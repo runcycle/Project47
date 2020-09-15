@@ -46,9 +46,9 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   fonts:
-    - family: Signatra
+    - family: CherryCreamSoda
       fonts:
-        - asset: assets/fonts/Signatra.ttf
+        - asset: assets/fonts/CherryCreamSoda-Regular.ttf
   assets:
     - assets/images/google_signin_button.png
     - assets/images/upload.svg
