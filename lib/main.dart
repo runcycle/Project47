@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttershare/pages/home.dart';
+import 'package:WatchA/pages/home.dart';
 
 void main() {
   runApp(MyApp());

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttershare/widgets/header.dart';
+import 'package:WatchA/widgets/header.dart';
 
 class Profile extends StatefulWidget {
   @override
