@@ -7,7 +7,7 @@ import 'package:WatchA/pages/activity_feed.dart';
 import 'package:WatchA/pages/create_account.dart';
 import 'package:WatchA/pages/profile.dart';
 import 'package:WatchA/pages/search.dart';
-import 'package:WatchA/pages/timeline.dart';
+//import 'package:WatchA/pages/timeline.dart';
 import 'package:WatchA/pages/upload.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -126,7 +126,7 @@ class _HomeState extends State<Home> {
           ActivityFeed(),
           Upload(currentUser: currentUser),
           Search(),
-          Profile(),
+          Profile(profileId: currentUser?.id),
         ],
         controller: pageController,
         onPageChanged: onPageChanged,
