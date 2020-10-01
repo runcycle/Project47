@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:WatchA/models/user.dart';
+import 'package:WatchA/pages/comments.dart';
 import 'package:WatchA/pages/home.dart';
 import 'package:WatchA/widgets/custom_image.dart';
 import 'package:WatchA/widgets/progress.dart';
@@ -133,6 +134,7 @@ class _PostState extends State<Post> {
           .collection("userPosts")
           .document(postId)
           .updateData({"likes.$currentUserId": false});
+      removeLikeFromActivityFeed();
       setState(() {
         likeCount -= 1;
         isLiked = false;
@@ -144,6 +146,7 @@ class _PostState extends State<Post> {
           .collection("userPosts")
           .document(postId)
           .updateData({"likes.$currentUserId": true});
+      addLikeToActivityFeed();
       setState(() {
         likeCount += 1;
         isLiked = true;
@@ -158,6 +161,41 @@ class _PostState extends State<Post> {
     }
   }
 
+  addLikeToActivityFeed() {
+    bool isNotPostOwner = currentUserId != ownerId;
+    if (isNotPostOwner) {
+      activityFeedRef
+          .document(ownerId)
+          .collection("feedItems")
+          .document(postId)
+          .setData({
+        "type": "like",
+        "username": currentUser.username,
+        "userId": currentUser.id,
+        "userProfileImg": currentUser.photoUrl,
+        "postId": postId,
+        "mediaUrl": mediaUrl,
+        "timestamp": timestamp,
+      });
+    }
+  }
+
+  removeLikeFromActivityFeed() {
+    bool isNotPostOwner = currentUserId != ownerId;
+    if (isNotPostOwner) {
+        activityFeedRef
+          .document(ownerId)
+          .collection("feedItems")
+          .document(postId)
+          .get()
+          .then((doc) {
+        if (doc.exists) {
+          doc.reference.delete();
+        }
+      });
+    }
+  }
+
   buildPostImage() {
     return GestureDetector(
       onDoubleTap: handleLikePost,
@@ -165,20 +203,18 @@ class _PostState extends State<Post> {
         alignment: Alignment.center,
         children: <Widget>[
           cachedNetworkImage(mediaUrl),
-          showHeart ? Animator(
-            duration: Duration(milliseconds: 300),
-            tween: Tween(begin: 0.8, end: 1.4),
-            curve: Curves.elasticOut,
-            cycles: 0,
-            builder: (anim) => Transform.scale(
-              scale: anim.value,
-              child: Icon(
-                Icons.favorite, 
-                size: 80.0, 
-                color: Colors.red
-              ),
-            ),
-          ) : Text(""),
+          showHeart
+              ? Animator(
+                  duration: Duration(milliseconds: 300),
+                  tween: Tween(begin: 0.8, end: 1.4),
+                  curve: Curves.elasticOut,
+                  cycles: 0,
+                  builder: (anim) => Transform.scale(
+                    scale: anim.value,
+                    child: Icon(Icons.favorite, size: 80.0, color: Colors.red),
+                  ),
+                )
+              : Text(""),
         ],
       ),
     );
@@ -201,7 +237,12 @@ class _PostState extends State<Post> {
             ),
             Padding(padding: EdgeInsets.only(right: 20.0)),
             GestureDetector(
-              onTap: () => print("showing comments"),
+              onTap: () => showComments(
+                context,
+                postId: postId,
+                ownerId: ownerId,
+                mediaUrl: mediaUrl,
+              ),
               child: Icon(
                 Icons.chat,
                 size: 28.0,
@@ -258,4 +299,15 @@ class _PostState extends State<Post> {
       ],
     );
   }
+}
+
+showComments(BuildContext context,
+    {String postId, String ownerId, String mediaUrl}) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return Comments(
+      postId: postId,
+      postOwnerId: ownerId,
+      postMediaUrl: mediaUrl,
+    );
+  }));
 }
