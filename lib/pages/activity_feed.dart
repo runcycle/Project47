@@ -1,8 +1,10 @@
 import 'package:WatchA/pages/home.dart';
 import 'package:WatchA/widgets/header.dart';
 import 'package:WatchA/widgets/progress.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ActivityFeed extends StatefulWidget {
   @override
@@ -17,15 +19,18 @@ class _ActivityFeedState extends State<ActivityFeed> {
         .orderBy("timestamp", descending: true)
         .limit(50)
         .getDocuments();
+    List<ActivityFeedItem> feedItems = [];
     snapshot.documents.forEach((doc) {
-      print("Activity Feed Item: ${doc.data}");
+      feedItems.add(ActivityFeedItem.fromDocument(doc));
+      //print("Activity Feed Item: ${doc.data}");
     });
-    return snapshot.documents;
+    return feedItems;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.lightBlueAccent,
       appBar: header(context, titleText: "Activity Feed"),
       body: Container(
         child: FutureBuilder(
@@ -34,7 +39,7 @@ class _ActivityFeedState extends State<ActivityFeed> {
               if (!snapshot.hasData) {
                 return circularProgress();
               }
-              return Text("Activity Feed");
+              return ListView(children: snapshot.data);
             }),
       ),
     );
@@ -42,6 +47,7 @@ class _ActivityFeedState extends State<ActivityFeed> {
 }
 
 Widget mediaPreview;
+String activityItemText;
 
 class ActivityFeedItem extends StatelessWidget {
   final String username;
@@ -73,11 +79,84 @@ class ActivityFeedItem extends StatelessWidget {
       userProfileImg: doc["userProfileImg"],
       commentData: doc["commentData"],
       timestamp: doc["timestamp"],
+      mediaUrl: doc["mediaUrl"],
     );
+  }
+
+  configureMediaPreview() {
+    if (type == "like" || type == "comment") {
+      mediaPreview = GestureDetector(
+        onTap: () => print("showing post"),
+        child: Container(
+          height: 50.0,
+          width: 50.0,
+          child: AspectRatio(
+            aspectRatio: 16 / 9,
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: CachedNetworkImageProvider(mediaUrl),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    } else {
+      mediaPreview = Text("");
+    }
+    if (type == "like") {
+      activityItemText = "liked your post";
+    } else if (type == "follow") {
+      activityItemText = "is following you";
+    } else if (type == "comment") {
+      activityItemText = "replied: $commentData";
+    } else {
+      activityItemText = "Error: Unknown type '$type'";
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Text('Activity Feed Item');
+    configureMediaPreview();
+    return Padding(
+      padding: EdgeInsets.only(bottom: 2.0),
+      child: Container(
+        color: Colors.white54,
+        child: ListTile(
+          title: GestureDetector(
+            onTap: () => print("show profile"),
+            child: RichText(
+              overflow: TextOverflow.ellipsis,
+              text: TextSpan(
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: Colors.black,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: username,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                      text: " $activityItemText",
+                    ),
+                  ]),
+            ),
+          ),
+          leading: CircleAvatar(
+            backgroundImage: CachedNetworkImageProvider(userProfileImg),
+          ),
+          subtitle: Text(
+            timeago.format(timestamp.toDate()),
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: mediaPreview,
+        ),
+      ),
+    );
   }
 }
