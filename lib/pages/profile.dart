@@ -20,6 +20,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  bool isFollowing = false;
   final String currentUserId = currentUser?.id;
   String postOrientation = "grid";
   bool isLoading = false;
@@ -88,15 +89,15 @@ class _ProfileState extends State<Profile> {
           child: Text(
             text,
             style: TextStyle(
-              color: Colors.white,
+              color: isFollowing ? Colors.black : Colors.white,
               fontWeight: FontWeight.bold,
             ),
           ),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: Colors.blue,
+            color: isFollowing ? Colors.white : Colors.blue,
             border: Border.all(
-              color: Colors.blue,
+              color: isFollowing ? Colors.grey : Colors.blue,
             ),
             borderRadius: BorderRadius.circular(5.0),
           ),
@@ -110,7 +111,17 @@ class _ProfileState extends State<Profile> {
     bool isProfileOwner = currentUserId == widget.profileId;
     if (isProfileOwner) {
       return buildButton(text: "Edit Profile", function: editProfile);
+    } else if (isFollowing) {
+      return buildButton(text: "Unfollow", function: handleUnfollowUser);
+    } else if (!isFollowing) {
+      return buildButton(text: "Unfollow", function: handleFollowUser);
     }
+  }
+
+  handleUnfollowUser() {}
+
+  handleFollowUser() {
+
   }
 
   buildProfileHeader() {
@@ -206,11 +217,11 @@ class _ProfileState extends State<Profile> {
             Padding(
               padding: EdgeInsets.only(top: 20.0),
               child: Text(
-                  "No Posts Yet!",
-                  style: TextStyle(
-                    color: Colors.redAccent,
-                    fontSize: 40.0,
-                    fontWeight: FontWeight.bold,
+                "No Posts Yet!",
+                style: TextStyle(
+                  color: Colors.redAccent,
+                  fontSize: 40.0,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -219,22 +230,21 @@ class _ProfileState extends State<Profile> {
       );
     } else if (postOrientation == "grid") {
       List<GridTile> gridTiles = [];
-    posts.forEach((post) {
-      gridTiles.add(GridTile(child: PostTile(post)));
-    });
-    return GridView.count(
-      crossAxisCount: 3,
-      childAspectRatio: 1.0,
-      mainAxisSpacing: 1.5,
-      crossAxisSpacing: 1.5,
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      children: gridTiles,
-    );
+      posts.forEach((post) {
+        gridTiles.add(GridTile(child: PostTile(post)));
+      });
+      return GridView.count(
+        crossAxisCount: 3,
+        childAspectRatio: 1.0,
+        mainAxisSpacing: 1.5,
+        crossAxisSpacing: 1.5,
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        children: gridTiles,
+      );
     } else if (postOrientation == "list") {
-        return Column(
+      return Column(
         children: posts,
-
       );
     }
   }
@@ -250,14 +260,18 @@ class _ProfileState extends State<Profile> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         IconButton(
-            onPressed: () => setPostOrientation("grid"),
-            icon: Icon(Icons.grid_on), 
-            color: postOrientation == "grid" ? Theme.of(context).primaryColor : Colors.grey,
+          onPressed: () => setPostOrientation("grid"),
+          icon: Icon(Icons.grid_on),
+          color: postOrientation == "grid"
+              ? Theme.of(context).primaryColor
+              : Colors.grey,
         ),
         IconButton(
           onPressed: () => setPostOrientation("list"),
           icon: Icon(Icons.list),
-          color: postOrientation == "list" ? Theme.of(context).primaryColor : Colors.grey,
+          color: postOrientation == "list"
+              ? Theme.of(context).primaryColor
+              : Colors.grey,
         ),
       ],
     );
