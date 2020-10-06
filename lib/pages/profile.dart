@@ -112,16 +112,86 @@ class _ProfileState extends State<Profile> {
     if (isProfileOwner) {
       return buildButton(text: "Edit Profile", function: editProfile);
     } else if (isFollowing) {
-      return buildButton(text: "Unfollow", function: handleUnfollowUser);
+      return buildButton(
+        text: "Unfollow",
+        function: handleUnfollowUser,
+      );
     } else if (!isFollowing) {
-      return buildButton(text: "Unfollow", function: handleFollowUser);
+      return buildButton(
+        text: "Follow",
+        function: handleFollowUser,
+      );
     }
   }
 
-  handleUnfollowUser() {}
+  handleUnfollowUser() {
+    setState(() {
+      isFollowing = false;
+    });
+    // remove follower
+    followersRef
+        .document(widget.profileId)
+        .collection("userFollowers")
+        .document(currentUserId)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+    // remove following
+    followingRef
+        .document(currentUserId)
+        .collection("userFollowing")
+        .document(widget.profileId)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+    // delete activity feed item
+    activityFeedRef
+        .document(widget.profileId)
+        .collection("feedItems")
+        .document(currentUserId)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+  }
 
   handleFollowUser() {
-
+    setState(() {
+      isFollowing = true;
+    });
+    // make auth user follower of THAT user (update THEIR followers collection)
+    followersRef
+        .document(widget.profileId)
+        .collection("userFollowers")
+        .document(currentUserId)
+        .setData({});
+    // put THAT user in YOUR following collection (update your following collection)
+    followingRef
+        .document(currentUserId)
+        .collection("userFollowing")
+        .document(widget.profileId)
+        .setData({});
+    // add activity feed item for THAT user to notify about new follower
+    activityFeedRef
+        .document(widget.profileId)
+        .collection("feedItems")
+        .document(currentUserId)
+        .setData({
+      "type": "follow",
+      "ownerId": widget.profileId,
+      "username": currentUser.username,
+      "userId": currentUserId,
+      "userProfileImg": currentUser.photoUrl,
+      "timestamp": timestamp,
+    });
   }
 
   buildProfileHeader() {
