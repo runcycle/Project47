@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:WatchA/models/user.dart';
 import 'package:WatchA/pages/home.dart';
 import 'package:WatchA/widgets/progress.dart';
+import 'package:WatchA/pages/activity_feed.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -118,7 +119,7 @@ class UserResult extends StatelessWidget {
       color: Theme.of(context).primaryColor.withOpacity(0.7),
       child: Column(children: <Widget>[
           GestureDetector(
-            onTap: () => print("Tapped"),
+            onTap: () => showProfile(context, profileId: user.id),
             child: ListTile(
               leading: CircleAvatar(
                 backgroundColor: Colors.grey,

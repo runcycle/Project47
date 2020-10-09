@@ -10,6 +10,7 @@ AppBar header(context, { bool isAppTitle = false, String titleText, removeBackBu
         fontFamily: isAppTitle ? "CherryCreamSoda" : "",
         fontSize: isAppTitle ? 30.0 : 25.0,
       ),
+      overflow: TextOverflow.ellipsis,
     ),
     centerTitle: true,
     backgroundColor: Theme.of(context).accentColor,
