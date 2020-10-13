@@ -16,7 +16,7 @@ exports.onCreateFollower = functions.firestore
         console.log("Follower Created", snapshot.id);
         const userId = context.params.userId;
         const followerId = context.params.followerId;
-    // Get followed user's posts ref
+    // Create followed user's posts ref
         const followedUserPostsRef = admin
             .firestore()
             .collection("posts")
@@ -41,3 +41,5 @@ exports.onCreateFollower = functions.firestore
             }
         })
     });
+
+    exports.onDeleteFollower
