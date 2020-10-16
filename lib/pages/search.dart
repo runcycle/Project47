@@ -12,7 +12,8 @@ class Search extends StatefulWidget {
   _SearchState createState() => _SearchState();
 }
 
-class _SearchState extends State<Search> {
+class _SearchState extends State<Search>
+    with AutomaticKeepAliveClientMixin<Search> {
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
 
@@ -97,8 +98,11 @@ class _SearchState extends State<Search> {
         });
   }
 
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor.withOpacity(0.9),
       appBar: buildSearchField(),
@@ -117,17 +121,23 @@ class UserResult extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).primaryColor.withOpacity(0.7),
-      child: Column(children: <Widget>[
+      child: Column(
+        children: <Widget>[
           GestureDetector(
             onTap: () => showProfile(context, profileId: user.id),
             child: ListTile(
               leading: CircleAvatar(
-                backgroundColor: Colors.grey,
-                backgroundImage: CachedNetworkImageProvider(user.photoUrl)
+                  backgroundColor: Colors.grey,
+                  backgroundImage: CachedNetworkImageProvider(user.photoUrl)),
+              title: Text(
+                user.displayName,
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
-              title: Text(user.displayName, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              subtitle: Text(
+                user.username,
+                style: TextStyle(color: Colors.white),
               ),
-              subtitle: Text(user.username, style: TextStyle(color: Colors.white),),
             ),
           ),
           Divider(
