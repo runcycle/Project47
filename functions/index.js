@@ -155,3 +155,63 @@ exports.onCreateFollower = functions.firestore
                 });
             });
         });
+
+        exports.onCreateActivityFeedItem = functions.firestore
+            .document("/feed/{userId}/feedItems/{activityFeedItem}")
+            .onCreate(async (snapshot, context) => {
+                console.log("Activity Feed Item Created", snapshot.data());
+                
+                // Connect user to feed
+                const userId = context.params.userId;
+                const userRef = admin.firestore().doc(`users/${userId}`);
+                const doc = await userRef.get();
+                // Once we have a user, check to see if they have a notification token
+                // Send notification if they have a token
+                const androidNotificationToken = doc.data().androidNotificationToken;
+                const createdActivityFeedItem = snapshot.data();
+                if (androidNotificationToken) {
+                    sendNotification(androidNotificationToken, createdActivityFeedItem);
+                } else {
+                    console.log("No token for user, cannot send notification");
+                }
+
+                function sendNotification(androidNotificationToken, activityFeedItem) {
+                    let body;
+
+                    // switch body value based on notifiaction type
+                    switch (activityFeedItem.type) {
+                        case "comment":
+                            body = `${activityFeedItem.username} replied: 
+                            ${activityFeedItem.commentData}`;
+                            break;
+                        case "like":
+                            body = `${activityFeedItem.username} liked your post`;
+                            break;
+                        case "follow":
+                            body = `${activityFeedItem.username} started following you`;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    // Create message for push notification
+                    const message = {
+                        notification: { body },
+                        token: androidNotificationToken,
+                        data: { recipient: userId }
+                    };
+
+                    // Send message with admin.messaging()
+
+                    admin   
+                        .messaging()
+                        .send(message)
+                        .then(response => {
+                            // Response is a message ID string
+                            console.log("Successfully sent message", response)
+                        })
+                        .catch(error => {
+                            console.log("Error sending message", error)
+                        })
+                }
+            });
