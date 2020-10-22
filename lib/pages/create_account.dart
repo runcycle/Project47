@@ -11,6 +11,8 @@ class _CreateAccountState extends State<CreateAccount> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   String username;
+  String password;
+  String email;
 
   submit() {
     final form = _formKey.currentState;
@@ -28,7 +30,8 @@ class _CreateAccountState extends State<CreateAccount> {
   Widget build(BuildContext parentContext) {
     return Scaffold(
         key: _scaffoldKey,
-        appBar: header(context, titleText: "Create Your Account", removeBackButton: true),
+        appBar: header(context,
+            titleText: "Create Your Account", removeBackButton: true),
         body: ListView(
           children: <Widget>[
             Container(
@@ -68,6 +71,17 @@ class _CreateAccountState extends State<CreateAccount> {
                             labelStyle: TextStyle(fontSize: 15.0),
                             hintText: "Must be at least 3 characters",
                           ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 25.0),
+                    child: Center(
+                      child: Text(
+                        "Create a Password",
+                        style: TextStyle(
+                          fontSize: 25.0,
                         ),
                       ),
                     ),
