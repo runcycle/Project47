@@ -86,6 +86,33 @@ class _CreateAccountState extends State<CreateAccount> {
                       ),
                     ),
                   ),
+                  // Padding(
+                  //   padding: EdgeInsets.all(16.0),
+                  //   child: Container(
+                  //     child: Form(
+                  //       key: _formKey,
+                  //       autovalidate: true,
+                  //       child: TextFormField(
+                  //         validator: (val) {
+                  //           if (val.trim().length < 3 || val.isEmpty) {
+                  //             return "Password too short";
+                  //           } else if (val.trim().length > 15) {
+                  //             return "Password too long";
+                  //           } else {
+                  //             return null;
+                  //           }
+                  //         },
+                  //         onSaved: (val) => password = val,
+                  //         decoration: InputDecoration(
+                  //           border: OutlineInputBorder(),
+                  //           labelText: "Password",
+                  //           labelStyle: TextStyle(fontSize: 15.0),
+                  //           hintText: "Must be at least 3 characters",
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   GestureDetector(
                     onTap: submit,
                     child: Container(
