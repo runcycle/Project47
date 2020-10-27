@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -206,6 +207,10 @@ class _HomeState extends State<Home> {
     //);
   }
 
+  register() {
+
+  }
+
   Scaffold buildUnAuthScreen() {
     return Scaffold(
       body: Container(
@@ -233,6 +238,26 @@ class _HomeState extends State<Home> {
               ),
             ),
             SizedBox(height: 225.0),
+            GestureDetector(
+              onTap: register,
+              child: Container(
+                child: Container(
+                  child: Text("Register")
+                ),
+                width: 200.0,
+                height: 50.0,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Colors.lightBlue[500],
+                    width: 4,
+                  ),
+                ),
+              ),
+
+            ),
+            SizedBox(height: 15.0),
             GestureDetector(
               onTap: login,
               child: Container(

@@ -51,29 +51,6 @@ class _TimelineState extends State<Timeline> {
     });
   }
 
-  // createUser() async {
-  //   await usersRef.document("asdsdasd").setData({
-  //     "username": "Jeff",
-  //     "postsCount": 0,
-  //     "isAdmin": false,
-  //   });
-  // }
-
-  // updateUser() async {
-  //   final doc = await usersRef.document("7EQel685vqBWo66miyAc").get();
-  //   if (doc.exists) {
-  //     doc.reference
-  //         .updateData({"username": "Fred", "postsCount": 5, "isAdmin": false});
-  //   }
-  // }
-
-  // deleteUser() async {
-  //   final DocumentSnapshot doc = await usersRef.document("asdsdasd").get();
-  //   if (doc.exists) {
-  //     doc.reference.delete();
-  //   }
-  // }
-
   buildTimeline() {
     if (posts == null) {
       return circularProgress();
