@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:WatchA/pages/email_account.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -208,7 +209,11 @@ class _HomeState extends State<Home> {
   }
 
   register() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => EmailAccount()));
+  }
 
+  loginWithEmail() {
+    
   }
 
   Scaffold buildUnAuthScreen() {
@@ -230,27 +235,31 @@ class _HomeState extends State<Home> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
-              'WhatchA',
+              'WatchA',
               style: TextStyle(
                 fontFamily: "CherryCreamSoda",
                 fontSize: 50.0,
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 225.0),
+            SizedBox(height: 175.0),
             GestureDetector(
               onTap: register,
               child: Container(
-                child: Container(
-                  child: Text("Register")
+                child: Center(
+                  child: Text("Create a New Account", textAlign: TextAlign.center, style: TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ))
                 ),
                 width: 200.0,
                 height: 50.0,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Colors.indigo[400],
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: Colors.lightBlue[500],
+                    color: Colors.white,
                     width: 4,
                   ),
                 ),
@@ -258,6 +267,30 @@ class _HomeState extends State<Home> {
 
             ),
             SizedBox(height: 15.0),
+            GestureDetector(
+              onTap: loginWithEmail,
+              child: Container(
+                child: Center(
+                  child: Text("Login With Email Address", textAlign: TextAlign.center, style: TextStyle(
+                    fontSize: 14.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ))
+                ),
+                width: 200.0,
+                height: 50.0,
+                decoration: BoxDecoration(
+                  color: Colors.indigo[400],
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 4,
+                  ),
+                ),
+              ),
+
+            ),
+            SizedBox(height: 25.0),
             GestureDetector(
               onTap: login,
               child: Container(

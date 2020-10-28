@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:WatchA/widgets/header.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
-class CreateAccount extends StatefulWidget {
+class EmailAccount extends StatefulWidget {
   @override
-  _CreateAccountState createState() => _CreateAccountState();
+  _EmailAccountState createState() => _EmailAccountState();
 }
 
-class _CreateAccountState extends State<CreateAccount> {
+class _EmailAccountState extends State<EmailAccount> {
   // final _auth = FirebaseAuth.instance;
   // final _scaffoldKey = GlobalKey<ScaffoldState>();
   // final _formKey = GlobalKey<FormState>();
@@ -52,7 +52,7 @@ class _CreateAccountState extends State<CreateAccount> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: header(context,
-          titleText: "Create Your Account", removeBackButton: true),
+          titleText: "Create Your Account", removeBackButton: false),
       body: ModalProgressHUD(
         inAsyncCall: _showProgress,
         child: Padding(
