@@ -58,6 +58,7 @@ class _EmailAccountState extends State<EmailAccount> {
             key: _formKey,
             autovalidate: true,
             child: ListView(
+              padding: const EdgeInsets.all(20),
               children: <Widget>[
                 SizedBox(
                   height: 20.0
@@ -170,7 +171,7 @@ class _EmailAccountState extends State<EmailAccount> {
                     width: 50.0,
                     decoration: BoxDecoration(
                       color: Colors.blue,
-                      borderRadius: BorderRadius.circular(20.0),
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
                     child: Center(
                       child: Text(
