@@ -235,14 +235,14 @@ class _HomeState extends State<Home> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
-              'WatchA',
+              'ChatShow',
               style: TextStyle(
                 fontFamily: "CherryCreamSoda",
                 fontSize: 50.0,
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 175.0),
+            SizedBox(height: 150.0),
             GestureDetector(
               onTap: register,
               child: Container(

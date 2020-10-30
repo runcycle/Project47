@@ -11,7 +11,7 @@ class EmailAccount extends StatefulWidget {
 }
 
 class _EmailAccountState extends State<EmailAccount> {
-  // final _auth = FirebaseAuth.instance;
+  final _auth = FirebaseAuth.instance;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
@@ -32,11 +32,17 @@ class _EmailAccountState extends State<EmailAccount> {
     }
   }
 
-  submit() {
+  submit() async {
     final form = _formKey.currentState;
 
     if (form.validate()) {
       form.save();
+      try {
+        await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      } catch (e) {
+        print(e);
+      }
       SnackBar snackbar = SnackBar(content: Text("Welcome $username!"));
       _scaffoldKey.currentState.showSnackBar(snackbar);
       Timer(Duration(seconds: 2), () {
@@ -123,7 +129,7 @@ class _EmailAccountState extends State<EmailAccount> {
                   controller: _password,
                   obscureText: true,
                   validator: (val) {
-                    if (val.trim().length < 3 || val.isEmpty) {
+                    if (val.trim().length < 6 || val.isEmpty) {
                       return "Password Too short";
                     } else if (val.trim().length > 50) {
                       return "Password Too Long";
