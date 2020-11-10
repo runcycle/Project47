@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:WatchA/widgets/progress.dart';
+//import 'package:WatchA/widgets/progress.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:WatchA/widgets/header.dart';
@@ -26,14 +26,12 @@ class _EmailAccountState extends State<EmailAccount> {
   String confirmPassword;
   bool _showProgress = false;
 
-  showCircularProgress() {
-    if (_showProgress == true) {
-      return circularProgress();
-    }
-  }
-
   submit() async {
     final form = _formKey.currentState;
+
+    setState(() {
+      _showProgress = true;
+    });
 
     if (form.validate()) {
       form.save();
