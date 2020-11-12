@@ -208,13 +208,15 @@ class _HomeState extends State<Home> {
     //);
   }
 
-  register() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => EmailAccount()));
+  emailRegister() async {
+    await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => EmailAccount()));
+    setState(() {
+      isAuth = true;
+    });
   }
 
-  loginWithEmail() {
-    
-  }
+  loginWithEmail() {}
 
   Scaffold buildUnAuthScreen() {
     return Scaffold(
@@ -244,15 +246,16 @@ class _HomeState extends State<Home> {
             ),
             SizedBox(height: 150.0),
             GestureDetector(
-              onTap: register,
+              onTap: emailRegister,
               child: Container(
                 child: Center(
-                  child: Text("Create a New Account", textAlign: TextAlign.center, style: TextStyle(
-                    fontSize: 15.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ))
-                ),
+                    child: Text("Create a New Account",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ))),
                 width: 200.0,
                 height: 50.0,
                 decoration: BoxDecoration(
@@ -264,19 +267,19 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-
             ),
             SizedBox(height: 15.0),
             GestureDetector(
               onTap: loginWithEmail,
               child: Container(
                 child: Center(
-                  child: Text("Login With Email Address", textAlign: TextAlign.center, style: TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ))
-                ),
+                    child: Text("Login With Email Address",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ))),
                 width: 200.0,
                 height: 50.0,
                 decoration: BoxDecoration(
@@ -288,7 +291,6 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-
             ),
             SizedBox(height: 25.0),
             GestureDetector(

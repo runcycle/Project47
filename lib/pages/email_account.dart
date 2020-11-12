@@ -1,9 +1,12 @@
 import 'dart:async';
 //import 'package:WatchA/widgets/progress.dart';
+import 'dart:io';
+
 import 'package:WatchA/models/user.dart';
 import 'package:WatchA/pages/activity_feed.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:WatchA/widgets/header.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -16,24 +19,40 @@ class EmailAccount extends StatefulWidget {
 
 class _EmailAccountState extends State<EmailAccount> {
   final _auth = FirebaseAuth.instance;
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  PageController pageController;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
+  final TextEditingController _displayName = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _confirmPass = TextEditingController();
 
+  String displayName;
   String email;
   String username;
   String password;
   String confirmPassword;
   bool _showProgress = false;
+  String uid;
+  FirebaseUser user;
+
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController();
+    getUserId();
+  }
+
+  getUserId() async {
+    final FirebaseUser user = await _auth.currentUser();
+    uid = user.uid;
+  }
 
   submit() async {
     final form = _formKey.currentState;
-    final FirebaseUser user = await _auth.currentUser();
-    final uid = user.uid;
     DocumentSnapshot doc = await usersRef.document(uid).get();
 
     setState(() {
@@ -52,8 +71,8 @@ class _EmailAccountState extends State<EmailAccount> {
         "id": uid,
         "username": username,
         "photoUrl": "",
-        "email": user.email,
-        "displayName": user.displayName,
+        "email": email,
+        "displayName": displayName,
         "bio": "",
         "timestamp": timestamp,
       });
@@ -67,16 +86,48 @@ class _EmailAccountState extends State<EmailAccount> {
       SnackBar snackbar = SnackBar(content: Text("Welcome $username!"));
       _scaffoldKey.currentState.showSnackBar(snackbar);
       Timer(Duration(seconds: 2), () {
-          Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ActivityFeed()),
-        );
+        Navigator.pop(context, username);
       });
     }
     doc = await usersRef.document(uid).get();
     currentUser = User.fromDocument(doc);
     print(currentUser);
     print(currentUser.username);
+    configurePushNotifications();
+  }
+
+  configurePushNotifications() async {
+    if (Platform.isIOS) getiOSPermission();
+
+    _firebaseMessaging.getToken().then((token) {
+      print("Firebase Messaging Token: $token\n");
+      usersRef.document(uid).updateData({"androidNotificationToken": token});
+    });
+
+    _firebaseMessaging.configure(
+      // onLaunch: (Map<String, dynamic> message) async {},
+      // onResume: (Map<String, dynamic> message) async {},
+      onMessage: (Map<String, dynamic> message) async {
+        print("on message: $message\n");
+        final String recipientId = message["data"]["recipient"];
+        final String body = message["notification"]["body"];
+        if (recipientId == uid) {
+          print("Notification shown!");
+          SnackBar snackbar =
+              SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
+          _scaffoldKey.currentState.showSnackBar(snackbar);
+        }
+        print("Notification NOT shown");
+      },
+    );
+  }
+
+  getiOSPermission() {
+    _firebaseMessaging.requestNotificationPermissions(
+        IosNotificationSettings(alert: true, badge: true, sound: true));
+    _firebaseMessaging.onIosSettingsRegistered.listen((settings) {
+      print("Setting registered: $settings");
+    });
   }
 
   @override
@@ -95,6 +146,32 @@ class _EmailAccountState extends State<EmailAccount> {
                   padding: const EdgeInsets.all(20),
                   children: <Widget>[
                     SizedBox(height: 20.0),
+                    Text(
+                      "Please Enter Your Full Name",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 5.0),
+                    TextFormField(
+                      controller: _displayName,
+                      validator: (val) {
+                        if (val.trim().length < 3 || val.isEmpty) {
+                          return "Username too short";
+                        } else if (val.trim().length > 50) {
+                          return "Username too long";
+                        } else {
+                          return null;
+                        }
+                      },
+                      onSaved: (val) => displayName = val,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "Full Name",
+                        labelStyle: TextStyle(fontSize: 15.0),
+                        hintText: "Must be at least 3 characters",
+                      ),
+                    ),
+                    SizedBox(height: 10.0),
                     Text(
                       "Please Enter Your Email Address",
                       textAlign: TextAlign.center,
@@ -224,26 +301,3 @@ class _EmailAccountState extends State<EmailAccount> {
             )));
   }
 }
-
-// Form(
-//                   key: _formKey,
-//                   autovalidate: true,
-//                   child: TextFormField(
-//                     validator: (val) {
-//                       if (val.trim().length < 3 || val.isEmpty) {
-//                         return "Email address too short";
-//                       } else if (val.trim().length > 50) {
-//                         return "Email address too long";
-//                       } else {
-//                         return null;
-//                       }
-//                     },
-//                     onSaved: (val) => email = val,
-//                     decoration: InputDecoration(
-//                       border: OutlineInputBorder(),
-//                       labelText: "Email Address",
-//                       labelStyle: TextStyle(fontSize: 15.0),
-//                       hintText: "Must be at least 3 characters",
-//                     ),
-//                   ),
-//                 ),
