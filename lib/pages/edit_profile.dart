@@ -3,6 +3,7 @@ import 'package:WatchA/pages/home.dart';
 import 'package:WatchA/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 
 class EditProfile extends StatefulWidget {
@@ -15,6 +16,7 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  final _auth = FirebaseAuth.instance;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController displayNameController = TextEditingController();
   TextEditingController bioController = TextEditingController();
@@ -115,6 +117,8 @@ class _EditProfileState extends State<EditProfile> {
     await googleSignIn.signOut();
     Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
   }
+
+  // check if emailLogin is true, then use _auth.signOut()
 
   @override
   Widget build(BuildContext context) {

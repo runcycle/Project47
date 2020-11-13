@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:WatchA/models/user.dart';
-import 'package:WatchA/pages/activity_feed.dart';
+//import 'package:WatchA/pages/activity_feed.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -20,7 +20,7 @@ class EmailAccount extends StatefulWidget {
 class _EmailAccountState extends State<EmailAccount> {
   final _auth = FirebaseAuth.instance;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  PageController pageController;
+  //PageController pageController;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
@@ -42,7 +42,7 @@ class _EmailAccountState extends State<EmailAccount> {
   @override
   void initState() {
     super.initState();
-    pageController = PageController();
+    //pageController = PageController();
     getUserId();
   }
 
@@ -128,6 +128,15 @@ class _EmailAccountState extends State<EmailAccount> {
     _firebaseMessaging.onIosSettingsRegistered.listen((settings) {
       print("Setting registered: $settings");
     });
+  }
+
+  void dispose() {
+    _displayName.dispose();
+    _email.dispose();
+    _username.dispose();
+    _password.dispose();
+    _confirmPass.dispose();
+    super.dispose();
   }
 
   @override

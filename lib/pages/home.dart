@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:WatchA/pages/email_account.dart';
+import 'package:WatchA/pages/email_login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -26,6 +27,8 @@ final followingRef = Firestore.instance.collection("following");
 final timelineRef = Firestore.instance.collection("timeline");
 final DateTime timestamp = DateTime.now();
 User currentUser;
+bool googleLogin = false;
+bool emailLogin = false;
 
 class Home extends StatefulWidget {
   @override
@@ -62,6 +65,7 @@ class _HomeState extends State<Home> {
       await createUserInFirestore();
       setState(() {
         isAuth = true;
+        googleLogin = true;
       });
       configurePushNotifications();
     } else {
@@ -213,10 +217,18 @@ class _HomeState extends State<Home> {
         context, MaterialPageRoute(builder: (context) => EmailAccount()));
     setState(() {
       isAuth = true;
+      emailLogin = true;
     });
   }
 
-  loginWithEmail() {}
+  loginWithEmail() async {
+    await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => EmailLogin()));
+    setState(() {
+      isAuth = true;
+      emailLogin = true;
+    });
+  }
 
   Scaffold buildUnAuthScreen() {
     return Scaffold(
