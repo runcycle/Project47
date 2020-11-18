@@ -17,6 +17,7 @@ class UserModel {
     this.bio,
   });
 
+  //Usermodel has to be upgraded to use new DocumentSnapshot code
   factory UserModel.fromDocument(DocumentSnapshot doc) {
     return UserModel(
       id: doc["id"],
