@@ -37,23 +37,22 @@ class _EmailAccountState extends State<EmailAccount> {
   String confirmPassword;
   bool _showProgress = false;
   String uid;
-  FirebaseUser user;
+  User user;
 
   @override
   void initState() {
     super.initState();
-    //pageController = PageController();
     getUserId();
   }
 
-  getUserId() async {
-    final FirebaseUser user = await _auth.currentUser();
+  getUserId() {
+    user = _auth.currentUser;
     uid = user.uid;
   }
 
   submit() async {
     final form = _formKey.currentState;
-    DocumentSnapshot doc = await usersRef.document(uid).get();
+    DocumentSnapshot doc = await usersRef.doc(uid).get();
 
     setState(() {
       _showProgress = true;
@@ -67,7 +66,7 @@ class _EmailAccountState extends State<EmailAccount> {
       } catch (e) {
         print(e);
       }
-      usersRef.document(uid).setData({
+      usersRef.doc(uid).set({
         "id": uid,
         "username": username,
         "photoUrl": "",
@@ -78,10 +77,10 @@ class _EmailAccountState extends State<EmailAccount> {
       });
       // make new user their own follower (to include their posts in their timeline)
       await followersRef
-          .document(uid)
+          .doc(uid)
           .collection("userFollowers")
-          .document(uid)
-          .setData({});
+          .doc(uid)
+          .set({});
 
       SnackBar snackbar = SnackBar(content: Text("Welcome $username!"));
       _scaffoldKey.currentState.showSnackBar(snackbar);
@@ -89,8 +88,8 @@ class _EmailAccountState extends State<EmailAccount> {
         Navigator.pop(context, username);
       });
     }
-    doc = await usersRef.document(uid).get();
-    currentUser = User.fromDocument(doc);
+    //doc = await usersRef.document(uid).get();
+    currentUser = UserModel.fromDocument(doc);
     print(currentUser);
     print(currentUser.username);
     configurePushNotifications();
@@ -101,7 +100,7 @@ class _EmailAccountState extends State<EmailAccount> {
 
     _firebaseMessaging.getToken().then((token) {
       print("Firebase Messaging Token: $token\n");
-      usersRef.document(uid).updateData({"androidNotificationToken": token});
+      usersRef.doc(uid).update({"androidNotificationToken": token});
     });
 
     _firebaseMessaging.configure(
@@ -150,7 +149,7 @@ class _EmailAccountState extends State<EmailAccount> {
             inAsyncCall: _showProgress,
             child: Form(
               key: _formKey,
-              autovalidate: true,
+              autovalidateMode: AutovalidateMode.always,
               child: ListView(
                   padding: const EdgeInsets.all(20),
                   children: <Widget>[

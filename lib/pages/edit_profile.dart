@@ -21,7 +21,7 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController displayNameController = TextEditingController();
   TextEditingController bioController = TextEditingController();
   bool isLoading = false;
-  User user;
+  UserModel user;
   bool _displayNameValid = true;
   bool _bioValid = true;
 
@@ -35,8 +35,8 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       isLoading = true;
     });
-    DocumentSnapshot doc = await usersRef.document(widget.currentUserId).get();
-    user = User.fromDocument(doc);
+    DocumentSnapshot doc = await usersRef.doc(widget.currentUserId).get();
+    user = UserModel.fromDocument(doc);
     displayNameController.text = user.displayName;
     bioController.text = user.bio;
     setState(() {
@@ -104,7 +104,7 @@ class _EditProfileState extends State<EditProfile> {
     });
 
     if (_displayNameValid && _bioValid) {
-      usersRef.document(widget.currentUserId).updateData({
+      usersRef.doc(widget.currentUserId).update({
         "displayName": displayNameController.text,
         "bio": bioController.text,
       });
@@ -114,8 +114,13 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   logout() async {
-    await googleSignIn.signOut();
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    if (googleLogin = true) {
+      await googleSignIn.signOut();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    } else if (emailLogin = true) {
+      await _auth.signOut();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    }
   }
 
   // check if emailLogin is true, then use _auth.signOut()
