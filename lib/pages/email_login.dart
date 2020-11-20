@@ -38,8 +38,10 @@ class _EmailLoginState extends State<EmailLogin> {
   }
 
   getUserId() {
-    user = _auth.currentUser;
-    uid = user.uid;
+    setState(() {
+      user = _auth.currentUser;
+      uid = user.uid;
+    });
   }
 
   submit() async {
@@ -59,13 +61,14 @@ class _EmailLoginState extends State<EmailLogin> {
         final user = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
         if (user != null) {
-          SnackBar snackbar = SnackBar(content: Text("Welcome Back $username!"));
+          SnackBar snackbar =
+              SnackBar(content: Text("Welcome Back $username!"));
           _scaffoldKey.currentState.showSnackBar(snackbar);
           Timer(Duration(seconds: 2), () {
             Navigator.pop(context);
-            });
-          }
-        } catch (e) {
+          });
+        }
+      } catch (e) {
         print(e);
       }
     }

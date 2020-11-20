@@ -46,8 +46,10 @@ class _EmailAccountState extends State<EmailAccount> {
   }
 
   getUserId() {
-    user = _auth.currentUser;
-    uid = user.uid;
+    setState(() {
+      user = _auth.currentUser;
+      uid = user.uid;
+    });
   }
 
   submit() async {

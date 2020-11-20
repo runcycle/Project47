@@ -20,12 +20,12 @@ class UserModel {
   //Usermodel has to be upgraded to use new DocumentSnapshot code
   factory UserModel.fromDocument(DocumentSnapshot doc) {
     return UserModel(
-      id: doc["id"],
-      email: doc["email"],
-      username: doc["username"],
-      photoUrl: doc["photoUrl"],
-      displayName: doc["displayName"],
-      bio: doc["bio"],
+      id: doc.data()["id"],
+      email: doc.data()["email"],
+      username: doc.data()["username"],
+      photoUrl: doc.data()["photoUrl"],
+      displayName: doc.data()["displayName"],
+      bio: doc.data()["bio"],
     );
   }
 }
