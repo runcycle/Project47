@@ -7,10 +7,10 @@ import 'package:WatchA/widgets/header.dart';
 import 'package:WatchA/widgets/progress.dart';
 import 'package:WatchA/pages/home.dart';
 
-final usersRef = Firestore.instance.collection("users");
+final usersRef = FirebaseFirestore.instance.collection("users");
 
 class Timeline extends StatefulWidget {
-  final User currentUser;
+  final UserModel currentUser;
 
   Timeline({this.currentUser});
   @override
@@ -30,12 +30,12 @@ class _TimelineState extends State<Timeline> {
 
   getTimeline() async {
     QuerySnapshot snapshot = await timelineRef
-        .document(widget.currentUser.id)
+        .doc(widget.currentUser.id)
         .collection("timelinePosts")
         .orderBy("timestamp", descending: true)
-        .getDocuments();
+        .get();
     List<Post> posts =
-        snapshot.documents.map((doc) => Post.fromDocument(doc)).toList();
+        snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
     setState(() {
       this.posts = posts;
     });
@@ -43,11 +43,11 @@ class _TimelineState extends State<Timeline> {
 
   getFollowing() async {
     QuerySnapshot snapshot = await followingRef
-        .document(currentUser.id)
+        .doc(currentUser.id)
         .collection("userFollowing")
-        .getDocuments();
+        .get();
     setState(() {
-      followingList = snapshot.documents.map((doc) => doc.documentID).toList();
+      followingList = snapshot.docs.map((doc) => doc.id).toList();
     });
   }
 
@@ -71,7 +71,7 @@ class _TimelineState extends State<Timeline> {
         }
         List<UserResult> userResults = [];
         snapshot.data.documents.forEach((doc) {
-          User user = User.fromDocument(doc);
+          UserModel user = UserModel.fromDocument(doc);
           final bool isAuthUser = currentUser.id == user.id;
           final bool isFollowingUser = followingList.contains(user.id);
           // remove auth user from recommended list

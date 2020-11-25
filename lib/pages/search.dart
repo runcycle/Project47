@@ -20,7 +20,7 @@ class _SearchState extends State<Search>
   handleSearch(String query) {
     Future<QuerySnapshot> users = usersRef
         .where("displayName", isGreaterThanOrEqualTo: query)
-        .getDocuments();
+        .get();
     setState(() {
       searchResultsFuture = users;
     });
@@ -88,7 +88,7 @@ class _SearchState extends State<Search>
           }
           List<UserResult> searchResults = [];
           snapshot.data.documents.forEach((doc) {
-            User user = User.fromDocument(doc);
+            UserModel user = UserModel.fromDocument(doc);
             UserResult searchResult = UserResult(user);
             searchResults.add(searchResult);
           });
@@ -113,7 +113,7 @@ class _SearchState extends State<Search>
 }
 
 class UserResult extends StatelessWidget {
-  final User user;
+  final UserModel user;
 
   UserResult(this.user);
 

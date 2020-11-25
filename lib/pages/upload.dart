@@ -4,7 +4,7 @@ import 'package:WatchA/models/user.dart';
 import 'package:WatchA/pages/home.dart';
 import 'package:WatchA/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
@@ -14,7 +14,7 @@ import 'package:image/image.dart' as Im;
 import 'package:uuid/uuid.dart';
 
 class Upload extends StatefulWidget {
-  final User currentUser;
+  final UserModel currentUser;
 
   Upload({this.currentUser});
 
@@ -125,9 +125,9 @@ class _UploadState extends State<Upload>
   }
 
   Future<String> uploadImage(imageFile) async {
-    StorageUploadTask uploadTask =
+    firebase_storage.UploadTask uploadTask =
         storageRef.child("post_$postId.jpg").putFile(imageFile);
-    StorageTaskSnapshot storageSnap = await uploadTask.onComplete;
+    firebase_storage.TaskSnapshot storageSnap = await uploadTask;
     String downloadUrl = await storageSnap.ref.getDownloadURL();
     return downloadUrl;
   }
@@ -135,10 +135,10 @@ class _UploadState extends State<Upload>
   createPostInFirestore(
       {String mediaUrl, String location, String description}) {
     postsRef
-        .document(widget.currentUser.id)
+        .doc(widget.currentUser.id)
         .collection("userPosts")
-        .document(postId)
-        .setData({
+        .doc(postId)
+        .set({
       "postId": postId,
       "ownerId": widget.currentUser.id,
       "username": widget.currentUser.username,

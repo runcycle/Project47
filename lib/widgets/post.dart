@@ -95,12 +95,12 @@ class _PostState extends State<Post> {
 
   buildPostHeader() {
     return FutureBuilder(
-      future: usersRef.document(ownerId).get(),
+      future: usersRef.doc(ownerId).get(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return circularProgress();
         }
-        User user = User.fromDocument(snapshot.data);
+        UserModel user = UserModel.fromDocument(snapshot.data);
         bool isPostOwner = currentUserId == ownerId;
         return ListTile(
           leading: CircleAvatar(
@@ -155,9 +155,9 @@ class _PostState extends State<Post> {
   deletePost() async {
     // delte post itself
     postsRef
-        .document(ownerId)
+        .doc(ownerId)
         .collection("userPosts")
-        .document(postId)
+        .doc(postId)
         .get()
         .then((doc) {
       if (doc.exists) {
@@ -168,21 +168,21 @@ class _PostState extends State<Post> {
     storageRef.child("post_$postId.jpg").delete();
     // then delete all activity feed notifications
     QuerySnapshot activityFeedSnapshot = await activityFeedRef
-        .document(ownerId)
+        .doc(ownerId)
         .collection("feedItems")
         .where("postId", isEqualTo: postId)
-        .getDocuments();
-    activityFeedSnapshot.documents.forEach((doc) {
+        .get();
+    activityFeedSnapshot.docs.forEach((doc) {
       if (doc.exists) {
         doc.reference.delete();
       }
     });
     // then delete all comments
     QuerySnapshot commentsSnapshot = await commentsRef
-      .document(postId)
+      .doc(postId)
       .collection("comments")
-      .getDocuments();
-    commentsSnapshot.documents.forEach((doc) {
+      .get();
+    commentsSnapshot.docs.forEach((doc) {
       if (doc.exists) {
         doc.reference.delete();
       }
@@ -194,10 +194,10 @@ class _PostState extends State<Post> {
 
     if (_isLiked) {
       postsRef
-          .document(ownerId)
+          .doc(ownerId)
           .collection("userPosts")
-          .document(postId)
-          .updateData({"likes.$currentUserId": false});
+          .doc(postId)
+          .update({"likes.$currentUserId": false});
       removeLikeFromActivityFeed();
       setState(() {
         likeCount -= 1;
@@ -206,10 +206,10 @@ class _PostState extends State<Post> {
       });
     } else if (!_isLiked) {
       postsRef
-          .document(ownerId)
+          .doc(ownerId)
           .collection("userPosts")
-          .document(postId)
-          .updateData({"likes.$currentUserId": true});
+          .doc(postId)
+          .update({"likes.$currentUserId": true});
       addLikeToActivityFeed();
       setState(() {
         likeCount += 1;
@@ -229,10 +229,10 @@ class _PostState extends State<Post> {
     bool isNotPostOwner = currentUserId != ownerId;
     if (isNotPostOwner) {
       activityFeedRef
-          .document(ownerId)
+          .doc(ownerId)
           .collection("feedItems")
-          .document(postId)
-          .setData({
+          .doc(postId)
+          .set({
         "type": "like",
         "username": currentUser.username,
         "userId": currentUser.id,
@@ -248,9 +248,9 @@ class _PostState extends State<Post> {
     bool isNotPostOwner = currentUserId != ownerId;
     if (isNotPostOwner) {
       activityFeedRef
-          .document(ownerId)
+          .doc(ownerId)
           .collection("feedItems")
-          .document(postId)
+          .doc(postId)
           .get()
           .then((doc) {
         if (doc.exists) {

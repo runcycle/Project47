@@ -40,9 +40,9 @@ class _ProfileState extends State<Profile> {
 
   checkIfFollowing() async {
     DocumentSnapshot doc = await followersRef
-        .document(widget.profileId)
+        .doc(widget.profileId)
         .collection("userFollowers")
-        .document(currentUserId)
+        .doc(currentUserId)
         .get();
     setState(() {
       isFollowing = doc.exists;
@@ -51,21 +51,21 @@ class _ProfileState extends State<Profile> {
 
   getFollowers() async {
     QuerySnapshot snapshot = await followersRef
-        .document(widget.profileId)
+        .doc(widget.profileId)
         .collection("userFollowers")
-        .getDocuments();
+        .get();
     setState(() {
-      followerCount = snapshot.documents.length;
+      followerCount = snapshot.docs.length;
     });
   }
 
   getFollowing() async {
     QuerySnapshot snapshot = await followingRef
-        .document(widget.profileId)
+        .doc(widget.profileId)
         .collection("userFollowing")
-        .getDocuments();
+        .get();
     setState(() {
-      followingCount = snapshot.documents.length;
+      followingCount = snapshot.docs.length;
     });
   }
 
@@ -74,14 +74,14 @@ class _ProfileState extends State<Profile> {
       isLoading = true;
     });
     QuerySnapshot snapshot = await postsRef
-        .document(widget.profileId)
+        .doc(widget.profileId)
         .collection("userPosts")
         .orderBy("timestamp", descending: true)
-        .getDocuments();
+        .get();
     setState(() {
       isLoading = false;
-      postCount = snapshot.documents.length;
-      posts = snapshot.documents.map((doc) => Post.fromDocument(doc)).toList();
+      postCount = snapshot.docs.length;
+      posts = snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
     });
   }
 
@@ -166,9 +166,9 @@ class _ProfileState extends State<Profile> {
     });
     // remove follower
     followersRef
-        .document(widget.profileId)
+        .doc(widget.profileId)
         .collection("userFollowers")
-        .document(currentUserId)
+        .doc(currentUserId)
         .get()
         .then((doc) {
       if (doc.exists) {
@@ -177,9 +177,9 @@ class _ProfileState extends State<Profile> {
     });
     // remove following
     followingRef
-        .document(currentUserId)
+        .doc(currentUserId)
         .collection("userFollowing")
-        .document(widget.profileId)
+        .doc(widget.profileId)
         .get()
         .then((doc) {
       if (doc.exists) {
@@ -188,9 +188,9 @@ class _ProfileState extends State<Profile> {
     });
     // delete activity feed item
     activityFeedRef
-        .document(widget.profileId)
+        .doc(widget.profileId)
         .collection("feedItems")
-        .document(currentUserId)
+        .doc(currentUserId)
         .get()
         .then((doc) {
       if (doc.exists) {
@@ -205,22 +205,22 @@ class _ProfileState extends State<Profile> {
     });
     // make auth user follower of THAT user (update THEIR followers collection)
     followersRef
-        .document(widget.profileId)
+        .doc(widget.profileId)
         .collection("userFollowers")
-        .document(currentUserId)
-        .setData({});
+        .doc(currentUserId)
+        .set({});
     // put THAT user in YOUR following collection (update your following collection)
     followingRef
-        .document(currentUserId)
+        .doc(currentUserId)
         .collection("userFollowing")
-        .document(widget.profileId)
-        .setData({});
+        .doc(widget.profileId)
+        .set({});
     // add activity feed item for THAT user to notify about new follower
     activityFeedRef
-        .document(widget.profileId)
+        .doc(widget.profileId)
         .collection("feedItems")
-        .document(currentUserId)
-        .setData({
+        .doc(currentUserId)
+        .set({
       "type": "follow",
       "ownerId": widget.profileId,
       "username": currentUser.username,
@@ -232,12 +232,12 @@ class _ProfileState extends State<Profile> {
 
   buildProfileHeader() {
     return FutureBuilder(
-      future: usersRef.document(widget.profileId).get(),
+      future: usersRef.doc(widget.profileId).get(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return circularProgress();
         }
-        User user = User.fromDocument(snapshot.data);
+        UserModel user = UserModel.fromDocument(snapshot.data);
         return Padding(
           padding: EdgeInsets.all(16.0),
           child: Column(

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User {
+class UserModel {
   final String id;
   final String username;
   final String email;
@@ -8,7 +8,7 @@ class User {
   final String displayName;
   final String bio;
 
-  User({
+  UserModel({
     this.id,
     this.username,
     this.email,
@@ -17,14 +17,15 @@ class User {
     this.bio,
   });
 
-  factory User.fromDocument(DocumentSnapshot doc) {
-    return User(
-      id: doc["id"],
-      email: doc["email"],
-      username: doc["username"],
-      photoUrl: doc["photoUrl"],
-      displayName: doc["displayName"],
-      bio: doc["bio"],
+  //Usermodel has to be upgraded to use new DocumentSnapshot code
+  factory UserModel.fromDocument(DocumentSnapshot doc) {
+    return UserModel(
+      id: doc.data()["id"],
+      email: doc.data()["email"],
+      username: doc.data()["username"],
+      photoUrl: doc.data()["photoUrl"],
+      displayName: doc.data()["displayName"],
+      bio: doc.data()["bio"],
     );
   }
 }

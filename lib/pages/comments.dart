@@ -40,7 +40,7 @@ class CommentsState extends State<Comments> {
   buildComments() {
     return StreamBuilder(
         stream: commentsRef
-            .document(postId)
+            .doc(postId)
             .collection("comments")
             .orderBy("timestamp", descending: false)
             .snapshots(),
@@ -59,7 +59,7 @@ class CommentsState extends State<Comments> {
   }
 
   addComment() {
-    commentsRef.document(postId).collection("comments").add({
+    commentsRef.doc(postId).collection("comments").add({
       "username": currentUser.username,
       "comment": commentController.text,
       "timestamp": timestamp,
@@ -68,7 +68,7 @@ class CommentsState extends State<Comments> {
     });
     bool isNotPostOwner = postOwnerId != currentUser.id;
     if (isNotPostOwner) {
-        activityFeedRef.document(postOwnerId).collection("feedItems").add({
+        activityFeedRef.doc(postOwnerId).collection("feedItems").add({
         "type": "comment",
         "commentData": commentController.text,
         "username": currentUser.username,

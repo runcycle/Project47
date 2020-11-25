@@ -28,7 +28,7 @@ class _EmailLoginState extends State<EmailLogin> {
   String username;
   bool _showProgress = false;
   String uid;
-  FirebaseUser user;
+  User user;
 
   @override
   void initState() {
@@ -37,16 +37,17 @@ class _EmailLoginState extends State<EmailLogin> {
     getUserId();
   }
 
-  getUserId() async {
-    final FirebaseUser user = await _auth.currentUser();
-    uid = user.uid;
+  getUserId() {
+    setState(() {
+      user = _auth.currentUser;
+      uid = user.uid;
+    });
   }
 
   submit() async {
     final form = _formKey.currentState;
-    DocumentSnapshot doc = await usersRef.document(uid).get();
-    doc = await usersRef.document(uid).get();
-    currentUser = User.fromDocument(doc);
+    DocumentSnapshot doc = await usersRef.doc(uid).get();
+    currentUser = UserModel.fromDocument(doc);
     username = currentUser.username;
     print(username);
 
@@ -60,13 +61,14 @@ class _EmailLoginState extends State<EmailLogin> {
         final user = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
         if (user != null) {
-          SnackBar snackbar = SnackBar(content: Text("Welcome Back $username!"));
+          SnackBar snackbar =
+              SnackBar(content: Text("Welcome Back $username!"));
           _scaffoldKey.currentState.showSnackBar(snackbar);
           Timer(Duration(seconds: 2), () {
             Navigator.pop(context);
-            });
-          }
-        } catch (e) {
+          });
+        }
+      } catch (e) {
         print(e);
       }
     }
@@ -88,7 +90,7 @@ class _EmailLoginState extends State<EmailLogin> {
             inAsyncCall: _showProgress,
             child: Form(
               key: _formKey,
-              autovalidate: true,
+              autovalidateMode: AutovalidateMode.always,
               child: ListView(
                   padding: const EdgeInsets.all(20),
                   children: <Widget>[
