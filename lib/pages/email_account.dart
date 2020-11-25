@@ -39,22 +39,14 @@ class _EmailAccountState extends State<EmailAccount> {
   String uid;
   User user;
 
-  @override
-  void initState() {
-    super.initState();
-    getUserId();
-  }
-
-  getUserId() {
-    setState(() {
-      user = _auth.currentUser;
-      uid = user.uid;
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getUserId();
+  // }
 
   submit() async {
     final form = _formKey.currentState;
-    DocumentSnapshot doc = await usersRef.doc(uid).get();
 
     setState(() {
       _showProgress = true;
@@ -65,6 +57,10 @@ class _EmailAccountState extends State<EmailAccount> {
       try {
         await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
+        setState(() {
+          final User user = _auth.currentUser;
+          uid = user.uid;
+        });
       } catch (e) {
         print(e);
       }
@@ -78,11 +74,7 @@ class _EmailAccountState extends State<EmailAccount> {
         "timestamp": timestamp,
       });
       // make new user their own follower (to include their posts in their timeline)
-      await followersRef
-          .doc(uid)
-          .collection("userFollowers")
-          .doc(uid)
-          .set({});
+      await followersRef.doc(uid).collection("userFollowers").doc(uid).set({});
 
       SnackBar snackbar = SnackBar(content: Text("Welcome $username!"));
       _scaffoldKey.currentState.showSnackBar(snackbar);
@@ -91,6 +83,7 @@ class _EmailAccountState extends State<EmailAccount> {
       });
     }
     //doc = await usersRef.document(uid).get();
+    DocumentSnapshot doc = await usersRef.doc(uid).get();
     currentUser = UserModel.fromDocument(doc);
     print(currentUser);
     print(currentUser.username);
