@@ -31,13 +31,13 @@ class _EmailLoginState extends State<EmailLogin> {
   User loggedInUser;
 
   getUserData() async {
-      DocumentSnapshot doc = await usersRef.doc(uid).get();
-      currentUser = UserModel.fromDocument(doc);
-      setState(() {
-        username = currentUser.username;
-      });
-      print(username);
-    }
+    DocumentSnapshot doc = await usersRef.doc(uid).get();
+    currentUser = UserModel.fromDocument(doc);
+    setState(() {
+      username = currentUser.username;
+    });
+    print(username);
+  }
 
   submit() async {
     final form = _formKey.currentState;
@@ -57,14 +57,13 @@ class _EmailLoginState extends State<EmailLogin> {
           uid = loggedInUser.uid;
         });
 
-        getUserData();
-
         if (user != null) {
+          getUserData();
           SnackBar snackbar =
               SnackBar(content: Text("Welcome Back $username!"));
           _scaffoldKey.currentState.showSnackBar(snackbar);
           Timer(Duration(seconds: 2), () {
-            Navigator.pop(context);
+            Navigator.pop(context, username);
           });
         }
       } catch (e) {
