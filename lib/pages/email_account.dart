@@ -1,12 +1,12 @@
 import 'dart:async';
-//import 'package:WatchA/widgets/progress.dart';
 import 'dart:io';
 
 import 'package:WatchA/models/user.dart';
-//import 'package:WatchA/pages/activity_feed.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:WatchA/widgets/header.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -19,6 +19,8 @@ class EmailAccount extends StatefulWidget {
 
 class _EmailAccountState extends State<EmailAccount> {
   final _auth = FirebaseAuth.instance;
+  firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   //PageController pageController;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -39,6 +41,20 @@ class _EmailAccountState extends State<EmailAccount> {
   String uid;
   User user;
 
+  uploadTempIcon() async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String filePath = "${appDocDir.absolute}/tempIcon.png";
+    File file = File(filePath);
+
+    try {
+      await firebase_storage.FirebaseStorage.instance
+          .ref("assets/images/tempIcon.png")
+          .putFile(file);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   submit() async {
     final form = _formKey.currentState;
 
@@ -58,6 +74,7 @@ class _EmailAccountState extends State<EmailAccount> {
       } catch (e) {
         print(e);
       }
+      uploadTempIcon();
       usersRef.doc(uid).set({
         "id": uid,
         "username": username,
@@ -93,8 +110,6 @@ class _EmailAccountState extends State<EmailAccount> {
     });
 
     _firebaseMessaging.configure(
-      // onLaunch: (Map<String, dynamic> message) async {},
-      // onResume: (Map<String, dynamic> message) async {},
       onMessage: (Map<String, dynamic> message) async {
         print("on message: $message\n");
         final String recipientId = message["data"]["recipient"];

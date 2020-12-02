@@ -53,6 +53,7 @@ flutter:
         - asset: assets/fonts/CherryCreamSoda-Regular.ttf
   assets:
     - assets/images/google_signin_button.png
+    - assets/images/tempIcon.png
     - assets/images/upload.svg
     - assets/images/search.svg
     - assets/images/activity_feed.svg
