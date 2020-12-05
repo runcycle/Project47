@@ -28,28 +28,19 @@ class _EmailLoginState extends State<EmailLogin> {
   String username;
   bool _showProgress = false;
   String uid;
-  User user;
+  User loggedInUser;
 
-  @override
-  void initState() {
-    super.initState();
-    //pageController = PageController();
-    getUserId();
-  }
-
-  getUserId() {
+  getUserData() async {
+    DocumentSnapshot doc = await usersRef.doc(uid).get();
+    currentUser = UserModel.fromDocument(doc);
     setState(() {
-      user = _auth.currentUser;
-      uid = user.uid;
+      username = currentUser.username;
     });
+    print(username);
   }
 
   submit() async {
     final form = _formKey.currentState;
-    DocumentSnapshot doc = await usersRef.doc(uid).get();
-    currentUser = UserModel.fromDocument(doc);
-    username = currentUser.username;
-    print(username);
 
     setState(() {
       _showProgress = true;
@@ -60,12 +51,19 @@ class _EmailLoginState extends State<EmailLogin> {
       try {
         final user = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
+
+        setState(() {
+          final User loggedInUser = _auth.currentUser;
+          uid = loggedInUser.uid;
+        });
+
         if (user != null) {
+          getUserData();
           SnackBar snackbar =
               SnackBar(content: Text("Welcome Back $username!"));
           _scaffoldKey.currentState.showSnackBar(snackbar);
           Timer(Duration(seconds: 2), () {
-            Navigator.pop(context);
+            Navigator.pop(context, username);
           });
         }
       } catch (e) {

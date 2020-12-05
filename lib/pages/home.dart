@@ -249,7 +249,7 @@ class _HomeState extends State<Home> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
-              'ChatShow',
+              'ShowShare',
               style: TextStyle(
                 fontFamily: "CherryCreamSoda",
                 fontSize: 50.0,

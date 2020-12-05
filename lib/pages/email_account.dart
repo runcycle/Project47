@@ -39,12 +39,6 @@ class _EmailAccountState extends State<EmailAccount> {
   String uid;
   User user;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getUserId();
-  // }
-
   submit() async {
     final form = _formKey.currentState;
 
