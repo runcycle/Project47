@@ -85,11 +85,12 @@ class ActivityFeedItem extends StatelessWidget {
     );
   }
 
+  // changed from userId: userId
   showPost(context) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PostScreen(postId: postId, userId: userId),
+        builder: (context) => PostScreen(postId: postId, userId: currentUser.id),
       ),
     );
   }
