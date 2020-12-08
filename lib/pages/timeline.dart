@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:WatchA/widgets/header.dart';
 import 'package:WatchA/widgets/progress.dart';
 import 'package:WatchA/pages/home.dart';
+import 'package:WatchA/pages/email_login.dart';
+import 'package:WatchA/pages/email_account.dart';
 
 final usersRef = FirebaseFirestore.instance.collection("users");
 
@@ -13,6 +15,7 @@ class Timeline extends StatefulWidget {
   final UserModel currentUser;
 
   Timeline({this.currentUser});
+
   @override
   _TimelineState createState() => _TimelineState();
 }

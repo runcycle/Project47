@@ -6,15 +6,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-//import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:WatchA/widgets/header.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:WatchA/pages/home.dart';
-//import 'package:uuid/uuid.dart';
-//import 'package:image/image.dart' as Im;
+UserModel currentUser;
 
 class EmailAccount extends StatefulWidget {
+  final UserModel currentUser;
+  
+  EmailAccount({this.currentUser});
+  
   @override
   _EmailAccountState createState() => _EmailAccountState();
 }
@@ -43,24 +45,7 @@ class _EmailAccountState extends State<EmailAccount> {
   bool _showProgress = false;
   String uid;
   User user;
-  //String postId = Uuid().v4();
-  //final file = File("assets/images/tempIcon.png");
   
-
-  //E/flutter (14716): [ERROR:flutter/lib/ui/ui_dart_state.cc(177)] Unhandled Exception: 
-  //'package:firebase_storage/src/reference.dart': Failed assertion: line 168 pos 12: 
-  //'file.absolute.existsSync()': is not true.
-
-  // Future<String> uploadImage() async {
-  //   // firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-  //   // .ref("assets/images/tempIcon.png");
-  //   firebase_storage.UploadTask uploadTask = firebase_storage.FirebaseStorage.instance
-  //       .ref().putFile(file);
-  //   firebase_storage.TaskSnapshot storageSnap = await uploadTask;
-  //   String downloadUrl = await storageSnap.ref.getDownloadURL();
-  //   return downloadUrl;
-  // }
-
   submit() async {
     final form = _formKey.currentState;
 
@@ -98,6 +83,7 @@ class _EmailAccountState extends State<EmailAccount> {
       Timer(Duration(seconds: 2), () {
         Navigator.pop(context, username);
       });
+      //doc = await usersRef.doc(uid).get();
     }
     //doc = await usersRef.document(uid).get();
     DocumentSnapshot doc = await usersRef.doc(uid).get();

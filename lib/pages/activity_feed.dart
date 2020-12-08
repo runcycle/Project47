@@ -74,14 +74,14 @@ class ActivityFeedItem extends StatelessWidget {
 
   factory ActivityFeedItem.fromDocument(DocumentSnapshot doc) {
     return ActivityFeedItem(
-      username: doc["username"],
-      userId: doc["userId"],
-      type: doc["type"],
-      postId: doc["postId"],
-      userProfileImg: doc["userProfileImg"],
-      commentData: doc["commentData"],
-      timestamp: doc["timestamp"],
-      mediaUrl: doc["mediaUrl"],
+      username: doc.data()["username"],
+      userId: doc.data()["userId"],
+      type: doc.data()["type"],
+      postId: doc.data()["postId"],
+      userProfileImg: doc.data()["userProfileImg"],
+      commentData: doc.data()["commentData"],
+      timestamp: doc.data()["timestamp"],
+      mediaUrl: doc.data()["mediaUrl"],
     );
   }
 

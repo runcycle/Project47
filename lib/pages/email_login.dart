@@ -1,16 +1,15 @@
 import 'dart:async';
-//import 'dart:io';
 
 import 'package:WatchA/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:WatchA/widgets/header.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:WatchA/pages/home.dart';
 
 class EmailLogin extends StatefulWidget {
+
   @override
   _EmailLoginState createState() => _EmailLoginState();
 }
@@ -30,15 +29,6 @@ class _EmailLoginState extends State<EmailLogin> {
   String uid;
   User loggedInUser;
 
-  getUserData() async {
-    DocumentSnapshot doc = await usersRef.doc(uid).get();
-    currentUser = UserModel.fromDocument(doc);
-    setState(() {
-      username = currentUser.username;
-    });
-    print(username);
-  }
-
   submit() async {
     final form = _formKey.currentState;
 
@@ -52,14 +42,17 @@ class _EmailLoginState extends State<EmailLogin> {
         final user = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
 
-        setState(() {
-          final User loggedInUser = _auth.currentUser;
-          uid = loggedInUser.uid;
-        });
-
         if (user != null) {
-          //Right here, username is returning null and user data is empty
-          getUserData();
+          final User getUserId = _auth.currentUser;
+          final uid = getUserId.uid;
+          DocumentSnapshot doc = await usersRef.doc(uid).get();
+          currentUser = UserModel.fromDocument(doc);
+          setState(() {
+            username = currentUser.username;
+          });
+          print(username);
+          print(uid);
+          
           SnackBar snackbar =
               SnackBar(content: Text("Welcome Back $username!"));
           _scaffoldKey.currentState.showSnackBar(snackbar);
