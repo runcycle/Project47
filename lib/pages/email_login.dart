@@ -58,6 +58,7 @@ class _EmailLoginState extends State<EmailLogin> {
         });
 
         if (user != null) {
+          //Right here, username is returning null and user data is empty
           getUserData();
           SnackBar snackbar =
               SnackBar(content: Text("Welcome Back $username!"));

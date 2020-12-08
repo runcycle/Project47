@@ -22,6 +22,8 @@ class EmailAccount extends StatefulWidget {
 class _EmailAccountState extends State<EmailAccount> {
   final _auth = FirebaseAuth.instance;
   firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
+  firebase_storage.Reference tempIconRef = firebase_storage.FirebaseStorage.instance
+    .ref("tempIcon.png");
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   //PageController pageController;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -78,8 +80,7 @@ class _EmailAccountState extends State<EmailAccount> {
       } catch (e) {
         print(e);
       }
-      firebase_storage.Reference tempIcon = firebase_storage.FirebaseStorage.instance
-    .ref("tempIcon.png");
+      final tempIcon = await tempIconRef.getDownloadURL();
       usersRef.doc(uid).set({
         "id": uid,
         "username": username,
