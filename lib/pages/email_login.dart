@@ -9,7 +9,6 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:WatchA/pages/home.dart';
 
 class EmailLogin extends StatefulWidget {
-
   @override
   _EmailLoginState createState() => _EmailLoginState();
 }
@@ -52,7 +51,7 @@ class _EmailLoginState extends State<EmailLogin> {
           });
           print(username);
           print(uid);
-          
+
           SnackBar snackbar =
               SnackBar(content: Text("Welcome Back $username!"));
           _scaffoldKey.currentState.showSnackBar(snackbar);

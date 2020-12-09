@@ -10,13 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:WatchA/widgets/header.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:WatchA/pages/home.dart';
-UserModel currentUser;
 
 class EmailAccount extends StatefulWidget {
-  final UserModel currentUser;
-  
-  EmailAccount({this.currentUser});
-  
   @override
   _EmailAccountState createState() => _EmailAccountState();
 }
