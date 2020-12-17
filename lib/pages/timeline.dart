@@ -13,6 +13,7 @@ class Timeline extends StatefulWidget {
   final UserModel currentUser;
 
   Timeline({this.currentUser});
+
   @override
   _TimelineState createState() => _TimelineState();
 }
@@ -39,6 +40,7 @@ class _TimelineState extends State<Timeline> {
     setState(() {
       this.posts = posts;
     });
+    print(currentUser.username);
   }
 
   getFollowing() async {
@@ -82,38 +84,34 @@ class _TimelineState extends State<Timeline> {
           } else {
             UserResult userResult = UserResult(user);
             userResults.add(userResult);
-            }
           }
-        );
+        });
         return Container(
-            color: Theme.of(context).accentColor.withOpacity(0.2),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.all(12.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.person_add,
+          color: Theme.of(context).accentColor.withOpacity(0.2),
+          child: Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.person_add,
+                        color: Theme.of(context).primaryColor, size: 30.0),
+                    SizedBox(width: 8.0),
+                    Text(
+                      "Users to Follow",
+                      style: TextStyle(
                         color: Theme.of(context).primaryColor,
-                        size: 30.0
+                        fontSize: 30.0,
                       ),
-                      SizedBox(width: 8.0),
-                      Text(
-                        "Users to Follow",
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 30.0,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Column(children: userResults),
-              ],
-            ),
-          );
+              ),
+              Column(children: userResults),
+            ],
+          ),
+        );
       },
     );
   }

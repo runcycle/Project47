@@ -87,8 +87,6 @@ class _HomeState extends State<Home> {
     });
 
     _firebaseMessaging.configure(
-      // onLaunch: (Map<String, dynamic> message) async {},
-      // onResume: (Map<String, dynamic> message) async {},
       onMessage: (Map<String, dynamic> message) async {
         print("on message: $message\n");
         final String recipientId = message["data"]["recipient"];
