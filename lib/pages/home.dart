@@ -193,10 +193,10 @@ class _HomeState extends State<Home> {
         activeColor: Theme.of(context).primaryColor,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.whatshot)),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications_active)),
+          BottomNavigationBarItem(icon: Icon(Icons.new_releases)),
           BottomNavigationBarItem(
               icon: Icon(
-            Icons.photo_camera,
+            Icons.post_add,
             size: 35.0,
           )),
           BottomNavigationBarItem(icon: Icon(Icons.search)),

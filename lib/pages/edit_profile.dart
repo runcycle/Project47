@@ -173,6 +173,7 @@ class _EditProfileState extends State<EditProfile> {
                           ],
                         ),
                       ),
+                      Padding(padding: EdgeInsets.all(10.0)),
                       RaisedButton(
                         onPressed: updateProfileData,
                         child: Text(
@@ -184,17 +185,15 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: FlatButton.icon(
-                          onPressed: logout,
-                          icon: Icon(Icons.cancel, color: Colors.red),
-                          label: Text(
-                            "Logout",
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 20.0,
-                            ),
+                      Padding(padding: EdgeInsets.all(60.0)),
+                      RaisedButton(
+                        onPressed: logout,
+                        child: Text(
+                          "Logout",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),

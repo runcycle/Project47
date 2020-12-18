@@ -121,7 +121,7 @@ class _PostState extends State<Post> {
           trailing: isPostOwner
               ? IconButton(
                   onPressed: () => handleDeletePost(context),
-                  icon: Icon(Icons.more_vert),
+                  icon: Icon(Icons.delete_outline),
                 )
               : Text(""),
         );

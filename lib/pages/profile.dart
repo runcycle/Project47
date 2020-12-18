@@ -146,7 +146,7 @@ class _ProfileState extends State<Profile> {
     // viewing your own profile - should show edit profile button
     bool isProfileOwner = currentUserId == widget.profileId;
     if (isProfileOwner) {
-      return buildButton(text: "Edit Profile", function: editProfile);
+      return buildButton(text: "Edit Profile/Logout", function: editProfile);
     } else if (isFollowing) {
       return buildButton(
         text: "Unfollow",
@@ -386,7 +386,13 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header(context, titleText: "Profile"),
+      backgroundColor: Colors.lightBlueAccent,
+      appBar: AppBar(
+            elevation: 15,
+            backgroundColor: Theme.of(context).accentColor,
+            title: Text('Profile',style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
+            centerTitle: true,
+          ),
       body: ListView(
         children: <Widget>[
           buildProfileHeader(),
@@ -401,3 +407,5 @@ class _ProfileState extends State<Profile> {
     );
   }
 }
+
+// header(context, titleText: "Profile"),
