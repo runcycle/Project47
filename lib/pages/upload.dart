@@ -92,7 +92,7 @@ class _UploadState extends State<Upload>
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: Text(
-                "Upload Image",
+                "Create Post",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 22.0,
