@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'WhatchA',
+      title: 'ShowShare',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Color(0xFFab47bc),

@@ -18,9 +18,8 @@ class _SearchState extends State<Search>
   Future<QuerySnapshot> searchResultsFuture;
 
   handleSearch(String query) {
-    Future<QuerySnapshot> users = usersRef
-        .where("displayName", isGreaterThanOrEqualTo: query)
-        .get();
+    Future<QuerySnapshot> users =
+        usersRef.where("displayName", isGreaterThanOrEqualTo: query).get();
     setState(() {
       searchResultsFuture = users;
     });
@@ -104,7 +103,7 @@ class _SearchState extends State<Search>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor.withOpacity(0.9),
+      backgroundColor: Theme.of(context).accentColor.withOpacity(0.5),
       appBar: buildSearchField(),
       body:
           searchResultsFuture == null ? buildNoContent() : buildSearchResults(),
@@ -120,7 +119,7 @@ class UserResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).primaryColor.withOpacity(0.7),
+      color: Theme.of(context).accentColor.withOpacity(0.9),
       child: Column(
         children: <Widget>[
           GestureDetector(
