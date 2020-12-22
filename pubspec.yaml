@@ -37,6 +37,7 @@ dependencies:
   flutter_svg:
   modal_progress_hud: ^0.1.3
   http: ^0.12.2
+  flutter_dotenv: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -59,3 +60,4 @@ flutter:
     - assets/images/search.svg
     - assets/images/activity_feed.svg
     - assets/images/no_content.svg
+    - environment_config.env
