@@ -21,8 +21,8 @@ class _ShowsState extends State<Shows> {
     _populateShows();
   }
 
-  void _populateShows() async {
-    final shows = await _getShow();
+  void _populateShows(show) async {
+    final shows = await _getShow(show);
     setState(() {
       _shows = shows;
     });
@@ -50,9 +50,6 @@ class _ShowsState extends State<Shows> {
     return Container();
   }
 }
-
-//http://www.omdbapi.com/?i=tt3896198&apikey=974478bf
-//1 change
 
 // API Key (v3 auth)
 // 5362b48d513a9b5e2951344ceaa0c40a

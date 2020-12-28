@@ -1,16 +1,21 @@
 import 'dart:async';
-import 'dart:io';
+//import 'dart:io';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+//import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:WatchA/models/user.dart';
+import 'package:WatchA/models/show.dart';
 import 'package:WatchA/pages/home.dart';
 import 'package:WatchA/widgets/progress.dart';
+import 'package:WatchA/widgets/shows_tile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+//import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:image/image.dart' as Im;
+//import 'package:image_picker/image_picker.dart';
+//import 'package:path_provider/path_provider.dart';
+//import 'package:image/image.dart' as Im;
 import 'package:uuid/uuid.dart';
 
 class Upload extends StatefulWidget {
@@ -26,57 +31,90 @@ class _UploadState extends State<Upload>
     with AutomaticKeepAliveClientMixin<Upload> {
   TextEditingController locationController = TextEditingController();
   TextEditingController captionController = TextEditingController();
-  File file;
-  final imagePicker = ImagePicker();
+  // File file;
+  // final imagePicker = ImagePicker();
   bool isUploading = false;
   String postId = Uuid().v4();
+  String show = "";
 
-  Future handleTakePhoto() async {
-    Navigator.pop(context);
-    final file = await imagePicker.getImage(
-      source: ImageSource.camera,
-      maxHeight: 675,
-      maxWidth: 960,
-    );
-    if (file != null) {
-      setState(() {
-        this.file = File(file.path);
-      });
+  List<Show> _shows = new List<Show>();
+  // final apiKey = DotEnv().env['API_KEY'];
+  
+
+  @override
+  void initState() {
+    super.initState();
+    _populateShows();
+  }
+
+  void _populateShows() async {
+    final shows = await _getShow();
+    setState(() {
+      _shows = shows;
+    });
+  }
+
+  //show will come from upload.dart file
+
+  Future<List<Show>> _getShow() async {
+    final response = await http.get(
+        "https://api.themoviedb.org/3/movie/550?api_key=5362b48d513a9b5e2951344ceaa0c40a");
+
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body);
+      Iterable list = result["results"];
+      return list.map((show) => Show.fromJson(show)).toList();
+    } else {
+      throw Exception("Failed to load request.");
     }
   }
 
-  Future handleChooseFromGallery() async {
-    Navigator.pop(context);
-    final file = await imagePicker.getImage(source: ImageSource.gallery);
-    if (file != null) {
-      setState(() {
-        this.file = File(file.path);
-      });
-    }
-  }
+  // Future handleTakePhoto() async {
+  //   Navigator.pop(context);
+  //   final file = await imagePicker.getImage(
+  //     source: ImageSource.camera,
+  //     maxHeight: 675,
+  //     maxWidth: 960,
+  //   );
+  //   if (file != null) {
+  //     setState(() {
+  //       this.file = File(file.path);
+  //     });
+  //   }
+  // }
 
-  selectImage(parentContext) {
-    return showDialog(
-        context: parentContext,
-        builder: (context) {
-          return SimpleDialog(
-            title: Text("Create Post"),
-            children: <Widget>[
-              SimpleDialogOption(
-                child: Text("Photo with Camera"),
-                onPressed: handleTakePhoto,
-              ),
-              SimpleDialogOption(
-                child: Text("Image from Gallery"),
-                onPressed: handleChooseFromGallery,
-              ),
-              SimpleDialogOption(
-                  child: Text("Cancel"),
-                  onPressed: () => Navigator.pop(context)),
-            ],
-          );
-        });
-  }
+  // Future handleChooseFromGallery() async {
+  //   Navigator.pop(context);
+  //   final file = await imagePicker.getImage(source: ImageSource.gallery);
+  //   if (file != null) {
+  //     setState(() {
+  //       this.file = File(file.path);
+  //     });
+  //   }
+  // }
+
+  // selectImage(parentContext) {
+  //   return showDialog(
+  //       context: parentContext,
+  //       builder: (context) {
+  //         return SimpleDialog(
+  //           title: Text("Create Post"),
+  //           children: <Widget>[
+  //             SimpleDialogOption(
+  //               child: Text("Photo with Camera"),
+  //               onPressed: handleTakePhoto,
+  //             ),
+  //             SimpleDialogOption(
+  //               child: Text("Image from Gallery"),
+  //               onPressed: handleChooseFromGallery,
+  //             ),
+  //             SimpleDialogOption(
+  //                 child: Text("Cancel"),
+  //                 onPressed: () => Navigator.pop(context)),
+  //           ],
+  //         );
+  //       });
+  // }
 
   Container buildSplashScreen() {
     return Container(
@@ -113,24 +151,24 @@ class _UploadState extends State<Upload>
     });
   }
 
-  compressImage() async {
-    final tempDir = await getTemporaryDirectory();
-    final path = tempDir.path;
-    Im.Image imageFile = Im.decodeImage(file.readAsBytesSync());
-    final compressedImageFile = File("$path/img_$postId.jpg")
-      ..writeAsBytesSync(Im.encodeJpg(imageFile, quality: 85));
-    setState(() {
-      file = compressedImageFile;
-    });
-  }
+  // compressImage() async {
+  //   final tempDir = await getTemporaryDirectory();
+  //   final path = tempDir.path;
+  //   Im.Image imageFile = Im.decodeImage(file.readAsBytesSync());
+  //   final compressedImageFile = File("$path/img_$postId.jpg")
+  //     ..writeAsBytesSync(Im.encodeJpg(imageFile, quality: 85));
+  //   setState(() {
+  //     file = compressedImageFile;
+  //   });
+  // }
 
-  Future<String> uploadImage(imageFile) async {
-    firebase_storage.UploadTask uploadTask =
-        storageRef.child("post_$postId.jpg").putFile(imageFile);
-    firebase_storage.TaskSnapshot storageSnap = await uploadTask;
-    String downloadUrl = await storageSnap.ref.getDownloadURL();
-    return downloadUrl;
-  }
+  // Future<String> uploadImage(imageFile) async {
+  //   firebase_storage.UploadTask uploadTask =
+  //       storageRef.child("post_$postId.jpg").putFile(imageFile);
+  //   firebase_storage.TaskSnapshot storageSnap = await uploadTask;
+  //   String downloadUrl = await storageSnap.ref.getDownloadURL();
+  //   return downloadUrl;
+  // }
 
   createPostInFirestore(
       {String mediaUrl, String location, String description}) {
@@ -161,7 +199,7 @@ class _UploadState extends State<Upload>
     setState(() {
       isUploading = true;
     });
-    await compressImage();
+    //await compressImage();
     String mediaUrl = await uploadImage(file);
     createPostInFirestore(
       mediaUrl: mediaUrl,
@@ -236,19 +274,19 @@ class _UploadState extends State<Upload>
             ),
           ),
           Divider(),
-          ListTile(
-            leading: Icon(Icons.pin_drop, color: Colors.orange, size: 35.0),
-            title: Container(
-              width: 250.0,
-              child: TextField(
-                controller: locationController,
-                decoration: InputDecoration(
-                  hintText: "Where was this photo taken?",
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.pin_drop, color: Colors.orange, size: 35.0),
+          //   title: Container(
+          //     width: 250.0,
+          //     child: TextField(
+          //       controller: locationController,
+          //       decoration: InputDecoration(
+          //         hintText: "Where was this photo taken?",
+          //         border: InputBorder.none,
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Container(
               width: 200.0,
               height: 100.0,
@@ -291,3 +329,9 @@ class _UploadState extends State<Upload>
     return file == null ? buildSplashScreen() : buildUploadForm();
   }
 }
+
+// API Key (v3 auth)
+// 5362b48d513a9b5e2951344ceaa0c40a
+// https://api.themoviedb.org/3/movie/550?api_key=5362b48d513a9b5e2951344ceaa0c40a
+// API Read Access Token (v4 auth)
+// eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MzYyYjQ4ZDUxM2E5YjVlMjk1MTM0NGNlYWEwYzQwYSIsInN1YiI6IjVmZDI3ZThhNmM4NGQ2MDAzZjM1ZGYwNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ETyZbthZqmNGupiEBnuwj97ESQT8cs5uzq9B3Qpg3Hg

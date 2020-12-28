@@ -1,26 +1,28 @@
 class Show {
-  final String imdbId;
+  final int id;
+  final double popularity;
   final String title;
   final String poster;
-  final String year;
-  // final String overview;
-  // final double rating;
+  final String overview;
+  final double rating;
 
   Show({
-    this.imdbId,
+    this.id,
+    this.popularity,
     this.title,
     this.poster,
-    this.year,
-    // this.overview,
-    // this.rating,
+    this.overview,
+    this.rating,
   });
 
   factory Show.fromJson(Map<String, dynamic> json) {
     return Show(
-      imdbId: json["imdbId"],
-      poster: json["Poster"],
-      title: json["Title"],
-      year: json["Year"]
+      id: json["id"],
+      popularity: json["popularity"],
+      title: json["title"],
+      poster: json["poster_path"],
+      overview: json["overview"],
+      rating: json["rating"]
     );
   }
 }
