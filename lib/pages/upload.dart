@@ -1,15 +1,15 @@
 import 'dart:async';
-//import 'dart:io';
+import 'dart:io';
 import 'dart:convert';
+import 'package:WatchA/models/show.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:dio/dio.dart';
 import 'package:WatchA/models/user.dart';
-import 'package:WatchA/models/show.dart';
+//import 'package:WatchA/models/show.dart';
 import 'package:WatchA/pages/home.dart';
 import 'package:WatchA/widgets/progress.dart';
-import 'package:WatchA/widgets/shows_tile.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+//import 'package:WatchA/widgets/shows_tile.dart';
+//import 'package:cached_network_image/cached_network_image.dart';
 //import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -18,8 +18,6 @@ class Upload extends StatefulWidget {
   final UserModel currentUser;
 
   Upload({this.currentUser});
-
-  final dio = Dio();
 
   @override
   _UploadState createState() => _UploadState();
@@ -33,7 +31,8 @@ class _UploadState extends State<Upload>
   bool isUploading = false;
   String postId = Uuid().v4();
   final apiKey = DotEnv().env['API_KEY'];
-  var _search;
+  String query = "";
+  var search;
 
   createPostInFirestore(
       {String mediaUrl, String location, String description}) {
@@ -60,38 +59,18 @@ class _UploadState extends State<Upload>
     });
   }
 
-  handleSubmit() async {
-    final isValid = _formKey.currentState.validate();
-    if (isValid) {
-      searchShows(query);
+  searchShows(query) async {
+    print(query);
+    final response = await http.get(
+        "https://api.themoviedb.org/3/search/?$query?api_key=5362b48d513a9b5e2951344ceaa0c40a");
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body);
+      print(result);
+      Iterable list = result["results"];
+      return list.map((query) => Show.fromJson(query)).toList();
+    } else {
+      throw Exception("Failed to load request.");
     }
-    setState(() {
-      isUploading = true;
-    });
-    // //await compressImage();
-    // String mediaUrl = await uploadImage(file);
-    // createPostInFirestore(
-    //   mediaUrl: mediaUrl,
-    //   location: locationController.text,
-    //   description: captionController.text,
-    // );
-  }
-
-  void searchShows(String, query) async {
-    final response = await widget.dio.get(
-        "https://api.themoviedb.org/3/movie/550?$apiKey",
-        queryParameters: {
-          "q": query,
-        });
-
-    // if (response.statusCode == 200) {
-    //   final result = jsonDecode(response.body);
-    //   Iterable list = result["results"];
-    //   return list.map((show) => Show.fromJson(show)).toList();
-    // } else {
-    //   throw Exception("Failed to load request.");
-    // }
-    print(response);
   }
 
   clearSearch() {
@@ -146,7 +125,7 @@ class _UploadState extends State<Upload>
                     ),
                     onChanged: (value) {
                       setState(() {
-                        _search = value;
+                        query = value;
                       });
                     },
                     validator: (value) {
@@ -181,20 +160,15 @@ class _UploadState extends State<Upload>
               width: 200.0,
               height: 100.0,
               alignment: Alignment.center,
-              child: RaisedButton(
+              child: ElevatedButton(
                 child: Text(
                   "Submit",
                   style: TextStyle(color: Colors.white),
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                color: Colors.blue,
-                onPressed: handleSubmit,
+                onPressed: () => searchShows(query),
               )),
         ],
       )),
     );
   }
 }
-
