@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+//import 'dart:io';
 import 'dart:convert';
 import 'package:WatchA/models/show.dart';
 import 'package:http/http.dart' as http;
@@ -59,10 +59,11 @@ class _UploadState extends State<Upload>
     });
   }
 
-  searchShows(query) async {
+  Future<List<Show>> searchShows(query) async {
     print(query);
+    print(apiKey);
     final response = await http.get(
-        "https://api.themoviedb.org/3/search/?$query?api_key=5362b48d513a9b5e2951344ceaa0c40a");
+        "https://api.themoviedb.org/3/search/movie?api_key=$apiKey&query=$query");
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
       print(result);
@@ -172,3 +173,5 @@ class _UploadState extends State<Upload>
     );
   }
 }
+
+//5362b48d513a9b5e2951344ceaa0c40a
