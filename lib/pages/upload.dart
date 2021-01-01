@@ -1,21 +1,17 @@
 import 'dart:async';
 //import 'dart:io';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
-//import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:WatchA/models/user.dart';
 import 'package:WatchA/models/show.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:WatchA/models/user.dart';
+//import 'package:WatchA/models/show.dart';
 import 'package:WatchA/pages/home.dart';
 import 'package:WatchA/widgets/progress.dart';
-import 'package:WatchA/widgets/shows_tile.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+//import 'package:WatchA/widgets/shows_tile.dart';
+//import 'package:cached_network_image/cached_network_image.dart';
 //import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:geolocator/geolocator.dart';
-//import 'package:image_picker/image_picker.dart';
-//import 'package:path_provider/path_provider.dart';
-//import 'package:image/image.dart' as Im;
 import 'package:uuid/uuid.dart';
 
 class Upload extends StatefulWidget {
@@ -29,146 +25,14 @@ class Upload extends StatefulWidget {
 
 class _UploadState extends State<Upload>
     with AutomaticKeepAliveClientMixin<Upload> {
-  TextEditingController locationController = TextEditingController();
   TextEditingController captionController = TextEditingController();
-  // File file;
-  // final imagePicker = ImagePicker();
+  TextEditingController searchController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   bool isUploading = false;
   String postId = Uuid().v4();
-  String show = "";
-
-  List<Show> _shows = new List<Show>();
-  // final apiKey = DotEnv().env['API_KEY'];
-  
-
-  @override
-  void initState() {
-    super.initState();
-    _populateShows();
-  }
-
-  void _populateShows() async {
-    final shows = await _getShow();
-    setState(() {
-      _shows = shows;
-    });
-  }
-
-  //show will come from upload.dart file
-
-  Future<List<Show>> _getShow() async {
-    final response = await http.get(
-        "https://api.themoviedb.org/3/movie/550?api_key=5362b48d513a9b5e2951344ceaa0c40a");
-
-    if (response.statusCode == 200) {
-      final result = jsonDecode(response.body);
-      Iterable list = result["results"];
-      return list.map((show) => Show.fromJson(show)).toList();
-    } else {
-      throw Exception("Failed to load request.");
-    }
-  }
-
-  // Future handleTakePhoto() async {
-  //   Navigator.pop(context);
-  //   final file = await imagePicker.getImage(
-  //     source: ImageSource.camera,
-  //     maxHeight: 675,
-  //     maxWidth: 960,
-  //   );
-  //   if (file != null) {
-  //     setState(() {
-  //       this.file = File(file.path);
-  //     });
-  //   }
-  // }
-
-  // Future handleChooseFromGallery() async {
-  //   Navigator.pop(context);
-  //   final file = await imagePicker.getImage(source: ImageSource.gallery);
-  //   if (file != null) {
-  //     setState(() {
-  //       this.file = File(file.path);
-  //     });
-  //   }
-  // }
-
-  // selectImage(parentContext) {
-  //   return showDialog(
-  //       context: parentContext,
-  //       builder: (context) {
-  //         return SimpleDialog(
-  //           title: Text("Create Post"),
-  //           children: <Widget>[
-  //             SimpleDialogOption(
-  //               child: Text("Photo with Camera"),
-  //               onPressed: handleTakePhoto,
-  //             ),
-  //             SimpleDialogOption(
-  //               child: Text("Image from Gallery"),
-  //               onPressed: handleChooseFromGallery,
-  //             ),
-  //             SimpleDialogOption(
-  //                 child: Text("Cancel"),
-  //                 onPressed: () => Navigator.pop(context)),
-  //           ],
-  //         );
-  //       });
-  // }
-
-  Container buildSplashScreen() {
-    return Container(
-      color: Colors.lightBlueAccent,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          SvgPicture.asset("assets/images/upload.svg", height: 260.0),
-          Padding(
-            padding: EdgeInsets.only(top: 20.0),
-            child: RaisedButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Text(
-                "Create Post",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22.0,
-                ),
-              ),
-              color: Colors.deepOrange,
-              onPressed: () => selectImage(context),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  clearImage() {
-    setState(() {
-      file = null;
-    });
-  }
-
-  // compressImage() async {
-  //   final tempDir = await getTemporaryDirectory();
-  //   final path = tempDir.path;
-  //   Im.Image imageFile = Im.decodeImage(file.readAsBytesSync());
-  //   final compressedImageFile = File("$path/img_$postId.jpg")
-  //     ..writeAsBytesSync(Im.encodeJpg(imageFile, quality: 85));
-  //   setState(() {
-  //     file = compressedImageFile;
-  //   });
-  // }
-
-  // Future<String> uploadImage(imageFile) async {
-  //   firebase_storage.UploadTask uploadTask =
-  //       storageRef.child("post_$postId.jpg").putFile(imageFile);
-  //   firebase_storage.TaskSnapshot storageSnap = await uploadTask;
-  //   String downloadUrl = await storageSnap.ref.getDownloadURL();
-  //   return downloadUrl;
-  // }
+  final apiKey = DotEnv().env['API_KEY'];
+  String query = "";
+  var search;
 
   createPostInFirestore(
       {String mediaUrl, String location, String description}) {
@@ -187,138 +51,35 @@ class _UploadState extends State<Upload>
       "likes": {},
     });
     captionController.clear();
-    locationController.clear();
+    searchController.clear();
     setState(() {
-      file = null;
+      //file = null;
       isUploading = false;
       postId = Uuid().v4();
     });
   }
 
-  handleSubmit() async {
-    setState(() {
-      isUploading = true;
-    });
-    //await compressImage();
-    String mediaUrl = await uploadImage(file);
-    createPostInFirestore(
-      mediaUrl: mediaUrl,
-      location: locationController.text,
-      description: captionController.text,
-    );
+  Future<List<Show>> searchShows(query) async {
+    print(query);
+    print(apiKey);
+    final response = await http.get(
+        "https://api.themoviedb.org/3/search/movie?api_key=$apiKey&query=$query");
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body);
+      print(result);
+      Iterable list = result["results"];
+      return list.map((query) => Show.fromJson(query)).toList();
+    } else {
+      throw Exception("Failed to load request.");
+    }
   }
 
-  Scaffold buildUploadForm() {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white70,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: clearImage,
-        ),
-        title: Text(
-          "Caption Post",
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: [
-          FlatButton(
-            onPressed: isUploading ? null : () => handleSubmit(),
-            child: Text(
-              "Post",
-              style: TextStyle(
-                color: Colors.blueAccent,
-                fontWeight: FontWeight.bold,
-                fontSize: 20.0,
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: ListView(
-        children: <Widget>[
-          isUploading ? linearProgress() : Text(""),
-          Container(
-            height: 220.0,
-            width: MediaQuery.of(context).size.width * 0.8,
-            child: Center(
-              child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: FileImage(file),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 10.0),
-          ),
-          ListTile(
-            leading: CircleAvatar(
-              backgroundImage:
-                  CachedNetworkImageProvider(widget.currentUser.photoUrl),
-            ),
-            title: Container(
-              width: 250.0,
-              child: TextField(
-                controller: captionController,
-                decoration: InputDecoration(
-                  hintText: "Write a caption ...",
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-          ),
-          Divider(),
-          // ListTile(
-          //   leading: Icon(Icons.pin_drop, color: Colors.orange, size: 35.0),
-          //   title: Container(
-          //     width: 250.0,
-          //     child: TextField(
-          //       controller: locationController,
-          //       decoration: InputDecoration(
-          //         hintText: "Where was this photo taken?",
-          //         border: InputBorder.none,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          Container(
-              width: 200.0,
-              height: 100.0,
-              alignment: Alignment.center,
-              child: RaisedButton.icon(
-                label: Text(
-                  "Use Current Location",
-                  style: TextStyle(color: Colors.white),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                color: Colors.blue,
-                onPressed: getUserLocation,
-                icon: Icon(
-                  Icons.my_location,
-                  color: Colors.white,
-                ),
-              )),
-        ],
-      ),
-    );
+  clearSearch() {
+    searchController.clear();
   }
 
-  getUserLocation() async {
-    Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    List<Placemark> placemarks = await Geolocator()
-        .placemarkFromCoordinates(position.latitude, position.longitude);
-    Placemark placemark = placemarks[0];
-    String formattedAddress = "${placemark.locality}, ${placemark.country}";
-    locationController.text = formattedAddress;
+  clearCaption() {
+    captionController.clear();
   }
 
   bool get wantKeepAlive => true;
@@ -326,12 +87,89 @@ class _UploadState extends State<Upload>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return file == null ? buildSplashScreen() : buildUploadForm();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white70,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => {},
+        ),
+        title: Text(
+          "Create a Post",
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+      body: Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          isUploading ? linearProgress() : Text(""),
+          Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: Column(children: [
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: TextFormField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      hintText: "Search for a show...",
+                      filled: true,
+                      prefixIcon: Icon(
+                        Icons.search,
+                        size: 28.0,
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.clear),
+                        onPressed: clearSearch,
+                      ),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        query = value;
+                      });
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Please enter a search term";
+                      }
+                      return null;
+                    }),
+              ),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: TextFormField(
+                  controller: captionController,
+                  decoration: InputDecoration(
+                    hintText: "Write a caption...",
+                    filled: true,
+                    prefixIcon: Icon(
+                      Icons.rate_review,
+                      size: 28.0,
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: clearCaption,
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+          ),
+          Divider(),
+          Container(
+              width: 200.0,
+              height: 100.0,
+              alignment: Alignment.center,
+              child: ElevatedButton(
+                child: Text(
+                  "Submit",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () => searchShows(query),
+              )),
+        ],
+      )),
+    );
   }
 }
-
-// API Key (v3 auth)
-// 5362b48d513a9b5e2951344ceaa0c40a
-// https://api.themoviedb.org/3/movie/550?api_key=5362b48d513a9b5e2951344ceaa0c40a
-// API Read Access Token (v4 auth)
-// eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MzYyYjQ4ZDUxM2E5YjVlMjk1MTM0NGNlYWEwYzQwYSIsInN1YiI6IjVmZDI3ZThhNmM4NGQ2MDAzZjM1ZGYwNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ETyZbthZqmNGupiEBnuwj97ESQT8cs5uzq9B3Qpg3Hg

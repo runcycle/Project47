@@ -247,7 +247,7 @@ class _HomeState extends State<Home> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
-              'ShowShare',
+              'Bingeable',
               style: TextStyle(
                 fontFamily: "CherryCreamSoda",
                 fontSize: 50.0,
