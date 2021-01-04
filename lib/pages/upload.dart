@@ -34,29 +34,33 @@ class _UploadState extends State<Upload>
   String query = "";
   var search;
 
-  createPostInFirestore(
-      {String mediaUrl, String location, String description}) {
-    postsRef
-        .doc(widget.currentUser.id)
-        .collection("userPosts")
-        .doc(postId)
-        .set({
-      "postId": postId,
-      "ownerId": widget.currentUser.id,
-      "username": widget.currentUser.username,
-      "mediaUrl": mediaUrl,
-      "description": description,
-      "location": location,
-      "timestamp": timestamp,
-      "likes": {},
-    });
-    captionController.clear();
-    searchController.clear();
-    setState(() {
-      //file = null;
-      isUploading = false;
-      postId = Uuid().v4();
-    });
+  // createPostInFirestore(
+  //     {String mediaUrl, String location, String description}) {
+  //   postsRef
+  //       .doc(widget.currentUser.id)
+  //       .collection("userPosts")
+  //       .doc(postId)
+  //       .set({
+  //     "postId": postId,
+  //     "ownerId": widget.currentUser.id,
+  //     "username": widget.currentUser.username,
+  //     "mediaUrl": mediaUrl,
+  //     "description": description,
+  //     "location": location,
+  //     "timestamp": timestamp,
+  //     "likes": {},
+  //   });
+  //   captionController.clear();
+  //   searchController.clear();
+  //   setState(() {
+  //     //file = null;
+  //     isUploading = false;
+  //     postId = Uuid().v4();
+  //   });
+  // }
+
+  void _searchResults() async {
+    final   
   }
 
   Future<List<Show>> searchShows(query) async {
