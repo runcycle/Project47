@@ -32,7 +32,7 @@ class _UploadState extends State<Upload>
   String postId = Uuid().v4();
   final apiKey = DotEnv().env['API_KEY'];
   String query = "";
-  var search;
+  List<Show> _show = new List<Show>();
 
   // createPostInFirestore(
   //     {String mediaUrl, String location, String description}) {
@@ -59,9 +59,9 @@ class _UploadState extends State<Upload>
   //   });
   // }
 
-  void _searchResults() async {
-    final   
-  }
+  // void _searchResults() async {
+  //   final
+  // }
 
   Future<List<Show>> searchShows(query) async {
     print(query);
@@ -72,7 +72,10 @@ class _UploadState extends State<Upload>
       final result = jsonDecode(response.body);
       print(result);
       Iterable list = result["results"];
-      return list.map((query) => Show.fromJson(query)).toList();
+      final show = list.map((query) => Show.fromJson(query)).toList();
+      setState(() {
+        _show = show;
+      });
     } else {
       throw Exception("Failed to load request.");
     }
@@ -112,6 +115,7 @@ class _UploadState extends State<Upload>
             key: _formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(children: [
+              Text("First, choose a show."),
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: TextFormField(
@@ -140,6 +144,7 @@ class _UploadState extends State<Upload>
                       return null;
                     }),
               ),
+              Text("Now, why do you like it?"),
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: TextFormField(
