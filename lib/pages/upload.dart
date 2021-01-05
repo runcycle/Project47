@@ -2,6 +2,7 @@ import 'dart:async';
 //import 'dart:io';
 import 'dart:convert';
 import 'package:WatchA/models/show.dart';
+import 'package:WatchA/widgets/shows_tile.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:WatchA/models/user.dart';
@@ -32,7 +33,7 @@ class _UploadState extends State<Upload>
   String postId = Uuid().v4();
   final apiKey = DotEnv().env['API_KEY'];
   String query = "";
-  List<Show> _show = new List<Show>();
+  List<Show> _shows = new List<Show>();
 
   // createPostInFirestore(
   //     {String mediaUrl, String location, String description}) {
@@ -63,7 +64,7 @@ class _UploadState extends State<Upload>
   //   final
   // }
 
-  Future<List<Show>> searchShows(query) async {
+  searchShows(query) async {
     print(query);
     print(apiKey);
     final response = await http.get(
@@ -72,10 +73,11 @@ class _UploadState extends State<Upload>
       final result = jsonDecode(response.body);
       print(result);
       Iterable list = result["results"];
-      final show = list.map((query) => Show.fromJson(query)).toList();
+      final showList = list.map((query) => Show.fromJson(query)).toList();
       setState(() {
-        _show = show;
+        _shows = showList;
       });
+      FocusManager.instance.primaryFocus.unfocus();
     } else {
       throw Exception("Failed to load request.");
     }
@@ -107,64 +109,61 @@ class _UploadState extends State<Upload>
         ),
       ),
       body: Center(
-          child: Column(
+        child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           isUploading ? linearProgress() : Text(""),
-          Form(
+          TextFormField(
             key: _formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: Column(children: [
-              Text("First, choose a show."),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: TextFormField(
-                    controller: searchController,
-                    decoration: InputDecoration(
-                      hintText: "Search for a show...",
-                      filled: true,
-                      prefixIcon: Icon(
-                        Icons.search,
-                        size: 28.0,
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.clear),
-                        onPressed: clearSearch,
-                      ),
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        query = value;
-                      });
-                    },
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return "Please enter a search term";
-                      }
-                      return null;
-                    }),
-              ),
-              Text("Now, why do you like it?"),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: captionController,
-                  decoration: InputDecoration(
-                    hintText: "Write a caption...",
-                    filled: true,
-                    prefixIcon: Icon(
-                      Icons.rate_review,
-                      size: 28.0,
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: clearCaption,
-                    ),
-                  ),
+            controller: searchController,
+            decoration: InputDecoration(
+            hintText: "Search for a show...",
+            filled: true,
+              prefixIcon: Icon(
+                  Icons.search,
+                  size: 28.0,
+                ),
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.clear),
+                  onPressed: clearSearch,
                 ),
               ),
-            ]),
-          ),
+              onChanged: (value) {
+                setState(() {
+                  query = value;
+                });
+              },
+              validator: (value) {
+                if (value.isEmpty) {
+                  return "Please enter a search term";
+                }
+                return null;
+              }),
+              SingleChildScrollView(
+                child: ShowsTile(shows: _shows)
+              ),
+            
+              // Text("Now, why do you like it?"),
+              // Padding(
+              //   padding: EdgeInsets.all(8.0),
+              //   child: TextFormField(
+              //     controller: captionController,
+              //     decoration: InputDecoration(
+              //       hintText: "Write a caption...",
+              //       filled: true,
+              //       prefixIcon: Icon(
+              //         Icons.rate_review,
+              //         size: 28.0,
+              //       ),
+              //       suffixIcon: IconButton(
+              //         icon: Icon(Icons.clear),
+              //         onPressed: clearCaption,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+            
           Divider(),
           Container(
               width: 200.0,
