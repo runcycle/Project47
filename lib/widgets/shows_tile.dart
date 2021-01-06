@@ -19,7 +19,8 @@ class ShowsTile extends StatelessWidget {
               SizedBox(
                 width: 100,
                 //I need to provide a poster if data returns null
-                child: Image.network(show.poster)
+                child: show.poster == null ? AssetImage("assets/images/noPoster.png") : NetworkImage(show.poster)
+                // (profile.imgUrl == null) ? AssetImage('images/user-avatar.png') : NetworkImage(profile.imgUrl)
               ),
               Column(children: [
                 Text(show.title),

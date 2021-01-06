@@ -65,8 +65,6 @@ class _UploadState extends State<Upload>
   // }
 
   searchShows(query) async {
-    print(query);
-    print(apiKey);
     final response = await http.get(
         "https://api.themoviedb.org/3/search/movie?api_key=$apiKey&query=$query");
     if (response.statusCode == 200) {

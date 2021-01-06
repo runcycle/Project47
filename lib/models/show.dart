@@ -20,7 +20,7 @@ class Show {
       id: json["id"],
       popularity: json["popularity"],
       title: json["title"],
-      poster: json[0]["poster_path"],
+      poster: json["poster_path"],
       overview: json["overview"],
       //rating: json["rating"]
     );
