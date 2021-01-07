@@ -74,6 +74,7 @@ class _UploadState extends State<Upload>
       final showList = list.map((query) => Show.fromJson(query)).toList();
       setState(() {
         _shows = showList;
+        isUploading = false;
       });
       FocusManager.instance.primaryFocus.unfocus();
     } else {
@@ -83,6 +84,9 @@ class _UploadState extends State<Upload>
 
   clearSearch() {
     searchController.clear();
+    setState(() {
+      _shows = [];
+    });
   }
 
   clearCaption() {
@@ -106,19 +110,18 @@ class _UploadState extends State<Upload>
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body: Center(
-        child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      body: ListView(
+        //physics: const AlwaysScrollableScrollPhysics(),
         children: <Widget>[
           isUploading ? linearProgress() : Text(""),
           TextFormField(
-            key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            controller: searchController,
-            decoration: InputDecoration(
-            hintText: "Search for a show...",
-            filled: true,
-              prefixIcon: Icon(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              controller: searchController,
+              decoration: InputDecoration(
+                hintText: "Search for a show...",
+                filled: true,
+                prefixIcon: Icon(
                   Icons.search,
                   size: 28.0,
                 ),
@@ -138,44 +141,43 @@ class _UploadState extends State<Upload>
                 }
                 return null;
               }),
-              SingleChildScrollView(
-                child: ShowsTile(shows: _shows)
-              ),
-            
-              // Text("Now, why do you like it?"),
-              // Padding(
-              //   padding: EdgeInsets.all(8.0),
-              //   child: TextFormField(
-              //     controller: captionController,
-              //     decoration: InputDecoration(
-              //       hintText: "Write a caption...",
-              //       filled: true,
-              //       prefixIcon: Icon(
-              //         Icons.rate_review,
-              //         size: 28.0,
-              //       ),
-              //       suffixIcon: IconButton(
-              //         icon: Icon(Icons.clear),
-              //         onPressed: clearCaption,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-            
-          Divider(),
+          Container(child: ShowsTile(shows: _shows)),
+
+          // Text("Now, why do you like it?"),
+          // Padding(
+          //   padding: EdgeInsets.all(8.0),
+          //   child: TextFormField(
+          //     controller: captionController,
+          //     decoration: InputDecoration(
+          //       hintText: "Write a caption...",
+          //       filled: true,
+          //       prefixIcon: Icon(
+          //         Icons.rate_review,
+          //         size: 28.0,
+          //       ),
+          //       suffixIcon: IconButton(
+          //         icon: Icon(Icons.clear),
+          //         onPressed: clearCaption,
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Container(
-              width: 200.0,
-              height: 100.0,
+              width: MediaQuery.of(context).size.width,
+              height: 50.0,
               alignment: Alignment.center,
               child: ElevatedButton(
                 child: Text(
                   "Submit",
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () => searchShows(query),
+                onPressed: () {
+                  searchShows(query);
+                  isUploading = true;
+                },
               )),
         ],
-      )),
+      ),
     );
   }
 }

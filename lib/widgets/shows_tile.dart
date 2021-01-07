@@ -9,25 +9,28 @@ class ShowsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: shows.length,
         itemBuilder: (context, index) {
           final show = shows[index];
           return ListTile(
-            title: Row(children: [
-              SizedBox(
-                width: 100,
-                //I need to provide a poster if data returns null
-                child: show.poster == null ? AssetImage("assets/images/noPoster.png") : NetworkImage(show.poster)
-                // (profile.imgUrl == null) ? AssetImage('images/user-avatar.png') : NetworkImage(profile.imgUrl)
-              ),
-              Column(children: [
-                Text(show.title),
-                ],
+            leading: GestureDetector(
+              onTap: () {},
+                child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 100,
+                  //I need to provide a poster if data returns null
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  image: DecorationImage(
+                    image: (show.poster) == null
+                        ? AssetImage("assets/images/noPoster.png")
+                        : NetworkImage(
+                          "https://image.tmdb.org/t/p/w500/" + show.poster),
+                ),
               )
-            ],
-          )
+            ),
+          ),
         );
       }
     );
