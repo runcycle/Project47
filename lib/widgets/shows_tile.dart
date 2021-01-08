@@ -14,25 +14,48 @@ class ShowsTile extends StatelessWidget {
         itemBuilder: (context, index) {
           final show = shows[index];
           return ListTile(
-            leading: GestureDetector(
-              onTap: () {},
-                child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 100,
-                  //I need to provide a poster if data returns null
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  image: DecorationImage(
-                    image: (show.poster) == null
-                        ? AssetImage("assets/images/noPoster.png")
-                        : NetworkImage(
-                          "https://image.tmdb.org/t/p/w500/" + show.poster),
+              title: Row(children: [
+            SizedBox(
+              child: SizedBox(
+              width: 100,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: (show.poster) == null
+                    ? Image.asset("assets/images/noPoster.png")
+                    : Image.network(
+                        "https://image.tmdb.org/t/p/w500/" + show.poster),
+              ),
+            )),
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Text(show.title),
+                  ],
                 ),
-              )
-            ),
-          ),
-        );
-      }
-    );
+              ),
+            )
+          ])
+
+              //   GestureDetector(
+              //     onTap: () {},
+              //       child: Container(
+              //       width: 100,
+              //       height: 100,
+              //         //I need to provide a poster if data returns null
+              //       decoration: BoxDecoration(
+              //         shape: BoxShape.rectangle,
+              //         image: DecorationImage(
+              //           image: (show.poster) == null
+              //               ? AssetImage("assets/images/noPoster.png")
+              //               : NetworkImage(
+              //                 "https://image.tmdb.org/t/p/w500/" + show.poster),
+              //       ),
+              //     )
+              //   ),
+              // ),
+              );
+        });
   }
 }
