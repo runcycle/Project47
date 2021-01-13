@@ -111,9 +111,8 @@ class _UploadState extends State<Upload>
         ),
       ),
       body: ListView(
-        //physics: const AlwaysScrollableScrollPhysics(),
         children: <Widget>[
-          isUploading ? linearProgress() : Text(""),
+          SizedBox(height: 10),
           TextFormField(
               key: _formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -141,30 +140,10 @@ class _UploadState extends State<Upload>
                 }
                 return null;
               }),
-          Container(child: ShowsTile(shows: _shows)),
-
-          // Text("Now, why do you like it?"),
-          // Padding(
-          //   padding: EdgeInsets.all(8.0),
-          //   child: TextFormField(
-          //     controller: captionController,
-          //     decoration: InputDecoration(
-          //       hintText: "Write a caption...",
-          //       filled: true,
-          //       prefixIcon: Icon(
-          //         Icons.rate_review,
-          //         size: 28.0,
-          //       ),
-          //       suffixIcon: IconButton(
-          //         icon: Icon(Icons.clear),
-          //         onPressed: clearCaption,
-          //       ),
-          //     ),
-          //   ),
-          // ),
+              SizedBox(height: 10),
           Container(
               width: MediaQuery.of(context).size.width,
-              height: 50.0,
+              height: 30.0,
               alignment: Alignment.center,
               child: ElevatedButton(
                 child: Text(
@@ -176,8 +155,16 @@ class _UploadState extends State<Upload>
                   isUploading = true;
                 },
               )),
+          Container(
+            child: ShowsTile(shows: _shows),
+          ),
         ],
-      ),
+      )
     );
   }
 }
+
+// isUploading ? linearProgress() : Text(""),
+//
+
+//

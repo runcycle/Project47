@@ -9,6 +9,7 @@ class ShowsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: shows.length,
         itemBuilder: (context, index) {
@@ -16,7 +17,7 @@ class ShowsTile extends StatelessWidget {
           return ListTile(
               title: Row(children: [
             SizedBox(
-              child: SizedBox(
+                child: SizedBox(
               width: 100,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
@@ -30,8 +31,10 @@ class ShowsTile extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
-                  children: [
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
                     Text(show.title),
+                    Text(show.date != null ? show.date : ""),
                   ],
                 ),
               ),
