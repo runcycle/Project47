@@ -25,15 +25,15 @@ class _ShowsTileState extends State<ShowsTile> {
             onTap: () async {
               await Navigator.push(context,
                   MaterialPageRoute(builder: (context) => DetailsPage(
-                //Need to find the best way to passs data to details.dart
-                )
+                    details: show
+                  )
                 )
               );
             },
             child: ListTile(
                 title: Row(children: [
               SizedBox(
-                  child: SizedBox(
+                child: SizedBox(
                 width: 100,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
