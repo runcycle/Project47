@@ -11,21 +11,8 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsState extends State<DetailsPage> {
-  ScrollController _scrollViewController;
   final details;
   _DetailsState(this.details);
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollViewController = ScrollController();
-  }
-
-  @override
-  void dispose() {
-    _scrollViewController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,31 +20,47 @@ class _DetailsState extends State<DetailsPage> {
         appBar: AppBar(
           title: Text(details.title),
         ),
-        body: NestedScrollView(
-            controller: _scrollViewController,
-            reverse: true,
-            headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
-              return <Widget>[
-                SliverAppBar(
-                  pinned: true,
-                  floating: true,
-                  forceElevated: boxIsScrolled,
-                  expandedHeight: 100.0,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: (details.poster) == null ? Image.asset("assets/images/noPoster.png")
-                  : Image.network(
-                    "https://image.tmdb.org/t/p/w500/" + details.poster),
+        body: ListView(
+          children: <Widget>[
+              Card(
+                child: Center(
+                    child: Container(
+                        height: 380,
+                        width: 255,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            fit: BoxFit.contain,
+                            image: (details.poster) == null ? AssetImage("assets/images/noPoster.png")
+                          : NetworkImage(
+                            "https://image.tmdb.org/t/p/w500/" + details.poster),
+                                )
+                              )
+                      
                   ),
+                ),
+              ),
+              SingleChildScrollView(
+                child: Card(
+                  child: Text((details.overview) == null ? "" : details.overview),
                 )
-              ];
-            },
-            body:  Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(details.overview),
-            ),
-            
-        )
-      );
+              ),
+              SizedBox(
+              width: 150,
+              height: 30,
+              child: ElevatedButton(
+                  child: Text(
+                    "Add to Post",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+
+                  },
+                ),
+              )
+        ],
+      )
+    );
   }
 }
 
