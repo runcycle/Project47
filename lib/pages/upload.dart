@@ -7,8 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:WatchA/models/user.dart';
 //import 'package:WatchA/models/show.dart';
-import 'package:WatchA/pages/home.dart';
-import 'package:WatchA/widgets/progress.dart';
+//import 'package:WatchA/pages/home.dart';
+//import 'package:WatchA/widgets/progress.dart';
 //import 'package:WatchA/widgets/shows_tile.dart';
 //import 'package:cached_network_image/cached_network_image.dart';
 //import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -66,7 +66,7 @@ class _UploadState extends State<Upload>
 
   searchShows(query) async {
     final response = await http.get(
-        "https://api.themoviedb.org/3/search/movie?api_key=$apiKey&query=$query");
+        "https://api.themoviedb.org/3/search/multi?api_key=$apiKey&query=$query");
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
       print(result);
@@ -163,8 +163,3 @@ class _UploadState extends State<Upload>
     );
   }
 }
-
-// isUploading ? linearProgress() : Text(""),
-//
-
-//

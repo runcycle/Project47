@@ -5,6 +5,7 @@ class Show {
   final String poster;
   final String overview;
   final String date;
+  final String name;
 
   Show({
     this.id,
@@ -13,6 +14,7 @@ class Show {
     this.poster,
     this.overview,
     this.date,
+    this.name,
   });
 
   factory Show.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class Show {
       poster: json["poster_path"],
       overview: json["overview"],
       date: json["release_date"],
+      name: json["name"],
     );
   }
 }
