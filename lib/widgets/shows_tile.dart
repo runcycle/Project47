@@ -49,7 +49,7 @@ class _ShowsTileState extends State<ShowsTile> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(show.title),
+                      Text(show.title != null ? show.title : show.name),
                       Text(show.date != null ? show.date : ""),
                     ],
                   ),

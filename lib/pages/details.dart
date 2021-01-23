@@ -24,7 +24,6 @@ class _DetailsState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //resizeToAvoidBottomInset: true,
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
@@ -35,29 +34,30 @@ class _DetailsState extends State<DetailsPage> {
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
                 title: Text(
-                  details.title,
+                  details.title != null ? details.title : details.name,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 15,
                   ),
                 ),
-                background: Stack(children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: double.infinity,
-                    child: details.poster != null
-                        ? Image.network(
-                            "https://image.tmdb.org/t/p/w500/" + details.poster)
-                        : Image.asset("assets/images/noPoster.png"),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [
-                      Colors.black.withOpacity(0.8),
-                      Colors.transparent,
-                    ])),
-                  ),
-                ]),
+                background: Stack(
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: double.infinity,
+                      child: details.poster != null
+                          ? Image.network(
+                              "https://image.tmdb.org/t/p/w342/" + details.poster)
+                          : Image.asset("assets/images/noPoster.png"),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(colors: [
+                        Colors.black.withOpacity(0.8),
+                        Colors.transparent,
+                      ])),
+                    ),
+                  ]),
               ),
             ),
           ];
@@ -65,32 +65,48 @@ class _DetailsState extends State<DetailsPage> {
         body: Container(
             width: MediaQuery.of(context).size.width,
             height: 400,
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
             child: ListView(children: <Widget>[
-              Text(details.overview, textAlign: TextAlign.justify),
+              Text("Overview", 
+                textAlign: TextAlign.center, 
+                style: TextStyle(
+                  fontWeight: FontWeight.bold, 
+                  fontSize: 15.0,
+                )
+              ),
+               SizedBox(
+                height: 5.0,
+              ),
+              Text(details.overview != null ? details.overview : "No overview available.", 
+              textAlign: TextAlign.justify),
               SizedBox(
                 height: 20.0,
               ),
               //Text("Add a comment ...", style: TextStyle(color: Colors.lightBlue[700])),
               TextField(
                 controller: _comment,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "Add a comment ...",
                 ),
               ),
+              SizedBox(height: 10.0),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: RaisedButton(
                   onPressed: () {},
                   child:
-                      const Text("Add To Post", style: TextStyle(fontSize: 15)),
+                      const Text("Create Post", style: TextStyle(fontSize: 15)),
                   color: Colors.blue,
                   textColor: Colors.white,
                   elevation: 5,
                 ),
-              )
-            ])),
+              ),
+            ]
+          )
+        ),
       ),
     );
   }
