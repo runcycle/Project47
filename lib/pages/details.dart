@@ -21,6 +21,30 @@ class _DetailsState extends State<DetailsPage> {
     super.dispose();
   }
 
+  // createPostInFirestore(
+  //     {String mediaUrl, String location, String description}) {
+  //   postsRef
+  //       .doc(widget.currentUser.id)
+  //       .collection("userPosts")
+  //       .doc(postId)
+  //       .set({
+  //     "postId": postId,
+  //     "ownerId": widget.currentUser.id,
+  //     "username": widget.currentUser.username,
+  //     "mediaUrl": mediaUrl,
+  //     "description": description,
+  //     "timestamp": timestamp,
+  //     "likes": {},
+  //   });
+  //   captionController.clear();
+  //   searchController.clear();
+  //   setState(() {
+  //     //file = null;
+  //     isUploading = false;
+  //     postId = Uuid().v4();
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,11 +57,14 @@ class _DetailsState extends State<DetailsPage> {
               floating: false,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
+                centerTitle: true,
                 title: Text(
                   details.title != null ? details.title : details.name,
                   textAlign: TextAlign.center,
+                  overflow: TextOverflow.fade,
                   style: TextStyle(
                     fontSize: 15,
+                    fontFamily: 'CherryCreamSoda',
                   ),
                 ),
                 background: Stack(

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:WatchA/pages/email_account.dart';
 import 'package:WatchA/pages/email_login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

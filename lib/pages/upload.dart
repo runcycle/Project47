@@ -60,9 +60,6 @@ class _UploadState extends State<Upload>
   //   });
   // }
 
-  // void _searchResults() async {
-  //   final
-  // }
 
   searchShows(query) async {
     final response = await http.get(
