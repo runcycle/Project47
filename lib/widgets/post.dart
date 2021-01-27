@@ -15,7 +15,7 @@ class Post extends StatefulWidget {
   final String postId;
   final String ownerId;
   final String username;
-  final String location;
+  //final String location;
   final String description;
   final String mediaUrl;
   final dynamic likes;
@@ -24,7 +24,7 @@ class Post extends StatefulWidget {
     this.postId,
     this.ownerId,
     this.username,
-    this.location,
+    //this.location,
     this.description,
     this.mediaUrl,
     this.likes,
@@ -35,7 +35,7 @@ class Post extends StatefulWidget {
       postId: doc["postId"],
       ownerId: doc["ownerId"],
       username: doc["username"],
-      location: doc["location"],
+      //location: doc["location"],
       description: doc["description"],
       mediaUrl: doc["mediaUrl"],
       likes: doc["likes"],
@@ -61,7 +61,7 @@ class Post extends StatefulWidget {
         postId: this.postId,
         ownerId: this.ownerId,
         username: this.username,
-        location: this.location,
+        //location: this.location,
         description: this.description,
         mediaUrl: this.mediaUrl,
         likes: this.likes,
@@ -74,7 +74,7 @@ class _PostState extends State<Post> {
   final String postId;
   final String ownerId;
   final String username;
-  final String location;
+  //final String location;
   final String description;
   final String mediaUrl;
   bool showHeart = false;
@@ -86,7 +86,7 @@ class _PostState extends State<Post> {
     this.postId,
     this.ownerId,
     this.username,
-    this.location,
+    //this.location,
     this.description,
     this.mediaUrl,
     this.likes,
@@ -117,7 +117,7 @@ class _PostState extends State<Post> {
               ),
             ),
           ),
-          subtitle: Text(location),
+          //subtitle: Text(location),
           trailing: isPostOwner
               ? IconButton(
                   onPressed: () => handleDeletePost(context),
