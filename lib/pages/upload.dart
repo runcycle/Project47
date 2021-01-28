@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:WatchA/models/user.dart';
 //import 'package:WatchA/models/show.dart';
-//import 'package:WatchA/pages/home.dart';
+import 'package:WatchA/pages/home.dart';
 //import 'package:WatchA/widgets/progress.dart';
 //import 'package:WatchA/widgets/shows_tile.dart';
 //import 'package:cached_network_image/cached_network_image.dart';
@@ -21,11 +21,13 @@ class Upload extends StatefulWidget {
   Upload({this.currentUser});
 
   @override
-  _UploadState createState() => _UploadState();
+  _UploadState createState() => _UploadState(currentUser);
 }
 
 class _UploadState extends State<Upload>
     with AutomaticKeepAliveClientMixin<Upload> {
+  final currentUser;
+  _UploadState(this.currentUser);
   TextEditingController captionController = TextEditingController();
   TextEditingController searchController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -59,7 +61,6 @@ class _UploadState extends State<Upload>
   //     postId = Uuid().v4();
   //   });
   // }
-
 
   searchShows(query) async {
     final response = await http.get(
@@ -96,67 +97,66 @@ class _UploadState extends State<Upload>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white70,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => {},
-        ),
-        title: Text(
-          "Create a Post",
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
-      body: ListView(
-        children: <Widget>[
-          SizedBox(height: 10),
-          TextFormField(
-              key: _formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              controller: searchController,
-              decoration: InputDecoration(
-                hintText: "Search for a show...",
-                filled: true,
-                prefixIcon: Icon(
-                  Icons.search,
-                  size: 28.0,
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.clear),
-                  onPressed: clearSearch,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  query = value;
-                });
-              },
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "Please enter a search term";
-                }
-                return null;
-              }),
-              SizedBox(height: 10),
-          Container(
-              width: MediaQuery.of(context).size.width,
-              height: 30.0,
-              alignment: Alignment.center,
-              child: ElevatedButton(
-                child: Text(
-                  "Submit",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  searchShows(query);
-                  isUploading = true;
-                },
-              )),
-          Container(
-            child: ShowsTile(shows: _shows),
+        appBar: AppBar(
+          backgroundColor: Colors.white70,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () => {},
           ),
-        ],
-      )
-    );
+          title: Text(
+            "Create a Post",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+        body: ListView(
+          children: <Widget>[
+            SizedBox(height: 10),
+            TextFormField(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                controller: searchController,
+                decoration: InputDecoration(
+                  hintText: "Search for a show...",
+                  filled: true,
+                  prefixIcon: Icon(
+                    Icons.search,
+                    size: 28.0,
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.clear),
+                    onPressed: clearSearch,
+                  ),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    query = value;
+                  });
+                },
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return "Please enter a search term";
+                  }
+                  return null;
+                }),
+            SizedBox(height: 10),
+            Container(
+                width: MediaQuery.of(context).size.width,
+                height: 30.0,
+                alignment: Alignment.center,
+                child: ElevatedButton(
+                  child: Text(
+                    "Submit",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    searchShows(query);
+                    isUploading = true;
+                  },
+                )),
+            Container(
+              child: ShowsTile(shows: _shows, currentUser: currentUser),
+            ),
+          ],
+        ));
   }
 }

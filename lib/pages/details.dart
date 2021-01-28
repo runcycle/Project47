@@ -1,49 +1,57 @@
 //import 'package:WatchA/models/show.dart';
+import 'package:WatchA/models/show.dart';
+import 'package:WatchA/models/user.dart';
+import 'package:WatchA/pages/home.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class DetailsPage extends StatefulWidget {
   final details;
+  final UserModel currentUser;
 
-  DetailsPage({this.details});
+  DetailsPage({this.details, this.currentUser});
 
   @override
-  _DetailsState createState() => _DetailsState(details);
+  _DetailsState createState() => _DetailsState(details, currentUser);
 }
 
 class _DetailsState extends State<DetailsPage> {
   final details;
-  _DetailsState(this.details);
+  final currentUser;
+  _DetailsState(this.details, this.currentUser);
 
   final TextEditingController _comment = TextEditingController();
+  String postId = Uuid().v4();
+  bool isUploading = false;
+  String description = "";
+  final mediaUrl = "https://image.tmdb.org/t/p/w342/";
 
   void dispose() {
     _comment.dispose();
     super.dispose();
   }
 
-  // createPostInFirestore(
-  //     {String mediaUrl, String location, String description}) {
-  //   postsRef
-  //       .doc(widget.currentUser.id)
-  //       .collection("userPosts")
-  //       .doc(postId)
-  //       .set({
-  //     "postId": postId,
-  //     "ownerId": widget.currentUser.id,
-  //     "username": widget.currentUser.username,
-  //     "mediaUrl": mediaUrl,
-  //     "description": description,
-  //     "timestamp": timestamp,
-  //     "likes": {},
-  //   });
-  //   captionController.clear();
-  //   searchController.clear();
-  //   setState(() {
-  //     //file = null;
-  //     isUploading = false;
-  //     postId = Uuid().v4();
-  //   });
-  // }
+  createPostInFirestore() {
+    final poster = details.poster;
+    postsRef
+        .doc(widget.currentUser.id)
+        .collection("userPosts")
+        .doc(postId)
+        .set({
+      "postId": postId,
+      "ownerId": widget.currentUser.id,
+      "username": widget.currentUser.username,
+      "mediaUrl": "https://image.tmdb.org/t/p/w342" + poster,
+      "description": description,
+      "timestamp": timestamp,
+      "likes": {},
+    });
+    _comment.clear();
+    setState(() {
+      isUploading = false;
+      postId = Uuid().v4();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,24 +75,22 @@ class _DetailsState extends State<DetailsPage> {
                     fontFamily: 'CherryCreamSoda',
                   ),
                 ),
-                background: Stack(
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: double.infinity,
-                      child: details.poster != null
-                          ? Image.network(
-                              "https://image.tmdb.org/t/p/w342/" + details.poster)
-                          : Image.asset("assets/images/noPoster.png"),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                        Colors.black.withOpacity(0.8),
-                        Colors.transparent,
-                      ])),
-                    ),
-                  ]),
+                background: Stack(children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: double.infinity,
+                    child: details.poster != null
+                        ? Image.network(mediaUrl + details.poster)
+                        : Image.asset("assets/images/noPoster.png"),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: [
+                      Colors.black.withOpacity(0.8),
+                      Colors.transparent,
+                    ])),
+                  ),
+                ]),
               ),
             ),
           ];
@@ -94,18 +100,20 @@ class _DetailsState extends State<DetailsPage> {
             height: 400,
             padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
             child: ListView(children: <Widget>[
-              Text("Overview", 
-                textAlign: TextAlign.center, 
-                style: TextStyle(
-                  fontWeight: FontWeight.bold, 
-                  fontSize: 15.0,
-                )
-              ),
-               SizedBox(
+              Text("Overview",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15.0,
+                  )),
+              SizedBox(
                 height: 5.0,
               ),
-              Text(details.overview != null ? details.overview : "No overview available.", 
-              textAlign: TextAlign.justify),
+              Text(
+                  details.overview != null
+                      ? details.overview
+                      : "No overview available.",
+                  textAlign: TextAlign.justify),
               SizedBox(
                 height: 20.0,
               ),
@@ -118,12 +126,20 @@ class _DetailsState extends State<DetailsPage> {
                   border: OutlineInputBorder(),
                   labelText: "Add a comment ...",
                 ),
+                onChanged: (value) {
+                  setState(() {
+                    description = value;
+                  });
+                },
               ),
               SizedBox(height: 10.0),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: RaisedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    createPostInFirestore();
+                    isUploading = true;
+                  },
                   child:
                       const Text("Create Post", style: TextStyle(fontSize: 15)),
                   color: Colors.blue,
@@ -131,9 +147,7 @@ class _DetailsState extends State<DetailsPage> {
                   elevation: 5,
                 ),
               ),
-            ]
-          )
-        ),
+            ])),
       ),
     );
   }
