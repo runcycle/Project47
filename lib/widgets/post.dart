@@ -165,7 +165,7 @@ class _PostState extends State<Post> {
       }
     });
     // delete uploaded image for the post
-    storageRef.child("post_$postId.jpg").delete();
+    //storageRef.child("post_$postId.jpg").delete();
     // then delete all activity feed notifications
     QuerySnapshot activityFeedSnapshot = await activityFeedRef
         .doc(ownerId)
