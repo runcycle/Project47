@@ -2,6 +2,7 @@
 import 'package:WatchA/models/show.dart';
 import 'package:WatchA/models/user.dart';
 import 'package:WatchA/pages/home.dart';
+import 'package:WatchA/pages/timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -24,6 +25,7 @@ class _DetailsState extends State<DetailsPage> {
   String postId = Uuid().v4();
   bool isUploading = false;
   String description = "";
+  bool renderPage = false;
   final mediaUrl = "https://image.tmdb.org/t/p/w342/";
 
   void dispose() {
@@ -50,6 +52,19 @@ class _DetailsState extends State<DetailsPage> {
     setState(() {
       isUploading = false;
       postId = Uuid().v4();
+    });
+    //Navigator.pop(context);
+  }
+
+  navigateToTimeline() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              Timeline(currentUser: currentUser, renderPage: renderPage)),
+    );
+    setState(() {
+      renderPage = true;
     });
   }
 
@@ -139,6 +154,7 @@ class _DetailsState extends State<DetailsPage> {
                   onPressed: () {
                     createPostInFirestore();
                     isUploading = true;
+                    navigateToTimeline();
                   },
                   child:
                       const Text("Create Post", style: TextStyle(fontSize: 15)),
@@ -147,7 +163,9 @@ class _DetailsState extends State<DetailsPage> {
                   elevation: 5,
                 ),
               ),
-            ])),
+            ]
+          )
+        ),
       ),
     );
   }
