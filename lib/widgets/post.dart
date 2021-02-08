@@ -283,7 +283,7 @@ class _PostState extends State<Post> {
       ),
     );
   }
-
+  
   buildPostFooter() {
     return Column(
       children: <Widget>[
