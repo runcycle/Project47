@@ -1,3 +1,4 @@
+import 'package:WatchA/pages/timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:WatchA/pages/home.dart';
@@ -14,13 +15,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ShowShare',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Color(0xFFab47bc),
-        accentColor: Color(0xFF42a5f5),
-      ),
-      home: Home(),
+        title: 'Bingeable',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primaryColor: Color(0xFFab47bc),
+          accentColor: Color(0xFF42a5f5),
+        ),
+        //home: Home(),
+        initialRoute: "/",
+        routes: {
+          "/": (context) => Home(),
+          "/timeline": (context) => Timeline(),
+      }
     );
   }
 }

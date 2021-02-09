@@ -56,17 +56,13 @@ class _DetailsState extends State<DetailsPage> {
     //Navigator.pop(context);
   }
 
-  navigateToTimeline() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) =>
-              Timeline(currentUser: currentUser, renderPage: renderPage)),
-    );
-    setState(() {
-      renderPage = true;
-    });
-  }
+  // navigateToTimeline() {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //         builder: (context) => Timeline(currentUser: currentUser)),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +150,7 @@ class _DetailsState extends State<DetailsPage> {
                   onPressed: () {
                     createPostInFirestore();
                     isUploading = true;
-                    navigateToTimeline();
+                    Navigator.pop(context);
                   },
                   child:
                       const Text("Create Post", style: TextStyle(fontSize: 15)),
@@ -163,9 +159,7 @@ class _DetailsState extends State<DetailsPage> {
                   elevation: 5,
                 ),
               ),
-            ]
-          )
-        ),
+            ])),
       ),
     );
   }
