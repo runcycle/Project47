@@ -98,15 +98,17 @@ class _UploadState extends State<Upload>
     super.build(context);
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white70,
+          elevation: 15,
+          backgroundColor: Theme.of(context).accentColor,
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () => {},
           ),
           title: Text(
             "Create a Post",
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0),
           ),
+          centerTitle: true,
         ),
         body: ListView(
           children: <Widget>[

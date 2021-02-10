@@ -21,12 +21,12 @@ class MyApp extends StatelessWidget {
           primaryColor: Color(0xFFab47bc),
           accentColor: Color(0xFF42a5f5),
         ),
-        //home: Home(),
-        initialRoute: "/",
-        routes: {
-          "/": (context) => Home(),
-          "/timeline": (context) => Timeline(),
-      }
+        home: Home(),
+        // initialRoute: "/",
+        // routes: {
+        //   "/": (context) => Home(),
+        //   "/timeline": (context) => Timeline(),
+        // }
     );
   }
 }

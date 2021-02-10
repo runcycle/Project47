@@ -36,7 +36,7 @@ class _ActivityFeedState extends State<ActivityFeed> {
       appBar: AppBar(
             elevation: 15,
             backgroundColor: Theme.of(context).accentColor,
-            title: Text('Recent Activity',style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
+            title: Text('Recent Activity', style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
             centerTitle: true,
           ),
       body: Container(

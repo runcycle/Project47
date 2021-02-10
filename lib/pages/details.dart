@@ -53,16 +53,7 @@ class _DetailsState extends State<DetailsPage> {
       isUploading = false;
       postId = Uuid().v4();
     });
-    //Navigator.pop(context);
   }
-
-  // navigateToTimeline() {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //         builder: (context) => Timeline(currentUser: currentUser)),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -147,8 +138,8 @@ class _DetailsState extends State<DetailsPage> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: RaisedButton(
-                  onPressed: () {
-                    createPostInFirestore();
+                  onPressed: () async {
+                    await createPostInFirestore();
                     isUploading = true;
                     Navigator.pop(context);
                   },
