@@ -1,10 +1,8 @@
-//import 'package:WatchA/models/show.dart';
-import 'package:WatchA/models/show.dart';
 import 'package:WatchA/models/user.dart';
 import 'package:WatchA/pages/home.dart';
-import 'package:WatchA/pages/timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class DetailsPage extends StatefulWidget {
   final details;
@@ -17,6 +15,10 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsState extends State<DetailsPage> {
+  firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
+  firebase_storage.Reference noPosterRef =
+      firebase_storage.FirebaseStorage.instance.ref("noPoster.jpg");
   final details;
   final currentUser;
   _DetailsState(this.details, this.currentUser);
@@ -33,8 +35,10 @@ class _DetailsState extends State<DetailsPage> {
     super.dispose();
   }
 
-  createPostInFirestore() {
-    final poster = details.poster;
+  createPostInFirestore() async {
+    final noPoster = await noPosterRef.getDownloadURL();
+    final poster =
+        details.poster != null ? mediaUrl + details.poster : noPoster;
     postsRef
         .doc(widget.currentUser.id)
         .collection("userPosts")
@@ -43,7 +47,7 @@ class _DetailsState extends State<DetailsPage> {
       "postId": postId,
       "ownerId": widget.currentUser.id,
       "username": widget.currentUser.username,
-      "mediaUrl": "https://image.tmdb.org/t/p/w342" + poster,
+      "mediaUrl": poster,
       "description": description,
       "timestamp": timestamp,
       "likes": {},

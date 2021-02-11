@@ -100,10 +100,10 @@ class _UploadState extends State<Upload>
         appBar: AppBar(
           elevation: 15,
           backgroundColor: Theme.of(context).accentColor,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () => {},
-          ),
+          // leading: IconButton(
+          //   icon: Icon(Icons.arrow_back, color: Colors.black),
+          //   onPressed: () => {},
+          // ),
           title: Text(
             "Create a Post",
             style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0),
