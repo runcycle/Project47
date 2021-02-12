@@ -16,6 +16,8 @@ class _SearchState extends State<Search>
     with AutomaticKeepAliveClientMixin<Search> {
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
+  final _formKey = GlobalKey<FormState>();
+  String query = "";
 
   handleSearch(String query) {
     Future<QuerySnapshot> users =
@@ -27,6 +29,9 @@ class _SearchState extends State<Search>
 
   clearSearch() {
     searchController.clear();
+    setState(() {
+      searchResultsFuture = null;
+    });
   }
 
   AppBar buildSearchField() {
@@ -58,20 +63,20 @@ class _SearchState extends State<Search>
         child: ListView(
           shrinkWrap: true,
           children: <Widget>[
-            SvgPicture.asset(
-              "assets/images/search.svg",
-              height: orientation == Orientation.portrait ? 250.0 : 150.0,
-            ),
-            Text(
-              "Find Users",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w600,
-                fontSize: 50.0,
-              ),
-            ),
+            // SvgPicture.asset(
+            //   "assets/images/search.svg",
+            //   height: orientation == Orientation.portrait ? 250.0 : 150.0,
+            // ),
+            // Text(
+            //   "Find Users",
+            //   textAlign: TextAlign.center,
+            //   style: TextStyle(
+            //     color: Colors.white,
+            //     fontStyle: FontStyle.italic,
+            //     fontWeight: FontWeight.w600,
+            //     fontSize: 50.0,
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -103,10 +108,69 @@ class _SearchState extends State<Search>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).accentColor.withOpacity(0.5),
-      appBar: buildSearchField(),
-      body:
-          searchResultsFuture == null ? buildNoContent() : buildSearchResults(),
+      //backgroundColor: Theme.of(context).accentColor.withOpacity(0.5),
+      appBar: AppBar(
+        elevation: 15,
+        backgroundColor: Theme.of(context).accentColor,
+        title: Text(
+          "Search for a User",
+          style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0),
+        ),
+        centerTitle: true,
+      ),
+      body: ListView(
+        children: <Widget>[
+          SizedBox(height: 10),
+          TextFormField(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              controller: searchController,
+              decoration: InputDecoration(
+                hintText: "Search for a user...",
+                filled: true,
+                prefixIcon: Icon(
+                  Icons.account_box,
+                  size: 28.0,
+                ),
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.clear),
+                  onPressed: clearSearch,
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  query = value;
+                });
+              },
+              validator: (value) {
+                if (value.isEmpty) {
+                  return "Please enter a search term";
+                }
+                return null;
+              }),
+          SizedBox(height: 10),
+          Container(
+              width: MediaQuery.of(context).size.width,
+              height: 30.0,
+              alignment: Alignment.center,
+              child: ElevatedButton(
+                child: Text(
+                  "Submit",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  handleSearch(query);
+                  FocusManager.instance.primaryFocus.unfocus();
+                },
+              )),
+          SizedBox(height: 10),
+          Container(
+            height: MediaQuery.of(context).size.height,
+            child: 
+            searchResultsFuture == null ? buildNoContent() : buildSearchResults(),
+          ),
+        ],
+      ),
     );
   }
 }

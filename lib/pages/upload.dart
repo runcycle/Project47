@@ -74,7 +74,6 @@ class _UploadState extends State<Upload>
         _shows = showList;
         isUploading = false;
       });
-      FocusManager.instance.primaryFocus.unfocus();
     } else {
       throw Exception("Failed to load request.");
     }
@@ -153,6 +152,7 @@ class _UploadState extends State<Upload>
                   onPressed: () {
                     searchShows(query);
                     isUploading = true;
+                    FocusManager.instance.primaryFocus.unfocus();
                   },
                 )),
             Container(
