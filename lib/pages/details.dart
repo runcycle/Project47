@@ -50,6 +50,7 @@ class _DetailsState extends State<DetailsPage> {
       "mediaUrl": poster,
       "description": description,
       "timestamp": timestamp,
+      "title": details.title,
       "likes": {},
     });
     _comment.clear();

@@ -1,6 +1,5 @@
 class Show {
   final int id;
-  //final int popularity;
   final String title;
   final String poster;
   final String overview;
@@ -9,7 +8,6 @@ class Show {
 
   Show({
     this.id,
-    //this.popularity,
     this.title,
     this.poster,
     this.overview,
@@ -20,7 +18,6 @@ class Show {
   factory Show.fromJson(Map<String, dynamic> json) {
     return Show(
       id: json["id"],
-      //popularity: json["popularity"],
       title: json["title"],
       poster: json["poster_path"],
       overview: json["overview"],

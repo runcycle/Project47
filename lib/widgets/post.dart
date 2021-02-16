@@ -15,7 +15,7 @@ class Post extends StatefulWidget {
   final String postId;
   final String ownerId;
   final String username;
-  //final String location;
+  final String title;
   final String description;
   final String mediaUrl;
   final dynamic likes;
@@ -24,7 +24,7 @@ class Post extends StatefulWidget {
     this.postId,
     this.ownerId,
     this.username,
-    //this.location,
+    this.title,
     this.description,
     this.mediaUrl,
     this.likes,
@@ -35,7 +35,7 @@ class Post extends StatefulWidget {
       postId: doc["postId"],
       ownerId: doc["ownerId"],
       username: doc["username"],
-      //location: doc["location"],
+      title: doc["title"],
       description: doc["description"],
       mediaUrl: doc["mediaUrl"],
       likes: doc["likes"],
@@ -61,7 +61,7 @@ class Post extends StatefulWidget {
         postId: this.postId,
         ownerId: this.ownerId,
         username: this.username,
-        //location: this.location,
+        title: this.title,
         description: this.description,
         mediaUrl: this.mediaUrl,
         likes: this.likes,
@@ -74,7 +74,7 @@ class _PostState extends State<Post> {
   final String postId;
   final String ownerId;
   final String username;
-  //final String location;
+  final String title;
   final String description;
   final String mediaUrl;
   bool showHeart = false;
@@ -86,7 +86,7 @@ class _PostState extends State<Post> {
     this.postId,
     this.ownerId,
     this.username,
-    //this.location,
+    this.title,
     this.description,
     this.mediaUrl,
     this.likes,
@@ -154,12 +154,7 @@ class _PostState extends State<Post> {
 
   deletePost() async {
     // delte post itself
-    postsRef
-        .doc(ownerId)
-        .collection("userPosts")
-        .doc(postId)
-        .get()
-        .then((doc) {
+    postsRef.doc(ownerId).collection("userPosts").doc(postId).get().then((doc) {
       if (doc.exists) {
         doc.reference.delete();
       }
@@ -178,10 +173,8 @@ class _PostState extends State<Post> {
       }
     });
     // then delete all comments
-    QuerySnapshot commentsSnapshot = await commentsRef
-      .doc(postId)
-      .collection("comments")
-      .get();
+    QuerySnapshot commentsSnapshot =
+        await commentsRef.doc(postId).collection("comments").get();
     commentsSnapshot.docs.forEach((doc) {
       if (doc.exists) {
         doc.reference.delete();
@@ -228,11 +221,7 @@ class _PostState extends State<Post> {
   addLikeToActivityFeed() {
     bool isNotPostOwner = currentUserId != ownerId;
     if (isNotPostOwner) {
-      activityFeedRef
-          .doc(ownerId)
-          .collection("feedItems")
-          .doc(postId)
-          .set({
+      activityFeedRef.doc(ownerId).collection("feedItems").doc(postId).set({
         "type": "like",
         "username": currentUser.username,
         "userId": currentUser.id,
@@ -283,10 +272,21 @@ class _PostState extends State<Post> {
       ),
     );
   }
-  
+
   buildPostFooter() {
     return Column(
       children: <Widget>[
+        SizedBox(
+          height: 5.0
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            title != null ? Text("$title", 
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)
+              ) : Text(""),
+            ],
+          ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
@@ -360,6 +360,7 @@ class _PostState extends State<Post> {
         buildPostHeader(),
         buildPostImage(),
         buildPostFooter(),
+        SizedBox(height: 20),
       ],
     );
   }

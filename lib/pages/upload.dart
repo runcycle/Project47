@@ -1,17 +1,9 @@
-import 'dart:async';
-//import 'dart:io';
 import 'dart:convert';
 import 'package:WatchA/models/show.dart';
 import 'package:WatchA/widgets/shows_tile.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:WatchA/models/user.dart';
-//import 'package:WatchA/models/show.dart';
-import 'package:WatchA/pages/home.dart';
-//import 'package:WatchA/widgets/progress.dart';
-//import 'package:WatchA/widgets/shows_tile.dart';
-//import 'package:cached_network_image/cached_network_image.dart';
-//import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
