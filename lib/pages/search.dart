@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+//import 'package:flutter_svg/flutter_svg.dart';
 import 'package:WatchA/models/user.dart';
 import 'package:WatchA/pages/home.dart';
 import 'package:WatchA/widgets/progress.dart';
@@ -98,8 +98,9 @@ class _SearchState extends State<Search>
           });
           return ListView(
             children: searchResults,
-          );
-        });
+        );
+      }
+    );
   }
 
   bool get wantKeepAlive => true;
@@ -183,23 +184,39 @@ class UserResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).accentColor.withOpacity(0.9),
+      color: Colors.white,
       child: Column(
         children: <Widget>[
-          GestureDetector(
-            onTap: () => showProfile(context, profileId: user.id),
-            child: ListTile(
-              leading: CircleAvatar(
-                  backgroundColor: Colors.grey,
-                  backgroundImage: CachedNetworkImageProvider(user.photoUrl)),
-              title: Text(
-                user.displayName,
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-              subtitle: Text(
-                user.username,
-                style: TextStyle(color: Colors.white),
+          Card(
+            elevation: 5.0,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter, 
+                  colors: [
+                    const Color(0xFFab47bc),
+                    const Color(0xFFcd5ae0)
+                    ], 
+                  )
+                ),
+              child: GestureDetector(
+                onTap: () => showProfile(context, profileId: user.id),
+                child: ListTile(
+                  leading: CircleAvatar(
+                      radius: 25.0,
+                      backgroundColor: Colors.white,
+                      backgroundImage: CachedNetworkImageProvider(user.photoUrl)),
+                  title: Text(
+                    user.displayName,
+                    style:
+                        TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    user.username,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               ),
             ),
           ),

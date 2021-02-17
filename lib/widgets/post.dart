@@ -354,14 +354,17 @@ class _PostState extends State<Post> {
   @override
   Widget build(BuildContext context) {
     isLiked = (likes[currentUserId] == true);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        buildPostHeader(),
-        buildPostImage(),
-        buildPostFooter(),
-        SizedBox(height: 20),
-      ],
+    return Card(
+      elevation: 5.0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                buildPostHeader(),
+                buildPostImage(),
+                buildPostFooter(),
+                SizedBox(height: 10),
+          ],
+        ),
     );
   }
 }

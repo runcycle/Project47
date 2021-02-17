@@ -137,42 +137,58 @@ class ActivityFeedItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     configureMediaPreview(context);
-    return Padding(
-      padding: EdgeInsets.only(bottom: 2.0),
-      child: Container(
-        color: Colors.white54,
-        child: ListTile(
-          title: GestureDetector(
-            onTap: () => showProfile(context, profileId: userId),
-            child: RichText(
-              overflow: TextOverflow.ellipsis,
-              text: TextSpan(
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.black,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: username,
+    return Card(
+        //color: Colors.purple[400],
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 2.0),
+          child: Container(
+            decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end:
+                  Alignment.bottomCenter, 
+              colors: [
+                const Color(0xFFab47bc),
+                const Color(0xffcd5ae0)
+                ], 
+              )
+            ),
+            child: ListTile(
+              title: GestureDetector(
+                onTap: () => showProfile(context, profileId: userId),
+                child: RichText(
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontSize: 14.0,
+                        color: Colors.white,
                       ),
-                    ),
-                    TextSpan(
-                      text: " $activityItemText",
-                    ),
-                  ]),
+                      children: [
+                        TextSpan(
+                          text: username,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextSpan(
+                          text: " $activityItemText",
+                        ),
+                      ]),
+                ),
+              ),
+              leading: CircleAvatar(
+                backgroundImage: CachedNetworkImageProvider(userProfileImg),
+                backgroundColor: Colors.white,
+                radius: 25.0,
+              ),
+              subtitle: Text(
+                timeago.format(timestamp.toDate()),
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Colors.white54, fontWeight: FontWeight.bold, fontSize: 13.0)
+              ),
+              trailing: mediaPreview,
             ),
           ),
-          leading: CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(userProfileImg),
-          ),
-          subtitle: Text(
-            timeago.format(timestamp.toDate()),
-            overflow: TextOverflow.ellipsis,
-          ),
-          trailing: mediaPreview,
-        ),
       ),
     );
   }
