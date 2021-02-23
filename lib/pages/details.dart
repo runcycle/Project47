@@ -106,8 +106,7 @@ class _DetailsState extends State<DetailsPage> {
             width: MediaQuery.of(context).size.width,
             height: 400,
             padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-            child: ListView(
-              children: <Widget>[
+            child: ListView(children: <Widget>[
               Text("Overview",
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -141,6 +140,7 @@ class _DetailsState extends State<DetailsPage> {
                 },
               ),
               SizedBox(height: 10.0),
+              // Start building checkboxes right here!
               Align(
                 alignment: Alignment.bottomCenter,
                 child: RaisedButton(
