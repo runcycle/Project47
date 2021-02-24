@@ -60,6 +60,11 @@ class _DetailsState extends State<DetailsPage> {
     });
   }
 
+  Widget buildNetworkList() => Center(
+     child: DropdownButton(
+       items: [],)
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,8 +144,16 @@ class _DetailsState extends State<DetailsPage> {
                   });
                 },
               ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 15.0),
+              Text("Which network did you watch this on?", 
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15.0,
+                  )
+                ),
               // Start building checkboxes right here!
+              buildNetworkList(),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: RaisedButton(
