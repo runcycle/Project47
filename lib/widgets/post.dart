@@ -17,6 +17,7 @@ class Post extends StatefulWidget {
   final String username;
   final String title;
   final String description;
+  final String network;
   final String mediaUrl;
   final dynamic likes;
 
@@ -26,6 +27,7 @@ class Post extends StatefulWidget {
     this.username,
     this.title,
     this.description,
+    this.network,
     this.mediaUrl,
     this.likes,
   });
@@ -37,6 +39,7 @@ class Post extends StatefulWidget {
       username: doc["username"],
       title: doc["title"],
       description: doc["description"],
+      network: doc["network"],
       mediaUrl: doc["mediaUrl"],
       likes: doc["likes"],
     );
@@ -63,6 +66,7 @@ class Post extends StatefulWidget {
         username: this.username,
         title: this.title,
         description: this.description,
+        network: this.network,
         mediaUrl: this.mediaUrl,
         likes: this.likes,
         likeCount: getLikeCount(this.likes),
@@ -76,6 +80,7 @@ class _PostState extends State<Post> {
   final String username;
   final String title;
   final String description;
+  final String network;
   final String mediaUrl;
   bool showHeart = false;
   int likeCount;
@@ -88,6 +93,7 @@ class _PostState extends State<Post> {
     this.username,
     this.title,
     this.description,
+    this.network,
     this.mediaUrl,
     this.likes,
     this.likeCount,
@@ -276,17 +282,30 @@ class _PostState extends State<Post> {
   buildPostFooter() {
     return Column(
       children: <Widget>[
-        SizedBox(
-          height: 5.0
-        ),
+        SizedBox(height: 5.0),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            title != null ? Text("$title", 
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)
-              ) : Text(""),
-            ],
-          ),
+            title != null
+                ? Text("$title",
+                    style:
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold))
+                : Text(""),
+          ],
+        ),
+        SizedBox(height: 5.0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            network != null
+                ? Text("Watched on: $network",
+                    style:
+                        TextStyle(
+                          fontSize: 14.0,
+                      ))
+                : Text(""),
+          ],
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
@@ -356,15 +375,15 @@ class _PostState extends State<Post> {
     isLiked = (likes[currentUserId] == true);
     return Card(
       elevation: 5.0,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                buildPostHeader(),
-                buildPostImage(),
-                buildPostFooter(),
-                SizedBox(height: 10),
-          ],
-        ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          buildPostHeader(),
+          buildPostImage(),
+          buildPostFooter(),
+          SizedBox(height: 10),
+        ],
+      ),
     );
   }
 }
