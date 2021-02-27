@@ -125,7 +125,6 @@ class _DetailsState extends State<DetailsPage> {
               SizedBox(
                 height: 20.0,
               ),
-              //Text("Add a comment ...", style: TextStyle(color: Colors.lightBlue[700])),
               TextField(
                 controller: _comment,
                 keyboardType: TextInputType.multiline,
