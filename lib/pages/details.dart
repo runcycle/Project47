@@ -29,11 +29,111 @@ class _DetailsState extends State<DetailsPage> {
   String description = "";
   bool renderPage = false;
   final mediaUrl = "https://image.tmdb.org/t/p/w342/";
+  String network;
+  List networksList = [
+    "Netflix",
+    "Hulu",
+    "Disney+",
+    "Amazon Prime",
+    "YouTube TV",
+    "Peacock (NBC)",
+    "CBS All Access",
+    "Curiosity Stream",
+    "Sling TV",
+    "Philo",
+    "Kanopy",
+    "fuboTV",
+    "KweliTV",
+    "PBS Documentaries",
+    "Plex",
+    "Tubi",
+    "VRV",
+    "Crunchyroll",
+    "Dazn",
+    "discovery+",
+    "ESPN+",
+    "Funimation",
+    "Apple TV+",
+    "HBO Now",
+    "IFC Films Unlimited",
+    "IMDbTV",
+    "Locast",
+    "Mubi",
+    "NFL Game Pass",
+    "Ovid.tv",
+    "RetroCrush",
+    "Shudder",
+    "The Criterion Channel",
+    "Acorn TV",
+    "AT&T TV",
+    "BET+",
+    "BritBox",
+    "Crackle",
+    "DC Universe",
+    "Filmatique",
+    "Hidive",
+    "NFL Sunday Ticket",
+    "Pluto TV",
+    "Quibi",
+    "Screambox",
+    "Showtime",
+    "Starz",
+    "Sundance Now",
+    "BlackOakTV",
+    "Xumo"
+  ];
 
   void dispose() {
     _comment.dispose();
     super.dispose();
   }
+
+  Widget buildNetworkList() => Center(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey, width: 1),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: DropdownButton(
+            hint: Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: Text("Choose a streaming service ...",
+              style: TextStyle(
+                fontSize: 17
+                )
+              ),
+            ),
+            icon: Icon(Icons.arrow_drop_down),
+            iconSize: 30,
+            isExpanded: true,
+            underline: SizedBox(),
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+            ),
+            value: network,
+            onChanged: (newValue) {
+                setState(() {
+                  network = newValue;
+                });
+              },
+            items: networksList.map((valueItem) {
+                return DropdownMenuItem(
+                  value: valueItem, 
+                  child: Center(
+                    child: Text(
+                      valueItem,
+                    ),
+                  )
+                );
+              }
+            ).toList(),
+          ),
+        ),
+      )
+    );
 
   createPostInFirestore() async {
     final noPoster = await noPosterRef.getDownloadURL();
@@ -49,6 +149,7 @@ class _DetailsState extends State<DetailsPage> {
       "username": widget.currentUser.username,
       "mediaUrl": poster,
       "description": description,
+      "network": network,
       "timestamp": timestamp,
       "title": details.title,
       "likes": {},
@@ -106,8 +207,7 @@ class _DetailsState extends State<DetailsPage> {
             width: MediaQuery.of(context).size.width,
             height: 400,
             padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-            child: ListView(
-              children: <Widget>[
+            child: ListView(children: <Widget>[
               Text("Overview",
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -139,7 +239,16 @@ class _DetailsState extends State<DetailsPage> {
                   });
                 },
               ),
+              SizedBox(height: 15.0),
+              Text("Which network did you watch this on?",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15.0,
+                  )),
               SizedBox(height: 10.0),
+              // Start building checkboxes right here!
+              buildNetworkList(),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: RaisedButton(
