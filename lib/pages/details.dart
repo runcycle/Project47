@@ -151,7 +151,7 @@ class _DetailsState extends State<DetailsPage> {
       "description": description,
       "network": network,
       "timestamp": timestamp,
-      "title": details.title,
+      "title": details.title != null ? details.title : details.name,
       "likes": {},
     });
     _comment.clear();
