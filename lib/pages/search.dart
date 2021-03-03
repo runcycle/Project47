@@ -112,7 +112,7 @@ class _SearchState extends State<Search>
       //backgroundColor: Theme.of(context).accentColor.withOpacity(0.5),
       appBar: AppBar(
         elevation: 15,
-        backgroundColor: Theme.of(context).accentColor,
+        backgroundColor: Theme.of(context).primaryColor,
         title: Text(
           "Search for a User",
           style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0),
@@ -195,8 +195,8 @@ class UserResult extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter, 
                   colors: [
-                    const Color(0xFFab47bc),
-                    const Color(0xFFcd5ae0)
+                    const Color(0xFF42a5f5),
+                    const Color(0xFF75c1ff)
                     ], 
                   )
                 ),

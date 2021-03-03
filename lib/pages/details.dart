@@ -168,8 +168,8 @@ class _DetailsState extends State<DetailsPage> {
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
             SliverAppBar(
-              backgroundColor: Colors.lightBlueAccent,
-              expandedHeight: 400.0,
+              backgroundColor: Theme.of(context).primaryColor,
+              expandedHeight: 350.0,
               floating: false,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
@@ -194,7 +194,7 @@ class _DetailsState extends State<DetailsPage> {
                   Container(
                     decoration: BoxDecoration(
                         gradient: LinearGradient(colors: [
-                      Colors.black.withOpacity(0.8),
+                      Colors.black.withOpacity(0.7),
                       Colors.transparent,
                     ])),
                   ),
@@ -225,7 +225,7 @@ class _DetailsState extends State<DetailsPage> {
               SizedBox(
                 height: 20.0,
               ),
-              TextField(
+              TextFormField(
                 controller: _comment,
                 keyboardType: TextInputType.multiline,
                 maxLines: null,

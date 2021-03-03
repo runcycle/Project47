@@ -389,7 +389,7 @@ class _ProfileState extends State<Profile> {
       backgroundColor: Colors.white,
       appBar: AppBar(
             elevation: 15,
-            backgroundColor: Theme.of(context).accentColor,
+            backgroundColor: Theme.of(context).primaryColor,
             title: Text('Profile',style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
             centerTitle: true,
           ),

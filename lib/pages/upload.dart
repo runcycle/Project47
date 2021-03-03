@@ -90,7 +90,7 @@ class _UploadState extends State<Upload>
     return Scaffold(
         appBar: AppBar(
           elevation: 15,
-          backgroundColor: Theme.of(context).accentColor,
+          backgroundColor: Theme.of(context).primaryColor,
           // leading: IconButton(
           //   icon: Icon(Icons.arrow_back, color: Colors.black),
           //   onPressed: () => {},

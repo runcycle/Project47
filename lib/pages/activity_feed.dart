@@ -35,7 +35,7 @@ class _ActivityFeedState extends State<ActivityFeed> {
       backgroundColor: Colors.white,
       appBar: AppBar(
             elevation: 15,
-            backgroundColor: Theme.of(context).accentColor,
+            backgroundColor: Theme.of(context).primaryColor,
             title: Text('Recent Activity', style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
             centerTitle: true,
           ),
@@ -148,8 +148,8 @@ class ActivityFeedItem extends StatelessWidget {
               end:
                   Alignment.bottomCenter, 
               colors: [
-                const Color(0xFFab47bc),
-                const Color(0xffcd5ae0)
+                const Color(0xFF42a5f5),
+                const Color(0xFF75c1ff)
                 ], 
               )
             ),
