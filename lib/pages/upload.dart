@@ -109,7 +109,7 @@ class _UploadState extends State<Upload>
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 controller: searchController,
                 decoration: InputDecoration(
-                  hintText: "What are you binge-watching?",
+                  hintText: "What are you binging?",
                   filled: true,
                   prefixIcon: Icon(
                     Icons.search,
