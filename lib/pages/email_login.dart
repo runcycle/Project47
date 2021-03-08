@@ -135,7 +135,7 @@ class _EmailLoginState extends State<EmailLogin> {
                         border: OutlineInputBorder(),
                         labelText: "Password",
                         labelStyle: TextStyle(fontSize: 15.0),
-                        hintText: "Must be at least 3 characters",
+                        hintText: "Must be at least 8 characters",
                       ),
                     ),
                     SizedBox(height: 25.0),

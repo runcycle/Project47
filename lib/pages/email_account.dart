@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:WatchA/widgets/header.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:WatchA/pages/home.dart';
+import 'package:wc_form_validators/wc_form_validators.dart';
 
 class EmailAccount extends StatefulWidget {
   @override
@@ -220,7 +221,7 @@ class _EmailAccountState extends State<EmailAccount> {
                         border: OutlineInputBorder(),
                         labelText: "Username",
                         labelStyle: TextStyle(fontSize: 15.0),
-                        hintText: "Must be at least 3 characters",
+                        hintText: "Must be at least 3 characters.",
                       ),
                     ),
                     SizedBox(height: 10.0),
@@ -233,21 +234,18 @@ class _EmailAccountState extends State<EmailAccount> {
                     TextFormField(
                       controller: _password,
                       obscureText: true,
-                      validator: (val) {
-                        if (val.trim().length < 6 || val.isEmpty) {
-                          return "Password Too short";
-                        } else if (val.trim().length > 50) {
-                          return "Password Too Long";
-                        } else {
-                          return null;
-                        }
-                      },
+                      validator: Validators.compose([
+                        Validators.required("PW must include 1 uppercase letter, 1 number, and 1 symbol"),
+                        Validators.patternString(
+                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$', 'Invalid Password'
+                        )
+                      ]),
                       onSaved: (val) => password = val,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: "Password",
                         labelStyle: TextStyle(fontSize: 15.0),
-                        hintText: "Must be at least 3 characters",
+                        hintText: "Must be at least 8 characters -- see note below",
                       ),
                     ),
                     SizedBox(height: 10.0),
