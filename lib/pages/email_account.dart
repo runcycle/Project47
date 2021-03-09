@@ -135,8 +135,9 @@ class _EmailAccountState extends State<EmailAccount> {
     return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.white,
-        appBar: header(context,
-            titleText: "Create Your Account", removeBackButton: false),
+        appBar: AppBar(
+           title: Text('Create Your Account', style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
+        ),
         body: ModalProgressHUD(
             inAsyncCall: _showProgress,
             child: Form(
