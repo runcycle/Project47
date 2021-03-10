@@ -190,6 +190,7 @@ class _HomeState extends State<Home> {
         currentIndex: pageIndex,
         onTap: onTap,
         activeColor: Theme.of(context).primaryColor,
+        border: Border(top: BorderSide(width: 1.0, color: Colors.grey[300]),),
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.whatshot)),
           BottomNavigationBarItem(icon: Icon(Icons.new_releases)),
