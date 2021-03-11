@@ -5,6 +5,7 @@ class Show {
   final String overview;
   final String date;
   final String name;
+  final String mediaType;
 
   Show({
     this.id,
@@ -13,6 +14,7 @@ class Show {
     this.overview,
     this.date,
     this.name,
+    this.mediaType,
   });
 
   factory Show.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class Show {
       overview: json["overview"],
       date: json["release_date"],
       name: json["name"],
+      mediaType: json["media_type"],
     );
   }
 }

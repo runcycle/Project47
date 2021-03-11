@@ -7,7 +7,6 @@ import 'package:WatchA/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:WatchA/widgets/header.dart';
 import 'package:flutter_svg/svg.dart';
 
 class Profile extends StatefulWidget {
@@ -361,6 +360,22 @@ class _ProfileState extends State<Profile> {
     });
   }
 
+  filterMethod() async {
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   QuerySnapshot snapshot = await postsRef
+  //       .doc(widget.profileId)
+  //       .collection("userPosts")
+  //       .orderBy("mediaType", descending: true)
+  //       .get();
+  //   setState(() {
+  //     isLoading = false;
+  //     postCount = snapshot.docs.length;
+  //     posts = snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
+  //   });
+  }
+
   buildTogglePostOrientation() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -379,20 +394,38 @@ class _ProfileState extends State<Profile> {
               ? Theme.of(context).primaryColor
               : Colors.grey,
         ),
+        PopupMenuButton(
+          onSelected: null,
+          icon: Icon(Icons.filter_alt_outlined, color: Colors.grey),
+          color: Colors.purple[400],
+          elevation: 2.0,
+          itemBuilder: (BuildContext context) {
+            return [
+              PopupMenuItem(
+                child: Text("All", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
+              PopupMenuItem(
+                child: Text("Movies", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
+              PopupMenuItem(
+                child: Text("TV Shows", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
+              PopupMenuItem(
+                child: Text("Podcasts", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
+            ];
+          },
+        ),
       ],
     );
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-            elevation: 15,
-            backgroundColor: Theme.of(context).primaryColor,
-            title: Text('Profile',style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
-            centerTitle: true,
-          ),
+        elevation: 15,
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Text('Profile',
+            style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
+        centerTitle: true,
+      ),
       body: ListView(
         children: <Widget>[
           buildProfileHeader(),
