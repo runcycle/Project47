@@ -27,6 +27,8 @@ class _ProfileState extends State<Profile> {
   int followerCount = 0;
   int followingCount = 0;
   List<Post> posts = [];
+  String postType = "";
+  String headerTitle = "All Posts";
 
   @override
   void initState() {
@@ -360,20 +362,49 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  filterMethod() async {
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-  //   QuerySnapshot snapshot = await postsRef
-  //       .doc(widget.profileId)
-  //       .collection("userPosts")
-  //       .orderBy("mediaType", descending: true)
-  //       .get();
-  //   setState(() {
-  //     isLoading = false;
-  //     postCount = snapshot.docs.length;
-  //     posts = snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
-  //   });
+  filterMedia() async {
+    if (postType == "all") {
+      QuerySnapshot snapshot =
+          await postsRef.doc(widget.profileId).collection("userPosts").get();
+      setState(() {
+        posts = snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
+        headerTitle = "All Posts";
+      });
+      buildProfilePosts();
+    } else if (postType == "movie") {
+      QuerySnapshot snapshot = await postsRef
+          .doc(widget.profileId)
+          .collection("userPosts")
+          .where("mediaType", isEqualTo: "movie")
+          .get();
+      setState(() {
+        posts = snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
+        headerTitle = "Movies";
+      });
+      buildProfilePosts();
+    } else if (postType == "tv") {
+      QuerySnapshot snapshot = await postsRef
+          .doc(widget.profileId)
+          .collection("userPosts")
+          .where("mediaType", isEqualTo: "tv")
+          .get();
+      setState(() {
+        posts = snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
+        headerTitle = "TV Shows";
+      });
+      buildProfilePosts();
+    } else if (postType == "podcast") {
+      QuerySnapshot snapshot = await postsRef
+          .doc(widget.profileId)
+          .collection("userPosts")
+          .where("mediaType", isEqualTo: "podcast")
+          .get();
+      setState(() {
+        posts = snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
+        headerTitle = "Podcasts";
+      });
+      buildProfilePosts();
+    }
   }
 
   buildTogglePostOrientation() {
@@ -395,25 +426,65 @@ class _ProfileState extends State<Profile> {
               : Colors.grey,
         ),
         PopupMenuButton(
-          onSelected: null,
+          onSelected: (result) {
+            setState(() {
+              postType = result;
+            });
+            print(postType);
+            filterMedia();
+          },
           icon: Icon(Icons.filter_alt_outlined, color: Colors.grey),
           color: Colors.purple[400],
           elevation: 2.0,
           itemBuilder: (BuildContext context) {
             return [
               PopupMenuItem(
-                child: Text("All", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
+                  value: "all",
+                  child: Text("All",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold))),
               PopupMenuItem(
-                child: Text("Movies", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
+                  value: "movie",
+                  child: Text("Movies",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold))),
               PopupMenuItem(
-                child: Text("TV Shows", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
+                  value: "tv",
+                  child: Text("TV Shows",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold))),
               PopupMenuItem(
-                child: Text("Podcasts", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
+                value: "podcast",
+                child: Text("Podcasts",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
+              ),
             ];
           },
         ),
       ],
     );
+  }
+
+  buildPostHeader() {
+    return Row(children: <Widget>[
+      Container(
+          height: 25.0,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            border: Border(
+                top: BorderSide(width: 1.0, color: Colors.grey),
+                bottom: BorderSide(width: 1.0, color: Colors.grey)),
+            //color: Colors.grey
+          ),
+          child: Center(
+            child: Text(
+              headerTitle,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+            ),
+          ))
+    ]);
   }
 
   Widget build(BuildContext context) {
@@ -431,8 +502,9 @@ class _ProfileState extends State<Profile> {
           buildProfileHeader(),
           Divider(),
           buildTogglePostOrientation(),
+          buildPostHeader(),
           Divider(
-            height: 0.0,
+            height: 5.0,
           ),
           buildProfilePosts(),
         ],
