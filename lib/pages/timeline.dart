@@ -120,7 +120,13 @@ class _TimelineState extends State<Timeline> {
 
   Widget build(context) {
     return Scaffold(
-      appBar: header(context, isAppTitle: true),
+      appBar: AppBar(
+        title: Text('Bingeable',
+            style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
+        centerTitle: true,
+        elevation: 15,
+        backgroundColor: Theme.of(context).primaryColor,
+      ),
       body: RefreshIndicator(
         onRefresh: () => getTimeline(),
         child: buildTimeline(),

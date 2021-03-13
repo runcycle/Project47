@@ -52,7 +52,8 @@ class _ShowsTileState extends State<ShowsTile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(show.title != null ? show.title : show.name),
-                      Text(show.date != null ? show.date : ""),
+                      SizedBox(height: 5.0),
+                      Text(show.date != null ? show.date.substring(0, 4) : ""),
                     ],
                   ),
                 ),

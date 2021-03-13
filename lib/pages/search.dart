@@ -195,8 +195,8 @@ class UserResult extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter, 
                   colors: [
-                    const Color(0xFF42a5f5),
-                    const Color(0xFF75c1ff)
+                    const Color(0xFF1b96fa),
+                    const Color(0xFF42a5f5)
                     ], 
                   )
                 ),

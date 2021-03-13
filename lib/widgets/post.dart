@@ -19,6 +19,7 @@ class Post extends StatefulWidget {
   final String description;
   final String network;
   final String mediaUrl;
+  final String mediaType;
   final dynamic likes;
 
   Post({
@@ -29,6 +30,7 @@ class Post extends StatefulWidget {
     this.description,
     this.network,
     this.mediaUrl,
+    this.mediaType,
     this.likes,
   });
 
@@ -41,6 +43,7 @@ class Post extends StatefulWidget {
       description: doc["description"],
       network: doc["network"],
       mediaUrl: doc["mediaUrl"],
+      mediaType: doc["mediaType"],
       likes: doc["likes"],
     );
   }
@@ -68,6 +71,7 @@ class Post extends StatefulWidget {
         description: this.description,
         network: this.network,
         mediaUrl: this.mediaUrl,
+        mediaType: this.mediaType,
         likes: this.likes,
         likeCount: getLikeCount(this.likes),
       );
@@ -82,6 +86,7 @@ class _PostState extends State<Post> {
   final String description;
   final String network;
   final String mediaUrl;
+  final String mediaType;
   bool showHeart = false;
   int likeCount;
   Map likes;
@@ -95,6 +100,7 @@ class _PostState extends State<Post> {
     this.description,
     this.network,
     this.mediaUrl,
+    this.mediaType,
     this.likes,
     this.likeCount,
   });
@@ -291,6 +297,7 @@ class _PostState extends State<Post> {
                     style:
                         TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold))
                 : Text(""),
+            Text(" ($mediaType)"),
           ],
         ),
         SizedBox(height: 5.0),
@@ -299,10 +306,9 @@ class _PostState extends State<Post> {
           children: [
             network != null
                 ? Text("Watched on: $network",
-                    style:
-                        TextStyle(
-                          fontSize: 14.0,
-                      ))
+                    style: TextStyle(
+                      fontSize: 14.0,
+                    ))
                 : Text(""),
           ],
         ),

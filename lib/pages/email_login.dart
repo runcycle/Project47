@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:WatchA/widgets/header.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:WatchA/pages/home.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class EmailLogin extends StatefulWidget {
   @override
@@ -24,6 +25,7 @@ class _EmailLoginState extends State<EmailLogin> {
   String email;
   String password;
   String username;
+  String error;
   bool _showProgress = false;
   String uid;
   User loggedInUser;
@@ -61,8 +63,44 @@ class _EmailLoginState extends State<EmailLogin> {
         }
       } catch (e) {
         print(e);
+        setState(() {
+          error = e.message;
+          _showProgress = false;
+        });
       }
     }
+  }
+
+  Widget showAlert() {
+    if (error != null) {
+      return Container(
+        color: Colors.amberAccent,
+        width: double.infinity,
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Icon(Icons.error_outline),
+            ),
+            Expanded(
+              child: AutoSizeText(error, maxLines: 3),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    setState(() {
+                      error = null;
+                    });
+                  }),
+            ),
+          ],
+        ),
+      );
+    }
+    return SizedBox(height: 0.0);
   }
 
   void dispose() {
@@ -85,6 +123,8 @@ class _EmailLoginState extends State<EmailLogin> {
               child: ListView(
                   padding: const EdgeInsets.all(20),
                   children: <Widget>[
+                    SizedBox(height: 5.0),
+                    showAlert(),
                     SizedBox(height: 20.0),
                     Text(
                       "Please Enter Your Email Address",

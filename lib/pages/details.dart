@@ -89,7 +89,7 @@ class _DetailsState extends State<DetailsPage> {
   }
 
   Widget buildNetworkList() => Center(
-      child: Padding(
+          child: Padding(
         padding: const EdgeInsets.only(bottom: 10.0),
         child: Container(
           decoration: BoxDecoration(
@@ -100,10 +100,7 @@ class _DetailsState extends State<DetailsPage> {
             hint: Padding(
               padding: const EdgeInsets.only(left: 10.0),
               child: Text("Choose a streaming service ...",
-              style: TextStyle(
-                fontSize: 17
-                )
-              ),
+                  style: TextStyle(fontSize: 17)),
             ),
             icon: Icon(Icons.arrow_drop_down),
             iconSize: 30,
@@ -115,25 +112,22 @@ class _DetailsState extends State<DetailsPage> {
             ),
             value: network,
             onChanged: (newValue) {
-                setState(() {
-                  network = newValue;
-                });
-              },
+              setState(() {
+                network = newValue;
+              });
+            },
             items: networksList.map((valueItem) {
-                return DropdownMenuItem(
-                  value: valueItem, 
+              return DropdownMenuItem(
+                  value: valueItem,
                   child: Center(
                     child: Text(
                       valueItem,
                     ),
-                  )
-                );
-              }
-            ).toList(),
+                  ));
+            }).toList(),
           ),
         ),
-      )
-    );
+      ));
 
   createPostInFirestore() async {
     final noPoster = await noPosterRef.getDownloadURL();
@@ -153,6 +147,7 @@ class _DetailsState extends State<DetailsPage> {
       "timestamp": timestamp,
       "title": details.title != null ? details.title : details.name,
       "likes": {},
+      "mediaType": details.mediaType,
     });
     _comment.clear();
     setState(() {
