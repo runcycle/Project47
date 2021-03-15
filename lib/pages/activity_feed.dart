@@ -142,17 +142,18 @@ class ActivityFeedItem extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.only(bottom: 2.0),
           child: Container(
-            decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end:
-                  Alignment.bottomCenter, 
-              colors: [
-                const Color(0xFF1b96fa),
-                const Color(0xFF42a5f5)
-                ], 
-              )
-            ),
+            color: Colors.grey[300],
+            // decoration: BoxDecoration(
+            // gradient: LinearGradient(
+            //   begin: Alignment.topCenter,
+            //   end:
+            //       Alignment.bottomCenter, 
+            //   colors: [
+            //     const Color(0xFF1b96fa),
+            //     const Color(0xFF42a5f5)
+            //     ], 
+            //   )
+            // ),
             child: ListTile(
               title: GestureDetector(
                 onTap: () => showProfile(context, profileId: userId),
@@ -161,7 +162,7 @@ class ActivityFeedItem extends StatelessWidget {
                   text: TextSpan(
                       style: TextStyle(
                         fontSize: 14.0,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                       children: [
                         TextSpan(
@@ -184,7 +185,7 @@ class ActivityFeedItem extends StatelessWidget {
               subtitle: Text(
                 timeago.format(timestamp.toDate()),
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.white54, fontWeight: FontWeight.bold, fontSize: 13.0)
+                style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.bold, fontSize: 13.0)
               ),
               trailing: mediaPreview,
             ),

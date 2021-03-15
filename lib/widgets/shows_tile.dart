@@ -29,8 +29,10 @@ class _ShowsTileState extends State<ShowsTile> {
               await Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => DetailsPage(details: show, 
-                      currentUser: currentUser,)));
+                      builder: (context) => DetailsPage(
+                            details: show,
+                            currentUser: currentUser,
+                          )));
             },
             child: ListTile(
                 title: Row(children: [
@@ -53,7 +55,7 @@ class _ShowsTileState extends State<ShowsTile> {
                     children: <Widget>[
                       Text(show.title != null ? show.title : show.name),
                       SizedBox(height: 5.0),
-                      Text(show.date != null ? show.date.substring(0, 4) : ""),
+                      Text(show.date != null ? show.date.substring(0, 4).trim() : ""),
                     ],
                   ),
                 ),

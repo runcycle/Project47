@@ -281,17 +281,7 @@ class _ProfileState extends State<Profile> {
                   user.username,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 16.0,
-                  ),
-                ),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(top: 4.0),
-                child: Text(
-                  user.displayName,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                    fontSize: 25.0,
                   ),
                 ),
               ),
@@ -299,8 +289,20 @@ class _ProfileState extends State<Profile> {
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(top: 2.0),
                 child: Text(
+                  user.displayName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 8.0),
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(top: 2.0),
+                child: Text(
                   user.bio,
                   style: TextStyle(
+                    color: Colors.grey[700],
                     fontWeight: FontWeight.bold,
                   ),
                 ),

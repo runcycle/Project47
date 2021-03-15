@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-import 'package:WatchA/widgets/header.dart';
+//import 'package:WatchA/widgets/header.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:WatchA/pages/home.dart';
 import 'package:wc_form_validators/wc_form_validators.dart';
@@ -19,9 +19,10 @@ class EmailAccount extends StatefulWidget {
 
 class _EmailAccountState extends State<EmailAccount> {
   final _auth = FirebaseAuth.instance;
-  firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
-  firebase_storage.Reference tempIconRef = firebase_storage.FirebaseStorage.instance
-    .ref("tempIcon.png");
+  firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
+  firebase_storage.Reference tempIconRef =
+      firebase_storage.FirebaseStorage.instance.ref("tempIcon.jpg");
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   //PageController pageController;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -41,7 +42,7 @@ class _EmailAccountState extends State<EmailAccount> {
   bool _showProgress = false;
   String uid;
   User user;
-  
+
   submit() async {
     final form = _formKey.currentState;
 
@@ -136,7 +137,8 @@ class _EmailAccountState extends State<EmailAccount> {
         key: _scaffoldKey,
         backgroundColor: Colors.white,
         appBar: AppBar(
-           title: Text('Create Your Account', style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
+          title: Text('Create Your Account',
+              style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
         ),
         body: ModalProgressHUD(
             inAsyncCall: _showProgress,
@@ -236,17 +238,19 @@ class _EmailAccountState extends State<EmailAccount> {
                       controller: _password,
                       obscureText: true,
                       validator: Validators.compose([
-                        Validators.required("PW must include 1 uppercase letter, 1 number, and 1 symbol"),
+                        Validators.required(
+                            "PW must include 1 uppercase letter, 1 number, and 1 symbol"),
                         Validators.patternString(
-                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$', 'Invalid Password'
-                        )
+                            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$',
+                            'Invalid Password')
                       ]),
                       onSaved: (val) => password = val,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: "Password",
                         labelStyle: TextStyle(fontSize: 15.0),
-                        hintText: "Must be at least 8 characters -- see note below",
+                        hintText:
+                            "Must be at least 8 characters -- see note below",
                       ),
                     ),
                     SizedBox(height: 10.0),
