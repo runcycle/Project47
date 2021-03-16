@@ -3,7 +3,7 @@ import 'package:WatchA/pages/search.dart';
 import 'package:WatchA/widgets/post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:WatchA/widgets/header.dart';
+//import 'package:WatchA/widgets/header.dart';
 import 'package:WatchA/widgets/progress.dart';
 import 'package:WatchA/pages/home.dart';
 

@@ -114,7 +114,19 @@ class _EmailLoginState extends State<EmailLogin> {
     return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.white,
-        appBar: header(context, titleText: "Login", removeBackButton: false),
+        appBar: AppBar(
+            elevation: 15,
+            backgroundColor: Theme.of(context).primaryColor,
+            title: Text('Login',
+                style:
+                    TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
+            centerTitle: true,
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Home()));
+                })),
         body: ModalProgressHUD(
             inAsyncCall: _showProgress,
             child: Form(

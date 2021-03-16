@@ -139,6 +139,13 @@ class _EmailAccountState extends State<EmailAccount> {
         appBar: AppBar(
           title: Text('Create Your Account',
               style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
+          leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Home()));
+            }
+          )
         ),
         body: ModalProgressHUD(
             inAsyncCall: _showProgress,

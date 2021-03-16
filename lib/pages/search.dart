@@ -185,47 +185,44 @@ class UserResult extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: Column(
-        children: <Widget>[
-          Card(
-            elevation: 5.0,
-            child: Container(
-              color: Colors.grey[300],
-              // decoration: BoxDecoration(
-              //     gradient: LinearGradient(
-              //   begin: Alignment.topCenter,
-              //   end: Alignment.bottomCenter,
-              //   colors: [const Color(0xFF1b96fa), const Color(0xFF42a5f5)],
-              // )),
-              child: GestureDetector(
-                onTap: () => showProfile(context, profileId: user.id),
-                child: ListTile(
-                  leading: CircleAvatar(
-                      radius: 25.0,
-                      backgroundColor: Colors.white,
-                      backgroundImage:
-                          CachedNetworkImageProvider(user.photoUrl)),
-                  title: Text(
-                    user.displayName,
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(
-                    user.username,
-                    style: TextStyle(
-                      color: Colors.grey[700],
-                      fontWeight: FontWeight.bold,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+        child: Column(
+          children: <Widget>[
+            Card(
+              elevation: 5.0,
+              child: Container(
+                color: Colors.grey[300],
+                child: GestureDetector(
+                  onTap: () => showProfile(context, profileId: user.id),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                        radius: 25.0,
+                        backgroundColor: Colors.white,
+                        backgroundImage:
+                            CachedNetworkImageProvider(user.photoUrl)),
+                    title: Text(
+                      user.displayName,
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      user.username,
+                      style: TextStyle(
+                        color: Colors.grey[700],
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-          Divider(
-            height: 2.0,
-            color: Colors.white54,
-          ),
-        ],
+            Divider(
+              height: 2.0,
+              color: Colors.white54,
+            ),
+          ],
+        ),
       ),
     );
   }

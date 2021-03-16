@@ -147,6 +147,7 @@ class _UploadState extends State<Upload>
                     FocusManager.instance.primaryFocus.unfocus();
                   },
                 )),
+            SizedBox(height: 8),
             Container(
               child: ShowsTile(shows: _shows, currentUser: currentUser),
             ),
