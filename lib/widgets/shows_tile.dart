@@ -55,7 +55,7 @@ class _ShowsTileState extends State<ShowsTile> {
                     children: <Widget>[
                       Text(show.title != null ? show.title : show.name),
                       SizedBox(height: 5.0),
-                      Text(show.date != null ? show.date.substring(0, 4).trim() : ""),
+                      Text(show.date != null || show.date != "" ? show.date.substring(0, 4).trim() : ""),
                     ],
                   ),
                 ),
