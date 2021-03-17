@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:WatchA/models/user.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -42,6 +43,7 @@ class _EmailAccountState extends State<EmailAccount> {
   bool _showProgress = false;
   String uid;
   User user;
+  String error;
 
   submit() async {
     final form = _formKey.currentState;
@@ -61,33 +63,80 @@ class _EmailAccountState extends State<EmailAccount> {
         });
       } catch (e) {
         print(e);
+        setState(() {
+          error = e.message;
+          _showProgress = false;
+        });
       }
-      final tempIcon = await tempIconRef.getDownloadURL();
-      usersRef.doc(uid).set({
-        "id": uid,
-        "username": username,
-        "photoUrl": tempIcon,
-        "email": email,
-        "displayName": displayName,
-        "bio": "",
-        "timestamp": timestamp,
-      });
-      // make new user their own follower (to include their posts in their timeline)
-      await followersRef.doc(uid).collection("userFollowers").doc(uid).set({});
+      if (error == null) {
+        setState(() {
+          error = "";
+        });
+        final tempIcon = await tempIconRef.getDownloadURL();
+        usersRef.doc(uid).set({
+          "id": uid,
+          "username": username,
+          "photoUrl": tempIcon,
+          "email": email,
+          "displayName": displayName,
+          "bio": "",
+          "timestamp": timestamp,
+        });
+        // make new user their own follower (to include their posts in their timeline)
+        await followersRef
+            .doc(uid)
+            .collection("userFollowers")
+            .doc(uid)
+            .set({});
 
-      SnackBar snackbar = SnackBar(content: Text("Welcome $username!"));
-      _scaffoldKey.currentState.showSnackBar(snackbar);
-      Timer(Duration(seconds: 2), () {
-        Navigator.pop(context, username);
-      });
-      //doc = await usersRef.doc(uid).get();
+        SnackBar snackbar = SnackBar(content: Text("Welcome $username!"));
+        _scaffoldKey.currentState.showSnackBar(snackbar);
+        Timer(Duration(seconds: 2), () {
+          Navigator.pop(context, username);
+        });
+        //doc = await usersRef.document(uid).get();
+        DocumentSnapshot doc = await usersRef.doc(uid).get();
+        currentUser = UserModel.fromDocument(doc);
+        print(currentUser);
+        print(currentUser.username);
+        configurePushNotifications();
+      }
     }
-    //doc = await usersRef.document(uid).get();
-    DocumentSnapshot doc = await usersRef.doc(uid).get();
-    currentUser = UserModel.fromDocument(doc);
-    print(currentUser);
-    print(currentUser.username);
-    configurePushNotifications();
+  }
+
+  Widget showAlert() {
+    if (error != null) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
+        child: Container(
+          color: Colors.amberAccent,
+          width: double.infinity,
+          padding: EdgeInsets.all(8.0),
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Icon(Icons.error_outline),
+              ),
+              Expanded(
+                child: AutoSizeText(error, maxLines: 3),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      setState(() {
+                        error = null;
+                      });
+                    }),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    return Text("");
   }
 
   configurePushNotifications() async {
@@ -137,25 +186,25 @@ class _EmailAccountState extends State<EmailAccount> {
         key: _scaffoldKey,
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('Create Your Account',
-              style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
-          leading: IconButton(
+            title: Text('Create Your Account',
+                style:
+                    TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
+            leading: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.push(
                       context, MaterialPageRoute(builder: (context) => Home()));
-            }
-          )
-        ),
+                })),
         body: ModalProgressHUD(
             inAsyncCall: _showProgress,
             child: Form(
               key: _formKey,
               autovalidateMode: AutovalidateMode.always,
               child: ListView(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.only(left: 20, right: 20),
                   children: <Widget>[
-                    SizedBox(height: 20.0),
+                    showAlert(),
+                    SizedBox(height: 10.0),
                     Text(
                       "Please Enter Your Full Name",
                       textAlign: TextAlign.center,
@@ -282,7 +331,7 @@ class _EmailAccountState extends State<EmailAccount> {
                         border: OutlineInputBorder(),
                         labelText: "Password Confirmation",
                         labelStyle: TextStyle(fontSize: 15.0),
-                        hintText: "Must be at least 3 characters",
+                        hintText: "Must be at least 8 characters",
                       ),
                     ),
                     SizedBox(height: 25.0),

@@ -113,10 +113,10 @@ class _PostState extends State<Post> {
           return circularProgress();
         }
         UserModel user = UserModel.fromDocument(snapshot.data);
-        bool isPostOwner = currentUserId == ownerId;
         return Container(
           color: Colors.grey[300],
           child: ListTile(
+            contentPadding: EdgeInsets.only(left: 15.0),
             leading: CircleAvatar(
               backgroundImage: CachedNetworkImageProvider(user.photoUrl),
               backgroundColor: Colors.grey,
@@ -132,12 +132,47 @@ class _PostState extends State<Post> {
               ),
             ),
             //subtitle: Text(location),
-            trailing: isPostOwner
-                ? IconButton(
-                    onPressed: () => handleDeletePost(context),
-                    icon: Icon(Icons.delete_outline),
-                  )
-                : Text(""),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: <Widget>[
+                    Padding(padding: EdgeInsets.only(top: 40.0, left: 20.0)),
+                    GestureDetector(
+                      onTap: handleLikePost,
+                      child: Icon(
+                        isLiked ? Icons.favorite : Icons.favorite_border,
+                        size: 28.0,
+                        color: Colors.pink,
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(right: 2.0)),
+                    Text(
+                      "$likeCount",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(right: 10.0)),
+                    GestureDetector(
+                      onTap: () => showComments(
+                        context,
+                        postId: postId,
+                        ownerId: ownerId,
+                        mediaUrl: mediaUrl,
+                      ),
+                      child: Icon(
+                        Icons.chat,
+                        size: 28.0,
+                        color: Colors.blue[900],
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(right: 20.0)),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -264,116 +299,110 @@ class _PostState extends State<Post> {
     }
   }
 
-  buildPostImage() {
-    return GestureDetector(
-      onDoubleTap: handleLikePost,
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-            ),
-           child: Padding(
-              padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-              child: cachedNetworkImage(mediaUrl),
-            ), 
+  buildPostFooter() {
+    bool isPostOwner = currentUserId == ownerId;
+    return Container(
+      color: Colors.grey[300],
+      child: ListTile(
+        contentPadding: EdgeInsets.only(left: 15.0),
+        title: Container(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 10.0,
+              ),
+              Row(
+                children: [
+                  title != null
+                  ? Flexible(
+                        child: Text("$title",
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 15.0, fontWeight: FontWeight.bold)),
+                  )
+                  : Text(""),
+                  Text(" ($mediaType)", style: TextStyle(fontSize: 15)),
+                ],
+              ),
+              Row(
+                children: [
+                  network != null
+                    ? Text("Watched on: $network",
+                        style: TextStyle(
+                          fontSize: 14.0,
+                        ))
+                    : Text(""),
+                ],
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+            ],
           ),
-          showHeart
-              ? Animator(
-                  duration: Duration(milliseconds: 300),
-                  tween: Tween(begin: 0.8, end: 1.4),
-                  curve: Curves.elasticOut,
-                  cycles: 0,
-                  builder: (anim) => Transform.scale(
-                    scale: anim.value,
-                    child: Icon(Icons.favorite, size: 80.0, color: Colors.red),
-                  ),
-                )
-              : Text(""),
-        ],
+        ),
+        trailing: 
+        Padding(
+          padding: EdgeInsets.only(left: 50),
+          child: isPostOwner
+          ? IconButton(
+              onPressed: () => handleDeletePost(context),
+              icon: Icon(Icons.delete_outline),
+            )
+          : Text(""),
+        ),
       ),
     );
   }
 
-  buildPostFooter() {
-    return Container(
-    color: Colors.grey[300],
-      child: Column(
-        children: <Widget>[
-          SizedBox(height: 5.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              title != null
-                  ? Text("$title",
-                      style:
-                          TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold))
-                  : Text(""),
-              Text(" ($mediaType)"),
-            ],
-          ),
-          SizedBox(height: 5.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              network != null
-                  ? Text("Watched on: $network",
-                      style: TextStyle(
-                        fontSize: 14.0,
-                      ))
-                  : Text(""),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Padding(padding: EdgeInsets.only(top: 40.0, left: 20.0)),
-              GestureDetector(
-                onTap: handleLikePost,
-                child: Icon(
-                  isLiked ? Icons.favorite : Icons.favorite_border,
-                  size: 28.0,
-                  color: Colors.pink,
-                ),
-              ),
-              Padding(padding: EdgeInsets.only(right: 20.0)),
-              GestureDetector(
-                onTap: () => showComments(
-                  context,
-                  postId: postId,
-                  ownerId: ownerId,
-                  mediaUrl: mediaUrl,
-                ),
-                child: Icon(
-                  Icons.chat,
-                  size: 28.0,
-                  color: Colors.blue[900],
-                ),
-              ),
-            ],
-          ),
-          Row(
+  buildPostImage() {
+    return Column(
+      children: [
+        GestureDetector(
+          onDoubleTap: handleLikePost,
+          child: Stack(
+            alignment: Alignment.center,
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(left: 20.0),
-                child: Text(
-                  "$likeCount likes",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                  child: cachedNetworkImage(mediaUrl),
                 ),
               ),
+              showHeart
+                  ? Animator(
+                      duration: Duration(milliseconds: 300),
+                      tween: Tween(begin: 0.8, end: 1.4),
+                      curve: Curves.elasticOut,
+                      cycles: 0,
+                      builder: (anim) => Transform.scale(
+                        scale: anim.value,
+                        child:
+                            Icon(Icons.favorite, size: 80.0, color: Colors.red),
+                      ),
+                    )
+                  : Text(""),
             ],
           ),
+        ),
+      ],
+    );
+  }
+
+  buildComment() {
+    return Container(
+      color: Colors.grey[300],
+      child: Column(
+        children: <Widget>[
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(left: 20.0),
+                margin: EdgeInsets.only(left: 15.0),
                 child: Text(
-                  "$username ",
+                  "Comment from $username: ",
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -385,7 +414,7 @@ class _PostState extends State<Post> {
               ),
             ],
           ),
-          SizedBox(height: 5.0),
+          SizedBox(height: 10.0),
         ],
       ),
     );
@@ -403,6 +432,7 @@ class _PostState extends State<Post> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             buildPostHeader(),
+            buildComment(),
             buildPostImage(),
             buildPostFooter(),
           ],

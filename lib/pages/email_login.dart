@@ -4,7 +4,6 @@ import 'package:WatchA/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:WatchA/widgets/header.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:WatchA/pages/home.dart';
 import 'package:auto_size_text/auto_size_text.dart';

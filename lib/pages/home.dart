@@ -3,7 +3,7 @@ import 'package:WatchA/pages/email_account.dart';
 import 'package:WatchA/pages/email_login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_storage/firebase_storage.dart'as firebase_storage;
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:WatchA/models/user.dart';
@@ -16,7 +16,8 @@ import 'package:WatchA/pages/upload.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
-final firebase_storage.Reference storageRef = firebase_storage.FirebaseStorage.instance.ref();
+final firebase_storage.Reference storageRef =
+    firebase_storage.FirebaseStorage.instance.ref();
 final usersRef = FirebaseFirestore.instance.collection("users");
 final postsRef = FirebaseFirestore.instance.collection("posts");
 final commentsRef = FirebaseFirestore.instance.collection("comments");
@@ -80,9 +81,7 @@ class _HomeState extends State<Home> {
 
     _firebaseMessaging.getToken().then((token) {
       print("Firebase Messaging Token: $token\n");
-      usersRef
-          .doc(user.id)
-          .update({"androidNotificationToken": token});
+      usersRef.doc(user.id).update({"androidNotificationToken": token});
     });
 
     _firebaseMessaging.configure(
@@ -190,7 +189,9 @@ class _HomeState extends State<Home> {
         currentIndex: pageIndex,
         onTap: onTap,
         activeColor: Theme.of(context).primaryColor,
-        border: Border(top: BorderSide(width: 1.0, color: Colors.grey[300]),),
+        border: Border(
+          top: BorderSide(width: 1.0, color: Colors.grey[300]),
+        ),
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.whatshot)),
           BottomNavigationBarItem(icon: Icon(Icons.new_releases)),
