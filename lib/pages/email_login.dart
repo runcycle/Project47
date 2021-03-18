@@ -194,7 +194,6 @@ class _EmailLoginState extends State<EmailLogin> {
                       onTap: submit,
                       child: Container(
                         height: 50.0,
-                        width: 50.0,
                         decoration: BoxDecoration(
                           color: Colors.blue,
                           borderRadius: BorderRadius.circular(5.0),

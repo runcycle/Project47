@@ -90,7 +90,7 @@ class _TimelineState extends State<Timeline> {
         });
         return Container(
           color: Colors.white,
-          child: Column(
+          child: ListView(
             children: <Widget>[
               Container(
                 padding: EdgeInsets.all(12.0),
@@ -98,13 +98,13 @@ class _TimelineState extends State<Timeline> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Icon(Icons.person_add,
-                        color: Theme.of(context).primaryColor, size: 30.0),
+                        color: Theme.of(context).primaryColor, size: 20.0),
                     SizedBox(width: 8.0),
                     Text(
-                      "Users to Follow",
+                      "A few users to get you started ...",
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
-                        fontSize: 30.0,
+                        fontSize: 15.0,
                       ),
                     ),
                   ],
