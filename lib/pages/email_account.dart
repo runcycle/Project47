@@ -92,7 +92,8 @@ class _EmailAccountState extends State<EmailAccount> {
         SnackBar snackbar = SnackBar(content: Text("Welcome $username!"));
         _scaffoldKey.currentState.showSnackBar(snackbar);
         Timer(Duration(seconds: 2), () {
-          Navigator.pop(context, username);
+          Navigator.of(context).pop(username);
+          //Navigator.pop(context, username);
         });
         //doc = await usersRef.document(uid).get();
         DocumentSnapshot doc = await usersRef.doc(uid).get();

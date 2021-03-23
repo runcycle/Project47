@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:WatchA/models/user.dart';
+import 'package:WatchA/pages/email_account.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,8 @@ class _EmailLoginState extends State<EmailLogin> {
               SnackBar(content: Text("Welcome Back $username!"));
           _scaffoldKey.currentState.showSnackBar(snackbar);
           Timer(Duration(seconds: 2), () {
-            Navigator.pop(context, username);
+            Navigator.of(context).pop(username);
+            //Navigator.pop(context, username);
           });
         }
       } catch (e) {
@@ -100,6 +102,11 @@ class _EmailLoginState extends State<EmailLogin> {
       );
     }
     return SizedBox(height: 0.0);
+  }
+
+  noAccount() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => EmailAccount()));
   }
 
   void dispose() {
@@ -208,6 +215,21 @@ class _EmailLoginState extends State<EmailLogin> {
                           ),
                         ),
                       ),
+                    ),
+                    SizedBox(height: 20.0),
+                    GestureDetector(
+                      onTap: noAccount,
+                      child: Container(
+                          height: 40.0,
+                          decoration: BoxDecoration(
+                            color: Colors.lightBlue[100],
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          child: Center(
+                              child: Text(
+                                  "Don't have an account?  Create one here.",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 13.0)))),
                     ),
                   ]),
             )));
