@@ -20,7 +20,7 @@ dependencies:
   flutter:
     sdk: flutter
   cloud_firestore: ^0.14.3
-  image_picker: ^0.6.0+2
+  image_picker: ^0.6.0+17
   firebase_core : ^0.5.2
   firebase_storage: ^5.0.1
   firebase_auth: ^0.18.3
@@ -58,7 +58,7 @@ flutter:
         - asset: assets/fonts/CherryCreamSoda-Regular.ttf
   assets:
     - assets/images/google_signin_button.png
-    - assets/images/tempIcon.png
+    - assets/images/tempIcon.jpg
     - assets/images/upload.svg
     - assets/images/search.svg
     - assets/images/activity_feed.svg

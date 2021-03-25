@@ -185,6 +185,18 @@ class _HomeState extends State<Home> {
         onPageChanged: onPageChanged,
         physics: NeverScrollableScrollPhysics(),
       ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: onTap(2),
+      //   tooltip: "Create Post",
+      //   child: Icon(
+      //     Icons.post_add,
+      //     size: 35.0,
+      //     color: Colors.white,
+      //   ),
+      //   elevation: 4.0,
+      //   backgroundColor: Colors.purple[400],
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: CupertinoTabBar(
         currentIndex: pageIndex,
         onTap: onTap,
@@ -198,7 +210,7 @@ class _HomeState extends State<Home> {
           BottomNavigationBarItem(
               icon: Icon(
             Icons.post_add,
-            size: 35.0,
+            size: 35,
           )),
           BottomNavigationBarItem(icon: Icon(Icons.search)),
           BottomNavigationBarItem(icon: Icon(Icons.account_circle)),
