@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 
+
 class EditProfile extends StatefulWidget {
   final String currentUserId;
 
@@ -116,10 +117,14 @@ class _EditProfileState extends State<EditProfile> {
   logout() async {
     if (googleLogin = true) {
       await googleSignIn.signOut();
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+      //Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+      Home()), (Route<dynamic> route) => false);
     } else if (emailLogin = true) {
       await _auth.signOut();
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+      //Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+      Home()), (Route<dynamic> route) => false);
     }
   }
 
@@ -177,7 +182,7 @@ class _EditProfileState extends State<EditProfile> {
                       RaisedButton(
                         onPressed: updateProfileData,
                         child: Text(
-                          "Update Profile",
+                          "Submit Bio Update",
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontSize: 20.0,

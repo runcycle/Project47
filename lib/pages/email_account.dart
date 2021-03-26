@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:WatchA/pages/home.dart';
 import 'package:wc_form_validators/wc_form_validators.dart';
+import 'package:flutter_svg/svg.dart';
 
 class EmailAccount extends StatefulWidget {
   @override
@@ -92,7 +93,8 @@ class _EmailAccountState extends State<EmailAccount> {
         SnackBar snackbar = SnackBar(content: Text("Welcome $username!"));
         _scaffoldKey.currentState.showSnackBar(snackbar);
         Timer(Duration(seconds: 2), () {
-          Navigator.pop(context, username);
+          Navigator.of(context).pop(username);
+          //Navigator.pop(context, username);
         });
         //doc = await usersRef.document(uid).get();
         DocumentSnapshot doc = await usersRef.doc(uid).get();

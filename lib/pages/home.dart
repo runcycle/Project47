@@ -177,7 +177,7 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           Timeline(currentUser: currentUser),
           ActivityFeed(),
-          Upload(currentUser: currentUser),
+          //Upload(currentUser: currentUser),
           Search(),
           Profile(profileId: currentUser?.id),
         ],
@@ -185,6 +185,8 @@ class _HomeState extends State<Home> {
         onPageChanged: onPageChanged,
         physics: NeverScrollableScrollPhysics(),
       ),
+      floatingActionButton: floatingAction(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: CupertinoTabBar(
         currentIndex: pageIndex,
         onTap: onTap,
@@ -195,20 +197,38 @@ class _HomeState extends State<Home> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.whatshot)),
           BottomNavigationBarItem(icon: Icon(Icons.new_releases)),
-          BottomNavigationBarItem(
-              icon: Icon(
-            Icons.post_add,
-            size: 35.0,
-          )),
+          // BottomNavigationBarItem(
+          //     icon: Icon(
+          //   Icons.post_add,
+          //   size: 35,
+          // )),
           BottomNavigationBarItem(icon: Icon(Icons.search)),
           BottomNavigationBarItem(icon: Icon(Icons.account_circle)),
         ],
       ),
     );
-    // return RaisedButton(
-    //   child: Text('Logout'),
-    //   onPressed: logout,
-    //);
+  }
+
+  floatingAction() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          margin: EdgeInsets.only(bottom: 23),
+          child: FloatingActionButton(
+            onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => Upload(currentUser: currentUser))
+            );
+          },
+          child: Icon(Icons.post_add, color: Colors.white),
+          backgroundColor: Colors.purple[400],
+          tooltip: "Create Post",
+          elevation: 4.0,
+          ),
+        ),
+      ],
+    );
   }
 
   emailRegister() async {
