@@ -177,7 +177,7 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           Timeline(currentUser: currentUser),
           ActivityFeed(),
-          //Upload(currentUser: currentUser),
+          Upload(currentUser: currentUser),
           Search(),
           Profile(profileId: currentUser?.id),
         ],
@@ -197,24 +197,21 @@ class _HomeState extends State<Home> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.whatshot)),
           BottomNavigationBarItem(icon: Icon(Icons.new_releases)),
-          // BottomNavigationBarItem(
-          //     icon: Icon(
-          //   Icons.post_add,
-          //   size: 35,
-          // )),
+          BottomNavigationBarItem(icon: SizedBox(width: 0.0)),
           BottomNavigationBarItem(icon: Icon(Icons.search)),
           BottomNavigationBarItem(icon: Icon(Icons.account_circle)),
         ],
       ),
     );
   }
+// Icon(Icons.post_add, size: 0.0)
 
   floatingAction() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Container(
-          margin: EdgeInsets.only(bottom: 23),
+          margin: EdgeInsets.only(bottom: 15),
           child: FloatingActionButton(
             onPressed: () {
             Navigator.of(context).push(
