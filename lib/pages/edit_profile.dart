@@ -1,3 +1,5 @@
+import "dart:io";
+
 import 'package:WatchA/models/user.dart';
 import 'package:WatchA/pages/home.dart';
 import 'package:WatchA/widgets/progress.dart';
@@ -5,7 +7,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
-
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfile extends StatefulWidget {
   final String currentUserId;
@@ -25,6 +28,7 @@ class _EditProfileState extends State<EditProfile> {
   UserModel user;
   bool _displayNameValid = true;
   bool _bioValid = true;
+  PickedFile _imageFile;
 
   @override
   void initState() {
@@ -118,17 +122,51 @@ class _EditProfileState extends State<EditProfile> {
     if (googleLogin = true) {
       await googleSignIn.signOut();
       //Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-      Home()), (Route<dynamic> route) => false);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => Home()),
+          (Route<dynamic> route) => false);
     } else if (emailLogin = true) {
       await _auth.signOut();
       //Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-      Home()), (Route<dynamic> route) => false);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => Home()),
+          (Route<dynamic> route) => false);
     }
   }
 
-  // check if emailLogin is true, then use _auth.signOut()
+  Future _pickImage() async {
+    final _picker = ImagePicker();
+    final selected = await _picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (selected != null) {
+        _imageFile = selected;
+      } else {
+        print("No image selected");
+      }
+    });
+  }
+
+  void _clear() {
+    setState(() {
+      _imageFile = null;
+    });
+  }
+
+  Future<void> _cropImage() async {
+    File cropped = await ImageCropper.cropImage(
+        sourcePath: _imageFile.path,
+        ratioX: 1.0,
+        ratioY: 1.0,
+        maxHeight: 512,
+        maxWidth: 512,
+        toolbarColor: Colors.purple[400],
+        toolbarWidgetColor: Colors.white,
+        toolbarTitle: "Crop Your Image");
+    setState(() {
+      _imageFile = cropped ?? _imageFile;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,23 +174,16 @@ class _EditProfileState extends State<EditProfile> {
       key: _scaffoldKey,
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.white,
+        elevation: 15,
+        backgroundColor: Theme.of(context).primaryColor,
         title: Text(
           "Edit Profile",
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
+            fontFamily: "CherryCreamSoda",
+            fontSize: 25.0,
           ),
         ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Icon(
-              Icons.done,
-              size: 30.0,
-              color: Colors.green,
-            ),
-          ),
-        ],
       ),
       body: isLoading
           ? circularProgress()
@@ -161,13 +192,36 @@ class _EditProfileState extends State<EditProfile> {
                 Container(
                   child: Column(
                     children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
-                        child: CircleAvatar(
-                          radius: 50.0,
-                          backgroundImage:
-                              CachedNetworkImageProvider(user.photoUrl),
-                        ),
+                      Stack(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: IconButton(
+                                  tooltip: "Upload New Avatar",
+                                  icon: Icon(
+                                    Icons.add_photo_alternate,
+                                    size: 35.0,
+                                    color: Colors.grey,
+                                  ),
+                                  onPressed: _pickImage,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 35.0),
+                              child: CircleAvatar(
+                                radius: 50.0,
+                                backgroundImage:
+                                    CachedNetworkImageProvider(user.photoUrl),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: EdgeInsets.all(16.0),
