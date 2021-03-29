@@ -5,6 +5,7 @@ import 'package:WatchA/pages/home.dart';
 import 'package:WatchA/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:image_cropper/image_cropper.dart';
@@ -34,7 +35,7 @@ class _EditProfileState extends State<EditProfile> {
   UserModel user;
   bool _displayNameValid = true;
   bool _bioValid = true;
-  PickedFile _imageFile;
+  File imageFile;
   AppState state;
 
   @override
@@ -143,14 +144,14 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future _pickImage() async {
-    final _picker = ImagePicker();
-    final selected = await _picker.getImage(source: ImageSource.gallery);
-
-    if (selected != null) {
+    final selected = await ImagePicker().getImage(source: ImageSource.gallery);
+    imageFile = selected != null ? File(selected.path) : null;
+    if (imageFile != null) {
       setState(() {
-        _imageFile = selected;
+        //_imageFile = selected;
         state = AppState.picked;
       });
+      _cropImage();
     } else {
       print("No image selected.");
     }
@@ -158,25 +159,57 @@ class _EditProfileState extends State<EditProfile> {
 
   void _clearImage() {
     setState(() {
-      _imageFile = null;
+      imageFile = null;
       state = AppState.free;
     });
   }
 
   Future<void> _cropImage() async {
-    File cropped = await ImageCropper.cropImage(
-        sourcePath: _imageFile.path,
-        ratioX: 1.0,
-        ratioY: 1.0,
-        maxHeight: 512,
-        maxWidth: 512,
-        toolbarColor: Colors.purple[400],
-        toolbarWidgetColor: Colors.white,
-        toolbarTitle: "Crop Your Image");
+    final cropped = await ImageCropper.cropImage(
+        sourcePath: imageFile.path,
+        // ratioX: 1.0,
+        // ratioY: 1.0,
+        // maxHeight: 512,
+        // maxWidth: 512,
+        // toolbarColor: Colors.purple[400],
+        // toolbarWidgetColor: Colors.white,
+        // toolbarTitle: "Crop Your Image");
+        aspectRatioPresets: Platform.isAndroid
+            ? [
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio16x9
+              ]
+            : [
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio5x3,
+                CropAspectRatioPreset.ratio5x4,
+                CropAspectRatioPreset.ratio7x5,
+                CropAspectRatioPreset.ratio16x9
+              ],
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Crop Your Image',
+            toolbarColor: Colors.purple[400],
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: IOSUiSettings(
+          title: 'Crop Your Image',
+        ));
     setState(() {
-      _imageFile = cropped ?? _imageFile;
+      imageFile = cropped;
       state = AppState.cropped;
     });
+    uploadImage();
+  }
+
+  uploadImage() {
+
   }
 
   _buildButtonIcon() {

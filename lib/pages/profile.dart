@@ -121,7 +121,7 @@ class _ProfileState extends State<Profile> {
       child: FlatButton(
         onPressed: function,
         child: Container(
-          width: 250.0,
+          width: 200.0,
           height: 27.0,
           child: Text(
             text,

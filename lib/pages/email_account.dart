@@ -23,7 +23,7 @@ class _EmailAccountState extends State<EmailAccount> {
   final _auth = FirebaseAuth.instance;
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
-  firebase_storage.Reference tempIconRef =
+  firebase_storage.Reference storageRef =
       firebase_storage.FirebaseStorage.instance.ref("tempIcon.jpg");
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   //PageController pageController;
@@ -73,7 +73,7 @@ class _EmailAccountState extends State<EmailAccount> {
         setState(() {
           error = "";
         });
-        final tempIcon = await tempIconRef.getDownloadURL();
+        final tempIcon = await storageRef.getDownloadURL();
         usersRef.doc(uid).set({
           "id": uid,
           "username": username,
