@@ -19,6 +19,12 @@ class EditProfile extends StatefulWidget {
   _EditProfileState createState() => _EditProfileState();
 }
 
+enum AppState {
+  free,
+  picked,
+  cropped,
+}
+
 class _EditProfileState extends State<EditProfile> {
   final _auth = FirebaseAuth.instance;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -29,11 +35,13 @@ class _EditProfileState extends State<EditProfile> {
   bool _displayNameValid = true;
   bool _bioValid = true;
   PickedFile _imageFile;
+  AppState state;
 
   @override
   void initState() {
     super.initState();
     getUser();
+    state = AppState.free;
   }
 
   getUser() async {
@@ -138,18 +146,20 @@ class _EditProfileState extends State<EditProfile> {
     final _picker = ImagePicker();
     final selected = await _picker.getImage(source: ImageSource.gallery);
 
-    setState(() {
-      if (selected != null) {
+    if (selected != null) {
+      setState(() {
         _imageFile = selected;
-      } else {
-        print("No image selected");
-      }
-    });
+        state = AppState.picked;
+      });
+    } else {
+      print("No image selected.");
+    }
   }
 
-  void _clear() {
+  void _clearImage() {
     setState(() {
       _imageFile = null;
+      state = AppState.free;
     });
   }
 
@@ -165,7 +175,19 @@ class _EditProfileState extends State<EditProfile> {
         toolbarTitle: "Crop Your Image");
     setState(() {
       _imageFile = cropped ?? _imageFile;
+      state = AppState.cropped;
     });
+  }
+
+  _buildButtonIcon() {
+    if (state == AppState.free)
+      return Icon(Icons.add);
+    else if (state == AppState.picked)
+      return Icon(Icons.crop);
+    else if (state == AppState.cropped)
+      return Icon(Icons.clear);
+    else
+      return Container();
   }
 
   @override
@@ -199,14 +221,22 @@ class _EditProfileState extends State<EditProfile> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: IconButton(
-                                  tooltip: "Upload New Avatar",
-                                  icon: Icon(
-                                    Icons.add_photo_alternate,
-                                    size: 35.0,
-                                    color: Colors.grey,
-                                  ),
-                                  onPressed: _pickImage,
+                                child: ElevatedButton(
+                                  child: _buildButtonIcon(),
+                                  //tooltip: "Upload New Avatar",
+                                  // icon: Icon(
+                                  //   Icons.add_photo_alternate,
+                                  //   size: 35.0,
+                                  //   color: Colors.grey,
+                                  // ),
+                                  onPressed: () {
+                                    if (state == AppState.free)
+                                      _pickImage();
+                                    else if (state == AppState.picked)
+                                      _cropImage();
+                                    else if (state == AppState.cropped)
+                                      _clearImage();
+                                  },
                                 ),
                               ),
                             ],
