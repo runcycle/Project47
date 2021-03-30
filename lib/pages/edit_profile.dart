@@ -130,17 +130,52 @@ class _EditProfileState extends State<EditProfile> {
   logout() async {
     if (googleLogin = true) {
       await googleSignIn.signOut();
-      //Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => Home()),
           (Route<dynamic> route) => false);
     } else if (emailLogin = true) {
       await _auth.signOut();
-      //Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => Home()),
           (Route<dynamic> route) => false);
     }
+  }
+
+  Future<void> _askToLogout() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Are you sure you want to log out?',
+              style: TextStyle(
+                fontSize: 15.0,
+              )),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                // Text('This is a demo alert dialog.'),
+                // Text('Would you like to approve of this message?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Yes'),
+              onPressed: () {
+                logout();
+              },
+            ),
+            TextButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future _pickImage() async {
@@ -157,23 +192,16 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
-  void _clearImage() {
-    setState(() {
-      imageFile = null;
-      state = AppState.free;
-    });
-  }
+  // void _clearImage() {
+  //   setState(() {
+  //     imageFile = null;
+  //     state = AppState.free;
+  //   });
+  // }
 
   Future<void> _cropImage() async {
     final cropped = await ImageCropper.cropImage(
         sourcePath: imageFile.path,
-        // ratioX: 1.0,
-        // ratioY: 1.0,
-        // maxHeight: 512,
-        // maxWidth: 512,
-        // toolbarColor: Colors.purple[400],
-        // toolbarWidgetColor: Colors.white,
-        // toolbarTitle: "Crop Your Image");
         aspectRatioPresets: Platform.isAndroid
             ? [
                 CropAspectRatioPreset.square,
@@ -195,8 +223,10 @@ class _EditProfileState extends State<EditProfile> {
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Crop Your Image',
             toolbarColor: Colors.purple[400],
+            dimmedLayerColor: Colors.purple[800],
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
+            activeControlsWidgetColor: Colors.blue[400],
             lockAspectRatio: false),
         iosUiSettings: IOSUiSettings(
           title: 'Crop Your Image',
@@ -208,19 +238,38 @@ class _EditProfileState extends State<EditProfile> {
     uploadImage();
   }
 
-  uploadImage() {
-
-  }
+  uploadImage() {}
 
   _buildButtonIcon() {
     if (state == AppState.free)
       return Icon(Icons.add);
-    else if (state == AppState.picked)
-      return Icon(Icons.crop);
-    else if (state == AppState.cropped)
-      return Icon(Icons.clear);
     else
       return Container();
+  }
+
+  avatarButton() {
+    if (emailLogin = true) {
+      return Column(
+        children: [
+          FlatButton(
+            color: Colors.grey[400],
+            textColor: Colors.black,
+            minWidth: 10.0,
+            child: _buildButtonIcon(),
+            onPressed: () {
+              _pickImage();
+            },
+          ),
+          Text(
+            "Edit Avatar",
+            style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      );
+    } else {
+      return Container();
+    }
   }
 
   @override
@@ -242,74 +291,60 @@ class _EditProfileState extends State<EditProfile> {
       ),
       body: isLoading
           ? circularProgress()
-          : ListView(
+          : Column(
               children: <Widget>[
-                Container(
+                Stack(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: avatarButton(),
+                        ),
+                      ],
+                    ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 35.0),
+                        child: CircleAvatar(
+                          radius: 50.0,
+                          backgroundImage:
+                              CachedNetworkImageProvider(user.photoUrl),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
                   child: Column(
                     children: <Widget>[
-                      Stack(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ElevatedButton(
-                                  child: _buildButtonIcon(),
-                                  //tooltip: "Upload New Avatar",
-                                  // icon: Icon(
-                                  //   Icons.add_photo_alternate,
-                                  //   size: 35.0,
-                                  //   color: Colors.grey,
-                                  // ),
-                                  onPressed: () {
-                                    if (state == AppState.free)
-                                      _pickImage();
-                                    else if (state == AppState.picked)
-                                      _cropImage();
-                                    else if (state == AppState.cropped)
-                                      _clearImage();
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 35.0),
-                              child: CircleAvatar(
-                                radius: 50.0,
-                                backgroundImage:
-                                    CachedNetworkImageProvider(user.photoUrl),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Column(
-                          children: <Widget>[
-                            buildDisplayNameField(),
-                            buildBioField(),
-                          ],
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.all(10.0)),
-                      RaisedButton(
-                        onPressed: updateProfileData,
-                        child: Text(
-                          "Submit Bio Update",
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.all(60.0)),
-                      RaisedButton(
-                        onPressed: logout,
+                      buildDisplayNameField(),
+                      buildBioField(),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10.0),
+                RaisedButton(
+                  onPressed: updateProfileData,
+                  color: Colors.blue[400],
+                  child: Text(
+                    "Submit",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 15.0),
+                      child: RaisedButton(
+                        onPressed: _askToLogout,
                         child: Text(
                           "Logout",
                           style: TextStyle(
@@ -319,7 +354,7 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ],

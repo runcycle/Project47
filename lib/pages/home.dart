@@ -66,6 +66,7 @@ class _HomeState extends State<Home> {
       setState(() {
         isAuth = true;
         googleLogin = true;
+        emailLogin = false;
       });
       configurePushNotifications();
     } else {
@@ -233,7 +234,7 @@ class _HomeState extends State<Home> {
         context, MaterialPageRoute(builder: (context) => EmailAccount()));
     setState(() {
       isAuth = true;
-      emailLogin = true;
+      //emailLogin = true;
     });
   }
 
@@ -242,7 +243,7 @@ class _HomeState extends State<Home> {
         context, MaterialPageRoute(builder: (context) => EmailLogin()));
     setState(() {
       isAuth = true;
-      emailLogin = true;
+      //emailLogin = true;
     });
   }
 

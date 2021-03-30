@@ -8,11 +8,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-//import 'package:WatchA/widgets/header.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:WatchA/pages/home.dart';
 import 'package:wc_form_validators/wc_form_validators.dart';
-import 'package:flutter_svg/svg.dart';
 
 class EmailAccount extends StatefulWidget {
   @override
@@ -61,6 +59,7 @@ class _EmailAccountState extends State<EmailAccount> {
         setState(() {
           final User user = _auth.currentUser;
           uid = user.uid;
+          emailLogin = true;
         });
       } catch (e) {
         print(e);

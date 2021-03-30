@@ -50,6 +50,7 @@ class _EmailLoginState extends State<EmailLogin> {
           currentUser = UserModel.fromDocument(doc);
           setState(() {
             username = currentUser.username;
+            emailLogin = true;
           });
           print(username);
           print(uid);
@@ -139,11 +140,11 @@ class _EmailLoginState extends State<EmailLogin> {
               key: _formKey,
               autovalidateMode: AutovalidateMode.always,
               child: ListView(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
                   children: <Widget>[
-                    SizedBox(height: 5.0),
+                    //SizedBox(height: 5.0),
                     showAlert(),
-                    SizedBox(height: 20.0),
+                    SizedBox(height: 5.0),
                     Text(
                       "Please Enter Your Email Address",
                       textAlign: TextAlign.center,
