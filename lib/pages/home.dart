@@ -58,6 +58,8 @@ class _HomeState extends State<Home> {
     }).catchError((err) {
       print('Error signing in: $err');
     });
+    emailLogin = false;
+    googleLogin = false;
   }
 
   handleSignIn(GoogleSignInAccount account) async {
@@ -205,7 +207,6 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-// Icon(Icons.post_add, size: 0.0)
 
   floatingAction() {
     return Column(
@@ -215,14 +216,13 @@ class _HomeState extends State<Home> {
           margin: EdgeInsets.only(bottom: 15),
           child: FloatingActionButton(
             onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => Upload(currentUser: currentUser))
-            );
-          },
-          child: Icon(Icons.post_add, color: Colors.white),
-          backgroundColor: Colors.purple[400],
-          tooltip: "Create Post",
-          elevation: 4.0,
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => Upload(currentUser: currentUser)));
+            },
+            child: Icon(Icons.post_add, color: Colors.white),
+            backgroundColor: Colors.purple[400],
+            tooltip: "Create Post",
+            elevation: 4.0,
           ),
         ),
       ],

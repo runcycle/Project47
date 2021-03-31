@@ -28,6 +28,8 @@ enum AppState {
 
 class _EditProfileState extends State<EditProfile> {
   final _auth = FirebaseAuth.instance;
+  firebase_storage.Reference storageRef =
+      firebase_storage.FirebaseStorage.instance.ref("tempIcon.jpg");
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController displayNameController = TextEditingController();
   TextEditingController bioController = TextEditingController();
@@ -248,28 +250,24 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   avatarButton() {
-    if (emailLogin = true) {
-      return Column(
-        children: [
-          FlatButton(
-            color: Colors.grey[400],
-            textColor: Colors.black,
-            minWidth: 10.0,
-            child: _buildButtonIcon(),
-            onPressed: () {
-              _pickImage();
-            },
-          ),
-          Text(
-            "Edit Avatar",
-            style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      );
-    } else {
-      return Container();
-    }
+    return Column(
+      children: [
+        FlatButton(
+          color: Colors.grey[400],
+          textColor: Colors.black,
+          minWidth: 10.0,
+          child: _buildButtonIcon(),
+          onPressed: () {
+            _pickImage();
+          },
+        ),
+        Text(
+          "Edit Avatar",
+          style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
   }
 
   @override
@@ -295,7 +293,7 @@ class _EditProfileState extends State<EditProfile> {
               children: <Widget>[
                 Stack(
                   children: [
-                    Row(
+                    emailLogin ? Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Padding(
@@ -303,7 +301,7 @@ class _EditProfileState extends State<EditProfile> {
                           child: avatarButton(),
                         ),
                       ],
-                    ),
+                    ) : Container(),
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 35.0),
@@ -342,7 +340,7 @@ class _EditProfileState extends State<EditProfile> {
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 15.0),
+                      padding: const EdgeInsets.only(bottom: 20.0),
                       child: RaisedButton(
                         onPressed: _askToLogout,
                         child: Text(
