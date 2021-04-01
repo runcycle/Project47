@@ -10,6 +10,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:image/image.dart' as Im;
+import 'package:uuid/uuid.dart';
 
 class EditProfile extends StatefulWidget {
   final String currentUserId;
@@ -29,7 +32,7 @@ enum AppState {
 class _EditProfileState extends State<EditProfile> {
   final _auth = FirebaseAuth.instance;
   firebase_storage.Reference storageRef =
-      firebase_storage.FirebaseStorage.instance.ref("tempIcon.jpg");
+      firebase_storage.FirebaseStorage.instance.ref();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController displayNameController = TextEditingController();
   TextEditingController bioController = TextEditingController();
@@ -39,6 +42,7 @@ class _EditProfileState extends State<EditProfile> {
   bool _bioValid = true;
   File imageFile;
   AppState state;
+  String postId = Uuid().v4();
 
   @override
   void initState() {
@@ -237,14 +241,29 @@ class _EditProfileState extends State<EditProfile> {
       imageFile = cropped;
       state = AppState.cropped;
     });
-    uploadImage();
+    _compressImage();
   }
 
-  uploadImage() {}
+  _compressImage() async {
+    final tempDir = await getTemporaryDirectory();
+    final path = tempDir.path;
+    Im.Image newImage = Im.decodeImage(imageFile.readAsBytesSync());
+    final compressedImage = File("$path/img_$postId.jpg")
+      ..writeAsBytesSync(Im.encodeJpg(newImage, quality: 85));
+    setState(() {
+      imageFile = compressedImage;
+    });
+    _uploadImage(imageFile);
+  }
+
+  _uploadImage(imageFile) async {
+    // final uploadTask = storageRef.child("post_$postId.jpg").putFile(imageFile);
+    // await uploadTask.onComplete;
+  }
 
   _buildButtonIcon() {
     if (state == AppState.free)
-      return Icon(Icons.add);
+      return Icon(Icons.person_add);
     else
       return Container();
   }
@@ -255,17 +274,17 @@ class _EditProfileState extends State<EditProfile> {
         FlatButton(
           color: Colors.grey[400],
           textColor: Colors.black,
-          minWidth: 10.0,
+          minWidth: 5.0,
           child: _buildButtonIcon(),
           onPressed: () {
             _pickImage();
           },
         ),
-        Text(
-          "Edit Avatar",
-          style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
+        // Text(
+        //   "Edit Avatar",
+        //   style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold),
+        //   textAlign: TextAlign.center,
+        // ),
       ],
     );
   }
@@ -293,15 +312,17 @@ class _EditProfileState extends State<EditProfile> {
               children: <Widget>[
                 Stack(
                   children: [
-                    emailLogin ? Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: avatarButton(),
-                        ),
-                      ],
-                    ) : Container(),
+                    emailLogin
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: avatarButton(),
+                              ),
+                            ],
+                          )
+                        : Container(),
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 35.0),
