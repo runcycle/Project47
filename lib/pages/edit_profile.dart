@@ -41,14 +41,14 @@ class _EditProfileState extends State<EditProfile> {
   bool _displayNameValid = true;
   bool _bioValid = true;
   File imageFile;
-  AppState state;
   String postId = Uuid().v4();
+  String avatar;
 
   @override
   void initState() {
     super.initState();
     getUser();
-    state = AppState.free;
+    //state = AppState.free;
   }
 
   getUser() async {
@@ -188,22 +188,11 @@ class _EditProfileState extends State<EditProfile> {
     final selected = await ImagePicker().getImage(source: ImageSource.gallery);
     imageFile = selected != null ? File(selected.path) : null;
     if (imageFile != null) {
-      setState(() {
-        //_imageFile = selected;
-        state = AppState.picked;
-      });
       _cropImage();
     } else {
       print("No image selected.");
     }
   }
-
-  // void _clearImage() {
-  //   setState(() {
-  //     imageFile = null;
-  //     state = AppState.free;
-  //   });
-  // }
 
   Future<void> _cropImage() async {
     final cropped = await ImageCropper.cropImage(
@@ -239,7 +228,7 @@ class _EditProfileState extends State<EditProfile> {
         ));
     setState(() {
       imageFile = cropped;
-      state = AppState.cropped;
+      //state = AppState.cropped;
     });
     _compressImage();
   }
@@ -257,15 +246,19 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   _uploadImage(imageFile) async {
-    // final uploadTask = storageRef.child("post_$postId.jpg").putFile(imageFile);
-    // await uploadTask.onComplete;
-  }
-
-  _buildButtonIcon() {
-    if (state == AppState.free)
-      return Icon(Icons.person_add);
-    else
-      return Container();
+    firebase_storage.UploadTask uploadTask =
+        storageRef.child("avatars/post_$postId.jpg").putFile(imageFile);
+    final avatarUrl = await (await uploadTask).ref.getDownloadURL();
+    setState(() {
+      avatar = avatarUrl.toString();
+      //state == AppState.free;
+    });
+    print(avatar);
+    usersRef.doc(widget.currentUserId).update({
+        "photoUrl": avatar,
+      });
+      SnackBar snackbar = SnackBar(content: Text("Profile updated!"));
+      _scaffoldKey.currentState.showSnackBar(snackbar);
   }
 
   avatarButton() {
@@ -275,16 +268,11 @@ class _EditProfileState extends State<EditProfile> {
           color: Colors.grey[400],
           textColor: Colors.black,
           minWidth: 5.0,
-          child: _buildButtonIcon(),
+          child: Icon(Icons.person_add),
           onPressed: () {
             _pickImage();
           },
         ),
-        // Text(
-        //   "Edit Avatar",
-        //   style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold),
-        //   textAlign: TextAlign.center,
-        // ),
       ],
     );
   }
