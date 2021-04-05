@@ -258,9 +258,9 @@ class _ProfileState extends State<Profile> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            buildCountColumn("posts", postCount),
-                            buildCountColumn("followers", followerCount),
-                            buildCountColumn("following", followingCount),
+                            buildCountColumn("Posts", postCount),
+                            buildCountColumn("Followers", followerCount),
+                            buildCountColumn("Following", followingCount),
                           ],
                         ),
                         Row(
@@ -303,7 +303,7 @@ class _ProfileState extends State<Profile> {
                   user.bio,
                   style: TextStyle(
                     color: Colors.grey[700],
-                    fontWeight: FontWeight.bold,
+                    //fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -502,7 +502,9 @@ class _ProfileState extends State<Profile> {
       body: ListView(
         children: <Widget>[
           buildProfileHeader(),
-          Divider(),
+          Divider(
+            thickness: 1.5,
+            color: Colors.grey[400]),
           buildTogglePostOrientation(),
           buildPostHeader(),
           Divider(

@@ -29,31 +29,6 @@ class _UploadState extends State<Upload>
   String query = "";
   List<Show> _shows = new List<Show>();
 
-  // createPostInFirestore(
-  //     {String mediaUrl, String location, String description}) {
-  //   postsRef
-  //       .doc(widget.currentUser.id)
-  //       .collection("userPosts")
-  //       .doc(postId)
-  //       .set({
-  //     "postId": postId,
-  //     "ownerId": widget.currentUser.id,
-  //     "username": widget.currentUser.username,
-  //     "mediaUrl": mediaUrl,
-  //     "description": description,
-  //     "location": location,
-  //     "timestamp": timestamp,
-  //     "likes": {},
-  //   });
-  //   captionController.clear();
-  //   searchController.clear();
-  //   setState(() {
-  //     //file = null;
-  //     isUploading = false;
-  //     postId = Uuid().v4();
-  //   });
-  // }
-
   searchShows(query) async {
     final response = await http.get(
         "https://api.themoviedb.org/3/search/multi?api_key=$apiKey&query=$query");
@@ -134,12 +109,15 @@ class _UploadState extends State<Upload>
             SizedBox(height: 10),
             Container(
                 width: MediaQuery.of(context).size.width,
-                height: 30.0,
+                height: 40.0,
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   child: Text(
                     "Submit",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                   ),
                   onPressed: () {
                     searchShows(query);

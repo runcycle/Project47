@@ -252,8 +252,8 @@ class _HomeState extends State<Home> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
             colors: [
               Theme.of(context).primaryColor,
               Theme.of(context).accentColor,
@@ -265,6 +265,7 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            SizedBox(height: 100),
             Text(
               'Bingeable',
               style: TextStyle(
@@ -273,7 +274,7 @@ class _HomeState extends State<Home> {
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 150.0),
+            SizedBox(height: 200.0),
             GestureDetector(
               onTap: emailRegister,
               child: Container(

@@ -103,6 +103,8 @@ class _EditProfileState extends State<EditProfile> {
         ),
         TextField(
           controller: bioController,
+          keyboardType: TextInputType.multiline,
+          maxLines: null,
           decoration: InputDecoration(
             hintText: "Update Bio",
             errorText: _bioValid ? null : "Bio too long",
@@ -118,7 +120,7 @@ class _EditProfileState extends State<EditProfile> {
               displayNameController.text.isEmpty
           ? _displayNameValid = false
           : _displayNameValid = true;
-      bioController.text.trim().length > 100
+      bioController.text.trim().length > 200
           ? _bioValid = false
           : _bioValid = true;
     });
@@ -277,6 +279,22 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
+  logoutButton() {
+    return Column(
+      children: [
+        FlatButton(
+          color: Colors.grey[400],
+          textColor: Colors.black,
+          minWidth: 5.0,
+          child: Icon(Icons.logout),
+          onPressed: () {
+            _askToLogout();
+          },
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -296,7 +314,7 @@ class _EditProfileState extends State<EditProfile> {
       ),
       body: isLoading
           ? circularProgress()
-          : Column(
+          : ListView(
               children: <Widget>[
                 Stack(
                   children: [
@@ -311,6 +329,15 @@ class _EditProfileState extends State<EditProfile> {
                             ],
                           )
                         : Container(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: logoutButton(),
+                        ),
+                      ],
+                    ),
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 35.0),
@@ -332,34 +359,18 @@ class _EditProfileState extends State<EditProfile> {
                     ],
                   ),
                 ),
-                SizedBox(height: 10.0),
-                RaisedButton(
-                  onPressed: updateProfileData,
-                  color: Colors.blue[400],
-                  child: Text(
-                    "Submit",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: RaisedButton(
-                        onPressed: _askToLogout,
-                        child: Text(
-                          "Logout",
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                SizedBox(height: 20.0),
+                Padding(
+                  padding: EdgeInsets.only(left: 150, right: 150),
+                  child: RaisedButton(
+                    onPressed: updateProfileData,
+                    color: Colors.blue[400],
+                    child: Text(
+                      "Submit",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
