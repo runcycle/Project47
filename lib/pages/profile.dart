@@ -240,7 +240,7 @@ class _ProfileState extends State<Profile> {
         }
         UserModel user = UserModel.fromDocument(snapshot.data);
         return Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 10.0),
           child: Column(
             children: <Widget>[
               Row(
@@ -322,7 +322,7 @@ class _ProfileState extends State<Profile> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SvgPicture.asset("assets/images/no_content.svg", height: 260.0),
+            SvgPicture.asset("assets/images/no_content.svg", height: 200.0),
             Padding(
               padding: EdgeInsets.only(top: 20.0),
               child: Text(
@@ -457,7 +457,7 @@ class _ProfileState extends State<Profile> {
                           color: Colors.white, fontWeight: FontWeight.bold))),
               PopupMenuItem(
                 value: "podcast",
-                child: Text("Podcasts",
+                child: Text("Podcasts (Soon)",
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold)),
               ),
@@ -475,8 +475,8 @@ class _ProfileState extends State<Profile> {
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             border: Border(
-                top: BorderSide(width: 1.0, color: Colors.grey),
-                bottom: BorderSide(width: 1.0, color: Colors.grey)),
+                top: BorderSide(width: 2.0, color: Colors.grey),
+                bottom: BorderSide(width: 2.0, color: Colors.grey)),
             //color: Colors.grey
           ),
           child: Center(
@@ -502,9 +502,9 @@ class _ProfileState extends State<Profile> {
       body: ListView(
         children: <Widget>[
           buildProfileHeader(),
-          Divider(
-            thickness: 1.5,
-            color: Colors.grey[400]),
+          // Divider(
+          //   thickness: 1.5,
+          //   color: Colors.grey[300]),
           buildTogglePostOrientation(),
           buildPostHeader(),
           Divider(

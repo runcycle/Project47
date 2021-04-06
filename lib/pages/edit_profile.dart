@@ -361,7 +361,7 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 SizedBox(height: 20.0),
                 Padding(
-                  padding: EdgeInsets.only(left: 150, right: 150),
+                  padding: EdgeInsets.only(left: 120, right: 120),
                   child: RaisedButton(
                     onPressed: updateProfileData,
                     color: Colors.blue[400],
