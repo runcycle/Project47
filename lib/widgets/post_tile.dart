@@ -1,6 +1,6 @@
-import 'package:WatchA/pages/post_screen.dart';
-import 'package:WatchA/widgets/custom_image.dart';
-import 'package:WatchA/widgets/post.dart';
+import 'package:bingeable/pages/post_screen.dart';
+import 'package:bingeable/widgets/custom_image.dart';
+import 'package:bingeable/widgets/post.dart';
 import 'package:flutter/material.dart';
 
 class PostTile extends StatelessWidget {

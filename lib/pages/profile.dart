@@ -1,9 +1,9 @@
-import 'package:WatchA/models/user.dart';
-import 'package:WatchA/pages/edit_profile.dart';
-import 'package:WatchA/pages/home.dart';
-import 'package:WatchA/widgets/post.dart';
-import 'package:WatchA/widgets/post_tile.dart';
-import 'package:WatchA/widgets/progress.dart';
+import 'package:bingeable/models/user.dart';
+import 'package:bingeable/pages/edit_profile.dart';
+import 'package:bingeable/pages/home.dart';
+import 'package:bingeable/widgets/post.dart';
+import 'package:bingeable/widgets/post_tile.dart';
+import 'package:bingeable/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -118,7 +118,7 @@ class _ProfileState extends State<Profile> {
   Container buildButton({String text, Function function}) {
     return Container(
       padding: EdgeInsets.only(top: 2.0),
-      child: FlatButton(
+      child: TextButton(
         onPressed: function,
         child: Container(
           width: 200.0,

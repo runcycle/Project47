@@ -2,10 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_svg/flutter_svg.dart';
-import 'package:WatchA/models/user.dart';
-import 'package:WatchA/pages/home.dart';
-import 'package:WatchA/widgets/progress.dart';
-import 'package:WatchA/pages/activity_feed.dart';
+import 'package:bingeable/models/user.dart';
+import 'package:bingeable/pages/home.dart';
+import 'package:bingeable/widgets/progress.dart';
+import 'package:bingeable/pages/activity_feed.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -57,7 +57,7 @@ class _SearchState extends State<Search>
   }
 
   buildNoContent() {
-    final Orientation orientation = MediaQuery.of(context).orientation;
+    //final Orientation orientation = MediaQuery.of(context).orientation;
     return Container(
       child: Center(
         child: ListView(

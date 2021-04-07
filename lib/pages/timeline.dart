@@ -1,11 +1,11 @@
-import 'package:WatchA/models/user.dart';
-import 'package:WatchA/pages/search.dart';
-import 'package:WatchA/widgets/post.dart';
+import 'package:bingeable/models/user.dart';
+import 'package:bingeable/pages/search.dart';
+import 'package:bingeable/widgets/post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 //import 'package:WatchA/widgets/header.dart';
-import 'package:WatchA/widgets/progress.dart';
-import 'package:WatchA/pages/home.dart';
+import 'package:bingeable/widgets/progress.dart';
+import 'package:bingeable/pages/home.dart';
 
 final usersRef = FirebaseFirestore.instance.collection("users");
 

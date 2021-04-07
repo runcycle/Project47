@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:WatchA/models/show.dart';
-import 'package:WatchA/widgets/shows_tile.dart';
+import 'package:bingeable/models/show.dart';
+import 'package:bingeable/widgets/shows_tile.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:WatchA/models/user.dart';
+import 'package:bingeable/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -27,7 +27,7 @@ class _UploadState extends State<Upload>
   String postId = Uuid().v4();
   final apiKey = DotEnv().env['API_KEY'];
   String query = "";
-  List<Show> _shows = new List<Show>();
+  List<Show> _shows = [];
 
   searchShows(query) async {
     final response = await http.get(

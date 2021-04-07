@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:WatchA/models/user.dart';
-import 'package:WatchA/pages/email_account.dart';
+import 'package:bingeable/models/user.dart';
+import 'package:bingeable/pages/email_account.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:WatchA/pages/home.dart';
+import 'package:bingeable/pages/home.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class EmailLogin extends StatefulWidget {
@@ -55,9 +55,12 @@ class _EmailLoginState extends State<EmailLogin> {
           print(username);
           print(uid);
 
-          SnackBar snackbar =
-              SnackBar(content: Text("Welcome Back $username!"));
-          _scaffoldKey.currentState.showSnackBar(snackbar);
+          ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Welcome Back $username!"))
+          );
+          // SnackBar snackbar =
+          //     SnackBar(content: Text("Welcome Back $username!"));
+          // _scaffoldKey.currentState.showSnackBar(snackbar);
           Timer(Duration(seconds: 2), () {
             Navigator.of(context).pop(username);
             //Navigator.pop(context, username);

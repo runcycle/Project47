@@ -1,7 +1,7 @@
-import 'package:WatchA/pages/home.dart';
-import 'package:WatchA/pages/post_screen.dart';
-import 'package:WatchA/pages/profile.dart';
-import 'package:WatchA/widgets/progress.dart';
+import 'package:bingeable/pages/home.dart';
+import 'package:bingeable/pages/post_screen.dart';
+import 'package:bingeable/pages/profile.dart';
+import 'package:bingeable/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

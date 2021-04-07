@@ -1,7 +1,7 @@
-import 'package:WatchA/pages/home.dart';
-import 'package:WatchA/widgets/header.dart';
-import 'package:WatchA/widgets/post.dart';
-import 'package:WatchA/widgets/progress.dart';
+import 'package:bingeable/pages/home.dart';
+import 'package:bingeable/widgets/header.dart';
+import 'package:bingeable/widgets/post.dart';
+import 'package:bingeable/widgets/progress.dart';
 import 'package:flutter/material.dart';
 
 class PostScreen extends StatelessWidget {

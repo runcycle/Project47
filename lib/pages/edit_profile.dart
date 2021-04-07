@@ -1,8 +1,8 @@
 import "dart:io";
 
-import 'package:WatchA/models/user.dart';
-import 'package:WatchA/pages/home.dart';
-import 'package:WatchA/widgets/progress.dart';
+import 'package:bingeable/models/user.dart';
+import 'package:bingeable/pages/home.dart';
+import 'package:bingeable/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -21,12 +21,6 @@ class EditProfile extends StatefulWidget {
 
   @override
   _EditProfileState createState() => _EditProfileState();
-}
-
-enum AppState {
-  free,
-  picked,
-  cropped,
 }
 
 class _EditProfileState extends State<EditProfile> {
@@ -130,8 +124,11 @@ class _EditProfileState extends State<EditProfile> {
         "displayName": displayNameController.text,
         "bio": bioController.text,
       });
-      SnackBar snackbar = SnackBar(content: Text("Profile updated!"));
-      _scaffoldKey.currentState.showSnackBar(snackbar);
+       ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(content: Text("Profile updated!"))
+        );
+      // SnackBar snackbar = SnackBar(content: Text("Profile updated!"));
+      // _scaffoldKey.currentState.showSnackBar(snackbar);
     }
   }
 
@@ -259,18 +256,26 @@ class _EditProfileState extends State<EditProfile> {
     usersRef.doc(widget.currentUserId).update({
         "photoUrl": avatar,
       });
-      SnackBar snackbar = SnackBar(content: Text("Profile updated!"));
-      _scaffoldKey.currentState.showSnackBar(snackbar);
+      ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(content: Text("Profile updated!"))
+        );
+      // SnackBar snackbar = SnackBar(content: Text("Profile updated!"));
+      // _scaffoldKey.currentState.showSnackBar(snackbar);
   }
 
   avatarButton() {
     return Column(
       children: [
-        FlatButton(
-          color: Colors.grey[400],
-          textColor: Colors.black,
-          minWidth: 5.0,
-          child: Icon(Icons.person_add),
+        TextButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[400]),
+            elevation: MaterialStateProperty.all<double>(4.0),
+            shadowColor: MaterialStateProperty.all<Color>(Colors.black),
+          ),
+          // color: Colors.grey[400],
+          // textColor: Colors.black,
+          // minWidth: 5.0,
+          child: Icon(Icons.person_add, color: Colors.black),
           onPressed: () {
             _pickImage();
           },
@@ -282,11 +287,15 @@ class _EditProfileState extends State<EditProfile> {
   logoutButton() {
     return Column(
       children: [
-        FlatButton(
-          color: Colors.grey[400],
-          textColor: Colors.black,
-          minWidth: 5.0,
-          child: Icon(Icons.logout),
+        TextButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[400]),
+            elevation: MaterialStateProperty.all<double>(4.0),
+            shadowColor: MaterialStateProperty.all<Color>(Colors.black),
+          ),
+          // textColor: Colors.black,
+          // minWidth: 5.0,
+          child: Icon(Icons.logout, color: Colors.black),
           onPressed: () {
             _askToLogout();
           },
@@ -362,9 +371,11 @@ class _EditProfileState extends State<EditProfile> {
                 SizedBox(height: 20.0),
                 Padding(
                   padding: EdgeInsets.only(left: 120, right: 120),
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed: updateProfileData,
-                    color: Colors.blue[400],
+                    style: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
+                    ),
                     child: Text(
                       "Submit",
                       style: TextStyle(

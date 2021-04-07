@@ -1,18 +1,18 @@
 import 'dart:io';
-import 'package:WatchA/pages/email_account.dart';
-import 'package:WatchA/pages/email_login.dart';
+import 'package:bingeable/pages/email_account.dart';
+import 'package:bingeable/pages/email_login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:WatchA/models/user.dart';
-import 'package:WatchA/pages/activity_feed.dart';
-import 'package:WatchA/pages/create_account.dart';
-import 'package:WatchA/pages/profile.dart';
-import 'package:WatchA/pages/search.dart';
-import 'package:WatchA/pages/timeline.dart';
-import 'package:WatchA/pages/upload.dart';
+import 'package:bingeable/models/user.dart';
+import 'package:bingeable/pages/activity_feed.dart';
+import 'package:bingeable/pages/create_account.dart';
+import 'package:bingeable/pages/profile.dart';
+import 'package:bingeable/pages/search.dart';
+import 'package:bingeable/pages/timeline.dart';
+import 'package:bingeable/pages/upload.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -94,9 +94,13 @@ class _HomeState extends State<Home> {
         final String body = message["notification"]["body"];
         if (recipientId == user.id) {
           print("Notification shown!");
-          SnackBar snackbar =
-              SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
-          _scaffoldKey.currentState.showSnackBar(snackbar);
+
+          ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(body, overflow: TextOverflow.ellipsis))
+          );
+          // SnackBar snackbar =
+          //     SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
+          // _scaffoldKey.currentState.showSnackBar(snackbar);
         }
         print("Notification NOT shown");
       },
