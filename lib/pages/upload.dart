@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:bingeable/models/show.dart';
 import 'package:bingeable/widgets/shows_tile.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 import 'package:bingeable/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -25,13 +25,16 @@ class _UploadState extends State<Upload>
   final _formKey = GlobalKey<FormState>();
   bool isUploading = false;
   String postId = Uuid().v4();
-  final apiKey = DotEnv().env['API_KEY'];
+  final apiKey = env['API_KEY'];
   String query = "";
   List<Show> _shows = [];
 
   searchShows(query) async {
-    final response = await http.get(
+    var url = Uri.parse(
         "https://api.themoviedb.org/3/search/multi?api_key=$apiKey&query=$query");
+    // final response = await http.get(
+    //     "https://api.themoviedb.org/3/search/multi?api_key=$apiKey&query=$query");
+    var response = await http.get(url);
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
       print(result);
@@ -115,9 +118,9 @@ class _UploadState extends State<Upload>
                   child: Text(
                     "Submit",
                     style: TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                   onPressed: () {
                     searchShows(query);

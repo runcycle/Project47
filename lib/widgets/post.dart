@@ -377,8 +377,8 @@ class _PostState extends State<Post> {
                       tween: Tween(begin: 0.8, end: 1.4),
                       curve: Curves.elasticOut,
                       cycles: 0,
-                      builder: (anim) => Transform.scale(
-                        scale: anim.value,
+                      builder: (BuildContext context, AnimatorState animatorState, Widget child) => Transform.scale(
+                        scale: animatorState.value,
                         child:
                             Icon(Icons.favorite, size: 80.0, color: Colors.red),
                       ),

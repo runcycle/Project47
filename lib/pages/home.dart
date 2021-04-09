@@ -37,7 +37,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   bool isAuth = false;
   PageController pageController;
   int pageIndex = 0;
@@ -87,32 +87,63 @@ class _HomeState extends State<Home> {
       usersRef.doc(user.id).update({"androidNotificationToken": token});
     });
 
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("on message: $message\n");
-        final String recipientId = message["data"]["recipient"];
-        final String body = message["notification"]["body"];
-        if (recipientId == user.id) {
-          print("Notification shown!");
+    // _firebaseMessaging.configure(
+    //   onMessage: (Map<String, dynamic> message) async {
+    //     print("on message: $message\n");
+    //     final String recipientId = message["data"]["recipient"];
+    //     final String body = message["notification"]["body"];
+    //     if (recipientId == user.id) {
+    //       print("Notification shown!");
 
+    //       ScaffoldMessenger.of(context).showSnackBar(
+    //       SnackBar(content: Text(body, overflow: TextOverflow.ellipsis))
+    //       );
+    //       // SnackBar snackbar =
+    //       //     SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
+    //       // _scaffoldKey.currentState.showSnackBar(snackbar);
+    //     }
+    //     print("Notification NOT shown");
+    //   },
+    // );
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      //AndroidNotification android = message.notification?.android;
+
+      print("on message: $message\n");
+        final String recipientId = message.messageId;
+        final String body = notification.body;
+        if (recipientId == currentUser.id) {
+          print("Notification shown!");
           ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(body, overflow: TextOverflow.ellipsis))
-          );
+              SnackBar(content: Text(body, overflow: TextOverflow.ellipsis)));
           // SnackBar snackbar =
           //     SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
           // _scaffoldKey.currentState.showSnackBar(snackbar);
         }
         print("Notification NOT shown");
-      },
-    );
+    });
   }
 
-  getiOSPermission() {
-    _firebaseMessaging.requestNotificationPermissions(
-        IosNotificationSettings(alert: true, badge: true, sound: true));
-    _firebaseMessaging.onIosSettingsRegistered.listen((settings) {
-      print("Setting registered: $settings");
-    });
+  // getiOSPermission() {
+  //   _firebaseMessaging.requestNotificationPermissions(
+  //       IosNotificationSettings(alert: true, badge: true, sound: true));
+  //   _firebaseMessaging.onIosSettingsRegistered.listen((settings) {
+  //     print("Setting registered: $settings");
+  //   });
+  // }
+  
+  getiOSPermission() async {
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    print('User granted permission: ${settings.authorizationStatus}');
   }
 
   createUserInFirestore() async {

@@ -23,7 +23,7 @@ class _EmailAccountState extends State<EmailAccount> {
       firebase_storage.FirebaseStorage.instance;
   firebase_storage.Reference storageRef =
       firebase_storage.FirebaseStorage.instance.ref("tempIcon.jpg");
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   //PageController pageController;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
@@ -89,9 +89,8 @@ class _EmailAccountState extends State<EmailAccount> {
             .doc(uid)
             .set({});
 
-        ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(content: Text("Welcome $username!"))
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Welcome $username!")));
         // SnackBar snackbar = SnackBar(content: Text("Welcome $username!"));
         // _scaffoldKey.currentState.showSnackBar(snackbar);
         Timer(Duration(seconds: 2), () {
@@ -151,31 +150,53 @@ class _EmailAccountState extends State<EmailAccount> {
       usersRef.doc(uid).update({"androidNotificationToken": token});
     });
 
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("on message: $message\n");
-        final String recipientId = message["data"]["recipient"];
-        final String body = message["notification"]["body"];
+    // _firebaseMessaging.configure(
+    //   onMessage: (Map<String, dynamic> message) async {
+    //     print("on message: $message\n");
+    //     final String recipientId = message["data"]["recipient"];
+    //     final String body = message["notification"]["body"];
+    //     if (recipientId == uid) {
+    //       print("Notification shown!");
+    //       ScaffoldMessenger.of(context).showSnackBar(
+    //           SnackBar(content: Text(body, overflow: TextOverflow.ellipsis)));
+    //       // SnackBar snackbar =
+    //       //     SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
+    //       // _scaffoldKey.currentState.showSnackBar(snackbar);
+    //     }
+    //     print("Notification NOT shown");
+    //   },
+    // );
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      //AndroidNotification android = message.notification?.android;
+
+      print("on message: $message\n");
+        final String recipientId = message.messageId;
+        final String body = notification.body;
         if (recipientId == uid) {
           print("Notification shown!");
           ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(body, overflow: TextOverflow.ellipsis))
-          );
+              SnackBar(content: Text(body, overflow: TextOverflow.ellipsis)));
           // SnackBar snackbar =
           //     SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
           // _scaffoldKey.currentState.showSnackBar(snackbar);
         }
         print("Notification NOT shown");
-      },
-    );
+    });
   }
 
-  getiOSPermission() {
-    _firebaseMessaging.requestNotificationPermissions(
-        IosNotificationSettings(alert: true, badge: true, sound: true));
-    _firebaseMessaging.onIosSettingsRegistered.listen((settings) {
-      print("Setting registered: $settings");
-    });
+  getiOSPermission() async {
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    print('User granted permission: ${settings.authorizationStatus}');
   }
 
   void dispose() {
