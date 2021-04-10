@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:WatchA/widgets/header.dart';
+import 'package:bingeable/widgets/header.dart';
 
 class CreateAccount extends StatefulWidget {
   @override
@@ -18,13 +18,18 @@ class _CreateAccountState extends State<CreateAccount> {
 
     if (form.validate()) {
       form.save();
-      SnackBar snackbar = SnackBar(content: Text("Welcome $username!"));
-      _scaffoldKey.currentState.showSnackBar(snackbar);
+      ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(content: Text("Welcome $username!"))
+        );
+      // SnackBar snackbar = SnackBar(content: Text("Welcome $username!"));
+      // _scaffoldKey.currentState.showSnackBar(snackbar);
       Timer(Duration(seconds: 2), () {
         Navigator.pop(context, username);
       });
     }
   }
+
+   
 
   @override
   Widget build(BuildContext parentContext) {

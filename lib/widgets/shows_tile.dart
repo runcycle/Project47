@@ -1,6 +1,6 @@
-import 'package:WatchA/models/show.dart';
-import 'package:WatchA/models/user.dart';
-import 'package:WatchA/pages/details.dart';
+import 'package:bingeable/models/show.dart';
+import 'package:bingeable/models/user.dart';
+import 'package:bingeable/pages/details.dart';
 import 'package:flutter/material.dart';
 
 class ShowsTile extends StatefulWidget {

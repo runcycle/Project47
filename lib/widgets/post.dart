@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:WatchA/models/user.dart';
-import 'package:WatchA/pages/comments.dart';
-import 'package:WatchA/pages/home.dart';
-import 'package:WatchA/widgets/custom_image.dart';
-import 'package:WatchA/widgets/progress.dart';
+import 'package:bingeable/models/user.dart';
+import 'package:bingeable/pages/comments.dart';
+import 'package:bingeable/pages/home.dart';
+import 'package:bingeable/widgets/custom_image.dart';
+import 'package:bingeable/widgets/progress.dart';
 import 'package:animator/animator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:WatchA/pages/activity_feed.dart';
+import 'package:bingeable/pages/activity_feed.dart';
 
 class Post extends StatefulWidget {
   final String postId;
@@ -377,8 +377,8 @@ class _PostState extends State<Post> {
                       tween: Tween(begin: 0.8, end: 1.4),
                       curve: Curves.elasticOut,
                       cycles: 0,
-                      builder: (anim) => Transform.scale(
-                        scale: anim.value,
+                      builder: (BuildContext context, AnimatorState animatorState, Widget child) => Transform.scale(
+                        scale: animatorState.value,
                         child:
                             Icon(Icons.favorite, size: 80.0, color: Colors.red),
                       ),

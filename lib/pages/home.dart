@@ -1,18 +1,18 @@
 import 'dart:io';
-import 'package:WatchA/pages/email_account.dart';
-import 'package:WatchA/pages/email_login.dart';
+import 'package:bingeable/pages/email_account.dart';
+import 'package:bingeable/pages/email_login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:WatchA/models/user.dart';
-import 'package:WatchA/pages/activity_feed.dart';
-import 'package:WatchA/pages/create_account.dart';
-import 'package:WatchA/pages/profile.dart';
-import 'package:WatchA/pages/search.dart';
-import 'package:WatchA/pages/timeline.dart';
-import 'package:WatchA/pages/upload.dart';
+import 'package:bingeable/models/user.dart';
+import 'package:bingeable/pages/activity_feed.dart';
+import 'package:bingeable/pages/create_account.dart';
+import 'package:bingeable/pages/profile.dart';
+import 'package:bingeable/pages/search.dart';
+import 'package:bingeable/pages/timeline.dart';
+import 'package:bingeable/pages/upload.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -37,7 +37,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   bool isAuth = false;
   PageController pageController;
   int pageIndex = 0;
@@ -87,28 +87,63 @@ class _HomeState extends State<Home> {
       usersRef.doc(user.id).update({"androidNotificationToken": token});
     });
 
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("on message: $message\n");
-        final String recipientId = message["data"]["recipient"];
-        final String body = message["notification"]["body"];
-        if (recipientId == user.id) {
+    // _firebaseMessaging.configure(
+    //   onMessage: (Map<String, dynamic> message) async {
+    //     print("on message: $message\n");
+    //     final String recipientId = message["data"]["recipient"];
+    //     final String body = message["notification"]["body"];
+    //     if (recipientId == user.id) {
+    //       print("Notification shown!");
+
+    //       ScaffoldMessenger.of(context).showSnackBar(
+    //       SnackBar(content: Text(body, overflow: TextOverflow.ellipsis))
+    //       );
+    //       // SnackBar snackbar =
+    //       //     SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
+    //       // _scaffoldKey.currentState.showSnackBar(snackbar);
+    //     }
+    //     print("Notification NOT shown");
+    //   },
+    // );
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      //AndroidNotification android = message.notification?.android;
+
+      print("on message: $message\n");
+        final String recipientId = message.messageId;
+        final String body = notification.body;
+        if (recipientId == currentUser.id) {
           print("Notification shown!");
-          SnackBar snackbar =
-              SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
-          _scaffoldKey.currentState.showSnackBar(snackbar);
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(body, overflow: TextOverflow.ellipsis)));
+          // SnackBar snackbar =
+          //     SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
+          // _scaffoldKey.currentState.showSnackBar(snackbar);
         }
         print("Notification NOT shown");
-      },
-    );
+    });
   }
 
-  getiOSPermission() {
-    _firebaseMessaging.requestNotificationPermissions(
-        IosNotificationSettings(alert: true, badge: true, sound: true));
-    _firebaseMessaging.onIosSettingsRegistered.listen((settings) {
-      print("Setting registered: $settings");
-    });
+  // getiOSPermission() {
+  //   _firebaseMessaging.requestNotificationPermissions(
+  //       IosNotificationSettings(alert: true, badge: true, sound: true));
+  //   _firebaseMessaging.onIosSettingsRegistered.listen((settings) {
+  //     print("Setting registered: $settings");
+  //   });
+  // }
+  
+  getiOSPermission() async {
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    print('User granted permission: ${settings.authorizationStatus}');
   }
 
   createUserInFirestore() async {
@@ -252,8 +287,8 @@ class _HomeState extends State<Home> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
             colors: [
               Theme.of(context).primaryColor,
               Theme.of(context).accentColor,
@@ -265,6 +300,7 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            SizedBox(height: 100),
             Text(
               'Bingeable',
               style: TextStyle(
@@ -273,7 +309,7 @@ class _HomeState extends State<Home> {
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 150.0),
+            SizedBox(height: 200.0),
             GestureDetector(
               onTap: emailRegister,
               child: Container(

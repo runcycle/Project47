@@ -1,5 +1,5 @@
-import 'package:WatchA/models/user.dart';
-import 'package:WatchA/pages/home.dart';
+import 'package:bingeable/models/user.dart';
+import 'package:bingeable/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -246,17 +246,24 @@ class _DetailsState extends State<DetailsPage> {
               buildNetworkList(),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: RaisedButton(
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                   foregroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
+                  ),
                   onPressed: () async {
                     await createPostInFirestore();
                     isUploading = true;
                     Navigator.pop(context);
                   },
                   child:
-                      const Text("Create Post", style: TextStyle(fontSize: 15)),
-                  color: Colors.blue,
-                  textColor: Colors.white,
-                  elevation: 5,
+                      const Text("Create Post", style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold
+                    )),
+                  // color: Colors.blue,
+                  // textColor: Colors.white,
+                  // elevation: 5,
                 ),
               ),
             ])),

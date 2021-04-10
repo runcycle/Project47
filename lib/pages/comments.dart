@@ -1,6 +1,6 @@
-import 'package:WatchA/pages/home.dart';
-import 'package:WatchA/widgets/header.dart';
-import 'package:WatchA/widgets/progress.dart';
+import 'package:bingeable/pages/home.dart';
+import 'package:bingeable/widgets/header.dart';
+import 'package:bingeable/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -95,9 +95,9 @@ class CommentsState extends State<Comments> {
               controller: commentController,
               decoration: InputDecoration(labelText: "Write a comment..."),
             ),
-            trailing: OutlineButton(
+            trailing: OutlinedButton(
               onPressed: addComment,
-              borderSide: BorderSide.none,
+              //borderSide: BorderSide.none,
               child: Text("Post"),
             ),
           ),

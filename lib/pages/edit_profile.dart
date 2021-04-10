@@ -1,8 +1,8 @@
 import "dart:io";
 
-import 'package:WatchA/models/user.dart';
-import 'package:WatchA/pages/home.dart';
-import 'package:WatchA/widgets/progress.dart';
+import 'package:bingeable/models/user.dart';
+import 'package:bingeable/pages/home.dart';
+import 'package:bingeable/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -21,12 +21,6 @@ class EditProfile extends StatefulWidget {
 
   @override
   _EditProfileState createState() => _EditProfileState();
-}
-
-enum AppState {
-  free,
-  picked,
-  cropped,
 }
 
 class _EditProfileState extends State<EditProfile> {
@@ -103,6 +97,8 @@ class _EditProfileState extends State<EditProfile> {
         ),
         TextField(
           controller: bioController,
+          keyboardType: TextInputType.multiline,
+          maxLines: null,
           decoration: InputDecoration(
             hintText: "Update Bio",
             errorText: _bioValid ? null : "Bio too long",
@@ -118,7 +114,7 @@ class _EditProfileState extends State<EditProfile> {
               displayNameController.text.isEmpty
           ? _displayNameValid = false
           : _displayNameValid = true;
-      bioController.text.trim().length > 100
+      bioController.text.trim().length > 200
           ? _bioValid = false
           : _bioValid = true;
     });
@@ -128,8 +124,11 @@ class _EditProfileState extends State<EditProfile> {
         "displayName": displayNameController.text,
         "bio": bioController.text,
       });
-      SnackBar snackbar = SnackBar(content: Text("Profile updated!"));
-      _scaffoldKey.currentState.showSnackBar(snackbar);
+       ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(content: Text("Profile updated!"))
+        );
+      // SnackBar snackbar = SnackBar(content: Text("Profile updated!"));
+      // _scaffoldKey.currentState.showSnackBar(snackbar);
     }
   }
 
@@ -257,20 +256,48 @@ class _EditProfileState extends State<EditProfile> {
     usersRef.doc(widget.currentUserId).update({
         "photoUrl": avatar,
       });
-      SnackBar snackbar = SnackBar(content: Text("Profile updated!"));
-      _scaffoldKey.currentState.showSnackBar(snackbar);
+      ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(content: Text("Profile updated!"))
+        );
+      // SnackBar snackbar = SnackBar(content: Text("Profile updated!"));
+      // _scaffoldKey.currentState.showSnackBar(snackbar);
   }
 
   avatarButton() {
     return Column(
       children: [
-        FlatButton(
-          color: Colors.grey[400],
-          textColor: Colors.black,
-          minWidth: 5.0,
-          child: Icon(Icons.person_add),
+        TextButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[400]),
+            elevation: MaterialStateProperty.all<double>(4.0),
+            shadowColor: MaterialStateProperty.all<Color>(Colors.black),
+          ),
+          // color: Colors.grey[400],
+          // textColor: Colors.black,
+          // minWidth: 5.0,
+          child: Icon(Icons.person_add, color: Colors.black),
           onPressed: () {
             _pickImage();
+          },
+        ),
+      ],
+    );
+  }
+
+  logoutButton() {
+    return Column(
+      children: [
+        TextButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[400]),
+            elevation: MaterialStateProperty.all<double>(4.0),
+            shadowColor: MaterialStateProperty.all<Color>(Colors.black),
+          ),
+          // textColor: Colors.black,
+          // minWidth: 5.0,
+          child: Icon(Icons.logout, color: Colors.black),
+          onPressed: () {
+            _askToLogout();
           },
         ),
       ],
@@ -296,7 +323,7 @@ class _EditProfileState extends State<EditProfile> {
       ),
       body: isLoading
           ? circularProgress()
-          : Column(
+          : ListView(
               children: <Widget>[
                 Stack(
                   children: [
@@ -311,6 +338,15 @@ class _EditProfileState extends State<EditProfile> {
                             ],
                           )
                         : Container(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: logoutButton(),
+                        ),
+                      ],
+                    ),
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 35.0),
@@ -332,34 +368,20 @@ class _EditProfileState extends State<EditProfile> {
                     ],
                   ),
                 ),
-                SizedBox(height: 10.0),
-                RaisedButton(
-                  onPressed: updateProfileData,
-                  color: Colors.blue[400],
-                  child: Text(
-                    "Submit",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
+                SizedBox(height: 20.0),
+                Padding(
+                  padding: EdgeInsets.only(left: 120, right: 120),
+                  child: ElevatedButton(
+                    onPressed: updateProfileData,
+                    style: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
                     ),
-                  ),
-                ),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: RaisedButton(
-                        onPressed: _askToLogout,
-                        child: Text(
-                          "Logout",
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                    child: Text(
+                      "Submit",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),

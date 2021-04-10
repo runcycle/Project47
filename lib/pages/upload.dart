@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:WatchA/models/show.dart';
-import 'package:WatchA/widgets/shows_tile.dart';
-import 'package:http/http.dart' as http;
+import 'package:bingeable/models/show.dart';
+import 'package:bingeable/widgets/shows_tile.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:WatchA/models/user.dart';
+import 'package:http/http.dart' as http;
+import 'package:bingeable/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -25,38 +25,16 @@ class _UploadState extends State<Upload>
   final _formKey = GlobalKey<FormState>();
   bool isUploading = false;
   String postId = Uuid().v4();
-  final apiKey = DotEnv().env['API_KEY'];
+  final apiKey = env['API_KEY'];
   String query = "";
-  List<Show> _shows = new List<Show>();
-
-  // createPostInFirestore(
-  //     {String mediaUrl, String location, String description}) {
-  //   postsRef
-  //       .doc(widget.currentUser.id)
-  //       .collection("userPosts")
-  //       .doc(postId)
-  //       .set({
-  //     "postId": postId,
-  //     "ownerId": widget.currentUser.id,
-  //     "username": widget.currentUser.username,
-  //     "mediaUrl": mediaUrl,
-  //     "description": description,
-  //     "location": location,
-  //     "timestamp": timestamp,
-  //     "likes": {},
-  //   });
-  //   captionController.clear();
-  //   searchController.clear();
-  //   setState(() {
-  //     //file = null;
-  //     isUploading = false;
-  //     postId = Uuid().v4();
-  //   });
-  // }
+  List<Show> _shows = [];
 
   searchShows(query) async {
-    final response = await http.get(
+    var url = Uri.parse(
         "https://api.themoviedb.org/3/search/multi?api_key=$apiKey&query=$query");
+    // final response = await http.get(
+    //     "https://api.themoviedb.org/3/search/multi?api_key=$apiKey&query=$query");
+    var response = await http.get(url);
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
       print(result);
@@ -134,12 +112,15 @@ class _UploadState extends State<Upload>
             SizedBox(height: 10),
             Container(
                 width: MediaQuery.of(context).size.width,
-                height: 30.0,
+                height: 40.0,
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   child: Text(
                     "Submit",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                   onPressed: () {
                     searchShows(query);

@@ -1,9 +1,9 @@
-import 'package:WatchA/models/user.dart';
-import 'package:WatchA/pages/edit_profile.dart';
-import 'package:WatchA/pages/home.dart';
-import 'package:WatchA/widgets/post.dart';
-import 'package:WatchA/widgets/post_tile.dart';
-import 'package:WatchA/widgets/progress.dart';
+import 'package:bingeable/models/user.dart';
+import 'package:bingeable/pages/edit_profile.dart';
+import 'package:bingeable/pages/home.dart';
+import 'package:bingeable/widgets/post.dart';
+import 'package:bingeable/widgets/post_tile.dart';
+import 'package:bingeable/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -118,7 +118,7 @@ class _ProfileState extends State<Profile> {
   Container buildButton({String text, Function function}) {
     return Container(
       padding: EdgeInsets.only(top: 2.0),
-      child: FlatButton(
+      child: TextButton(
         onPressed: function,
         child: Container(
           width: 200.0,
@@ -240,7 +240,7 @@ class _ProfileState extends State<Profile> {
         }
         UserModel user = UserModel.fromDocument(snapshot.data);
         return Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 10.0),
           child: Column(
             children: <Widget>[
               Row(
@@ -258,9 +258,9 @@ class _ProfileState extends State<Profile> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            buildCountColumn("posts", postCount),
-                            buildCountColumn("followers", followerCount),
-                            buildCountColumn("following", followingCount),
+                            buildCountColumn("Posts", postCount),
+                            buildCountColumn("Followers", followerCount),
+                            buildCountColumn("Following", followingCount),
                           ],
                         ),
                         Row(
@@ -303,7 +303,7 @@ class _ProfileState extends State<Profile> {
                   user.bio,
                   style: TextStyle(
                     color: Colors.grey[700],
-                    fontWeight: FontWeight.bold,
+                    //fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -322,7 +322,7 @@ class _ProfileState extends State<Profile> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SvgPicture.asset("assets/images/no_content.svg", height: 260.0),
+            SvgPicture.asset("assets/images/no_content.svg", height: 200.0),
             Padding(
               padding: EdgeInsets.only(top: 20.0),
               child: Text(
@@ -457,7 +457,7 @@ class _ProfileState extends State<Profile> {
                           color: Colors.white, fontWeight: FontWeight.bold))),
               PopupMenuItem(
                 value: "podcast",
-                child: Text("Podcasts",
+                child: Text("Podcasts (Soon)",
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold)),
               ),
@@ -475,8 +475,8 @@ class _ProfileState extends State<Profile> {
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             border: Border(
-                top: BorderSide(width: 1.0, color: Colors.grey),
-                bottom: BorderSide(width: 1.0, color: Colors.grey)),
+                top: BorderSide(width: 2.0, color: Colors.grey),
+                bottom: BorderSide(width: 2.0, color: Colors.grey)),
             //color: Colors.grey
           ),
           child: Center(
@@ -502,7 +502,9 @@ class _ProfileState extends State<Profile> {
       body: ListView(
         children: <Widget>[
           buildProfileHeader(),
-          Divider(),
+          // Divider(
+          //   thickness: 1.5,
+          //   color: Colors.grey[300]),
           buildTogglePostOrientation(),
           buildPostHeader(),
           Divider(
