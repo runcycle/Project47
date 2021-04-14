@@ -27,7 +27,6 @@ class _TimelineState extends State<Timeline> {
   List<String> followingList = [];
   BannerAd _ad;
   bool isLoaded;
-  final AdSize adSize = AdSize(height: 468, width: 350);
 
   @override
   void initState() {
@@ -37,7 +36,7 @@ class _TimelineState extends State<Timeline> {
     _ad = BannerAd(
       adUnitId: AdHelper.bannerAdUnitId,
       request: AdRequest(),
-      size: adSize,
+      size: AdSize.mediumRectangle,
       listener: AdListener(onAdLoaded: (_) {
         setState(
           () {
@@ -84,15 +83,23 @@ class _TimelineState extends State<Timeline> {
 
   buildAd() {
     if (isLoaded == true) {
-      return Container(
-        // elevation: 5.0,
-        // margin: EdgeInsets.all(10.0),
-        child: AdWidget(
-          ad: _ad,
+      return Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            color: Colors.grey[300],
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: AdWidget(
+                ad: _ad,
+              ),
+            ),
+            width: _ad.size.width.toDouble(),
+            height: _ad.size.height.toDouble(),
+            alignment: Alignment.center,
+          ),
         ),
-        width: _ad.size.width.toDouble(),
-        height: _ad.size.height.toDouble(),
-        alignment: Alignment.center,
       );
     } else {
       return CircularProgressIndicator();
@@ -106,18 +113,19 @@ class _TimelineState extends State<Timeline> {
       return buildUsersToFollow();
     } else {
       return ListView.separated(
-          itemCount: posts.length,
-          itemBuilder: (BuildContext context, int index) {
+        clipBehavior: Clip.none,
+        itemCount: posts.length,
+        itemBuilder: (BuildContext context, int index) {
             return Column(
               children: posts,
             );
           },
-          separatorBuilder: (BuildContext context, int index) {
-            if (index % 5 == 0) {
-              return buildAd();
-            } else {
-              return Divider();
-            }
+        separatorBuilder: (BuildContext context, int index) {
+          if (index % 2 == 0) {
+            return buildAd();
+          } else {
+            return Divider();
+          }
         },
       );
     }

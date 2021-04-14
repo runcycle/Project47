@@ -425,19 +425,18 @@ class _PostState extends State<Post> {
   Widget build(BuildContext context) {
     isLiked = (likes[currentUserId] == true);
     return Padding(
-      padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-      child: Card(
-        elevation: 0.0,
-        margin: EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(5.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            buildPostHeader(),
-            buildComment(),
-            buildPostImage(),
-            buildPostFooter(),
-          ],
-        ),
+        //mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          buildPostHeader(),
+          buildComment(),
+          buildPostImage(),
+          buildPostFooter(),
+        ],
+          ),
       ),
     );
   }
