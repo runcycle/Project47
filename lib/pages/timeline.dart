@@ -116,16 +116,17 @@ class _TimelineState extends State<Timeline> {
         clipBehavior: Clip.none,
         itemCount: posts.length,
         itemBuilder: (BuildContext context, int index) {
-            return Column(
-              children: posts,
-            );
-          },
+          return Column(
+            children: posts,
+          );
+        },
         separatorBuilder: (BuildContext context, int index) {
-          if (index % 2 == 0) {
-            return buildAd();
-          } else {
-            return Divider();
-          }
+          return buildAd();
+          // if (index % 5 == 0) {
+          //   return buildAd();
+          // } else {
+          //   return Divider();
+          // }
         },
       );
     }
