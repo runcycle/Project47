@@ -81,7 +81,7 @@ class _TimelineState extends State<Timeline> {
     super.dispose();
   }
 
-  buildAd() {
+  Widget buildAd() {
     if (isLoaded == true) {
       return Padding(
         padding: const EdgeInsets.all(5.0),
@@ -121,12 +121,9 @@ class _TimelineState extends State<Timeline> {
           );
         },
         separatorBuilder: (BuildContext context, int index) {
-          return buildAd();
-          // if (index % 5 == 0) {
-          //   return buildAd();
-          // } else {
-          //   return Divider();
-          // }
+          return Container(child: 
+            buildAd(),
+          );
         },
       );
     }
