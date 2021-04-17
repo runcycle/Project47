@@ -314,24 +314,24 @@ class _PostState extends State<Post> {
               Row(
                 children: [
                   title != null
-                  ? Flexible(
-                        child: Text("$title",
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 15.0, fontWeight: FontWeight.bold)),
-                  )
-                  : Text(""),
+                      ? Flexible(
+                          child: Text("$title",
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 15.0, fontWeight: FontWeight.bold)),
+                        )
+                      : Text(""),
                   Text(" ($mediaType)", style: TextStyle(fontSize: 15)),
                 ],
               ),
               Row(
                 children: [
                   network != null
-                    ? Text("Watched on: $network",
-                        style: TextStyle(
-                          fontSize: 14.0,
-                        ))
-                    : Text(""),
+                      ? Text("Watched on: $network",
+                          style: TextStyle(
+                            fontSize: 14.0,
+                          ))
+                      : Text(""),
                 ],
               ),
               SizedBox(
@@ -340,15 +340,14 @@ class _PostState extends State<Post> {
             ],
           ),
         ),
-        trailing: 
-        Padding(
+        trailing: Padding(
           padding: EdgeInsets.only(left: 50),
           child: isPostOwner
-          ? IconButton(
-              onPressed: () => handleDeletePost(context),
-              icon: Icon(Icons.delete_outline),
-            )
-          : Text(""),
+              ? IconButton(
+                  onPressed: () => handleDeletePost(context),
+                  icon: Icon(Icons.delete_outline),
+                )
+              : Text(""),
         ),
       ),
     );
@@ -377,7 +376,9 @@ class _PostState extends State<Post> {
                       tween: Tween(begin: 0.8, end: 1.4),
                       curve: Curves.elasticOut,
                       cycles: 0,
-                      builder: (BuildContext context, AnimatorState animatorState, Widget child) => Transform.scale(
+                      builder: (BuildContext context,
+                              AnimatorState animatorState, Widget child) =>
+                          Transform.scale(
                         scale: animatorState.value,
                         child:
                             Icon(Icons.favorite, size: 80.0, color: Colors.red),
@@ -424,19 +425,18 @@ class _PostState extends State<Post> {
   Widget build(BuildContext context) {
     isLiked = (likes[currentUserId] == true);
     return Padding(
-      padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-      child: Card(
-        elevation: 5.0,
-        margin: EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(5.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            buildPostHeader(),
-            buildComment(),
-            buildPostImage(),
-            buildPostFooter(),
-          ],
-        ),
+        //mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          buildPostHeader(),
+          buildComment(),
+          buildPostImage(),
+          buildPostFooter(),
+        ],
+          ),
       ),
     );
   }

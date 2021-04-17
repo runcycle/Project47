@@ -1,11 +1,13 @@
 import 'package:bingeable/models/user.dart';
 import 'package:bingeable/pages/search.dart';
+import 'package:bingeable/services/admob_service.dart';
 import 'package:bingeable/widgets/post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 //import 'package:WatchA/widgets/header.dart';
 import 'package:bingeable/widgets/progress.dart';
 import 'package:bingeable/pages/home.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 final usersRef = FirebaseFirestore.instance.collection("users");
 
@@ -23,12 +25,30 @@ class Timeline extends StatefulWidget {
 class _TimelineState extends State<Timeline> {
   List<Post> posts;
   List<String> followingList = [];
+  BannerAd _ad;
+  bool isLoaded;
 
   @override
   void initState() {
     super.initState();
     getTimeline();
     getFollowing();
+    _ad = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: AdRequest(),
+      size: AdSize.mediumRectangle,
+      listener: AdListener(onAdLoaded: (_) {
+        setState(
+          () {
+            isLoaded = true;
+          },
+        );
+      }, onAdFailedToLoad: (Ad ad, LoadAdError error) {
+        ad.dispose();
+        print("Ad Failed to Load with Error: $error");
+      }),
+    );
+    _ad.load();
   }
 
   getTimeline() async {
@@ -55,13 +75,57 @@ class _TimelineState extends State<Timeline> {
     });
   }
 
+  @override
+  void dispose() {
+    _ad?.dispose();
+    super.dispose();
+  }
+
+  Widget buildAd() {
+    if (isLoaded == true) {
+      return Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            color: Colors.grey[300],
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: AdWidget(
+                ad: _ad,
+              ),
+            ),
+            width: _ad.size.width.toDouble(),
+            height: _ad.size.height.toDouble(),
+            alignment: Alignment.center,
+          ),
+        ),
+      );
+    } else {
+      return CircularProgressIndicator();
+    }
+  }
+
   buildTimeline() {
     if (posts == null) {
       return circularProgress();
     } else if (posts.isEmpty) {
       return buildUsersToFollow();
     } else {
-      return ListView(children: posts);
+      return ListView.separated(
+        clipBehavior: Clip.none,
+        itemCount: posts.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Column(
+            children: posts,
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return Container(child: 
+            buildAd(),
+          );
+        },
+      );
     }
   }
 
