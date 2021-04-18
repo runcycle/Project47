@@ -4,7 +4,6 @@ import 'package:bingeable/services/admob_service.dart';
 import 'package:bingeable/widgets/post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-//import 'package:WatchA/widgets/header.dart';
 import 'package:bingeable/widgets/progress.dart';
 import 'package:bingeable/pages/home.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
