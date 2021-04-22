@@ -23,6 +23,7 @@ class Timeline extends StatefulWidget {
 
 class _TimelineState extends State<Timeline> {
   List<Post> posts;
+  List<Object> itemList;
   List<String> followingList = [];
   BannerAd _ad;
   bool isLoaded;
@@ -105,25 +106,44 @@ class _TimelineState extends State<Timeline> {
     }
   }
 
+  // adSwitch() {
+  //   for (int i = posts.length - 5; i >= 1; i - 5) {
+  //     posts.insert(i, _ad);
+  //   }
+  // }
+
   buildTimeline() {
     if (posts == null) {
       return circularProgress();
     } else if (posts.isEmpty) {
       return buildUsersToFollow();
     } else {
+      // return ListView.builder(
+      //   addAutomaticKeepAlives: true,
+      //   itemCount: itemList.length,
+      //   itemBuilder: (BuildContext context, int index) {
+      //     return Column(
+      //       children: posts,
+      //     );
+      //   },
+      // );
       return ListView.separated(
         clipBehavior: Clip.none,
-        itemCount: posts.length,
         itemBuilder: (BuildContext context, int index) {
           return Column(
             children: posts,
           );
         },
         separatorBuilder: (BuildContext context, int index) {
-          return Container(child: 
-            buildAd(),
-          );
+          if (index % 5 == 0) {
+            return Container(
+              child: buildAd(),
+            );
+          } else {
+            return Divider();
+          }
         },
+        itemCount: posts.length,
       );
     }
   }
