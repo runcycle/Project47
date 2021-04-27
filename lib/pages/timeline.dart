@@ -23,10 +23,10 @@ class Timeline extends StatefulWidget {
 
 class _TimelineState extends State<Timeline> {
   List<Post> posts;
-  List<Object> itemList;
   List<String> followingList = [];
   BannerAd _ad;
   bool isLoaded;
+  bool insertAd = false;
 
   @override
   void initState() {
@@ -106,11 +106,38 @@ class _TimelineState extends State<Timeline> {
     }
   }
 
-  // adSwitch() {
-  //   for (int i = posts.length - 5; i >= 1; i - 5) {
-  //     posts.insert(i, _ad);
-  //   }
-  // }
+// // Defined somewhere, e.g. in your State[less/ful] widget
+// Map<String, BannerAd> ads = <String, BannerAd>{}; 
+// ...
+// ...
+// ...
+
+// ListView.separated(
+//   separatorBuilder: (context, index) => Divider(),
+//   shrinkWrap: true,
+//   itemBuilder: (BuildContext context, int index) {
+//     ads['myBanner$index'] = BannerAd(
+//       adUnitId: '<Banner ID>',
+//       size: AdSize.banner,
+//       request: AdRequest(),
+//       listener: AdListener(onAdClosed: (ad) => ad.dispose()));
+//     ads['myBanner$index'].load();
+
+//     if (index % 6 == 0) {
+//       return Column(
+//         children: [
+//           Container(
+//             child: AdWidget(ad: ads['myBanner$index']),
+//             height: 100.0,
+//           ),
+//          _buildItem(context, items[index])
+//        ],
+//      );
+//    }
+//    return _buildItem(context, items[index]);
+//   },
+//   itemCount: items.length,
+// )
 
   buildTimeline() {
     if (posts == null) {
@@ -118,32 +145,19 @@ class _TimelineState extends State<Timeline> {
     } else if (posts.isEmpty) {
       return buildUsersToFollow();
     } else {
-      // return ListView.builder(
-      //   addAutomaticKeepAlives: true,
-      //   itemCount: itemList.length,
-      //   itemBuilder: (BuildContext context, int index) {
-      //     return Column(
-      //       children: posts,
-      //     );
-      //   },
-      // );
-      return ListView.separated(
+      return ListView.builder(
         clipBehavior: Clip.none,
+        itemCount: posts.length,
         itemBuilder: (BuildContext context, int index) {
-          return Column(
-            children: posts,
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) {
           if (index % 5 == 0) {
             return Container(
               child: buildAd(),
             );
-          } else {
-            return Divider();
-          }
+          } 
+          return Column(
+            children: posts,
+          );
         },
-        itemCount: posts.length,
       );
     }
   }
