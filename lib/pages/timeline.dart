@@ -1,3 +1,4 @@
+import 'package:bingeable/main.dart';
 import 'package:bingeable/models/user.dart';
 import 'package:bingeable/pages/search.dart';
 import 'package:bingeable/services/admob_service.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:bingeable/widgets/progress.dart';
 import 'package:bingeable/pages/home.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final usersRef = FirebaseFirestore.instance.collection("users");
 
@@ -27,6 +29,7 @@ class _TimelineState extends State<Timeline> {
   BannerAd _ad;
   bool isLoaded;
   bool insertAd = false;
+  //List<Object> postsAndAds;
 
   @override
   void initState() {
@@ -51,6 +54,15 @@ class _TimelineState extends State<Timeline> {
     _ad.load();
   }
 
+  // @override
+  // void didChangeDependencies() async {
+  //   super.didChangeDependencies();
+  //   final adState = context.read(adStateProvider);
+  //   await adState.initialization.then((value) {
+  //     insertAdsWithPosts(adState);
+  //   });
+  // }
+
   getTimeline() async {
     QuerySnapshot snapshot = await timelineRef
         .doc(widget.currentUser.id)
@@ -61,9 +73,19 @@ class _TimelineState extends State<Timeline> {
         snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
     setState(() {
       this.posts = posts;
+      //postsAndAds = List.from(posts);
     });
     print(currentUser.username);
+    //print(postsAndAds.length);
   }
+
+  // void insertAdsWithPosts(AdHelper adState) {
+  //   setState(() {
+  //     for (var i = postsAndAds.length - 5; i >= 1; i -= 10) {
+  //       postsAndAds.insert(i, _ad);
+  //     }
+  //   });
+  // }
 
   getFollowing() async {
     QuerySnapshot snapshot = await followingRef
@@ -91,9 +113,7 @@ class _TimelineState extends State<Timeline> {
             color: Colors.grey[300],
             child: Padding(
               padding: const EdgeInsets.all(5.0),
-              child: AdWidget(
-                ad: _ad,
-              ),
+              child: AdWidget(ad: _ad),
             ),
             width: _ad.size.width.toDouble(),
             height: _ad.size.height.toDouble(),
@@ -106,39 +126,6 @@ class _TimelineState extends State<Timeline> {
     }
   }
 
-// // Defined somewhere, e.g. in your State[less/ful] widget
-// Map<String, BannerAd> ads = <String, BannerAd>{}; 
-// ...
-// ...
-// ...
-
-// ListView.separated(
-//   separatorBuilder: (context, index) => Divider(),
-//   shrinkWrap: true,
-//   itemBuilder: (BuildContext context, int index) {
-//     ads['myBanner$index'] = BannerAd(
-//       adUnitId: '<Banner ID>',
-//       size: AdSize.banner,
-//       request: AdRequest(),
-//       listener: AdListener(onAdClosed: (ad) => ad.dispose()));
-//     ads['myBanner$index'].load();
-
-//     if (index % 6 == 0) {
-//       return Column(
-//         children: [
-//           Container(
-//             child: AdWidget(ad: ads['myBanner$index']),
-//             height: 100.0,
-//           ),
-//          _buildItem(context, items[index])
-//        ],
-//      );
-//    }
-//    return _buildItem(context, items[index]);
-//   },
-//   itemCount: items.length,
-// )
-
   buildTimeline() {
     if (posts == null) {
       return circularProgress();
@@ -149,14 +136,14 @@ class _TimelineState extends State<Timeline> {
         clipBehavior: Clip.none,
         itemCount: posts.length,
         itemBuilder: (BuildContext context, int index) {
+          //final item = postsAndAds[index];
           if (index % 5 == 0) {
-            return Container(
-              child: buildAd(),
+            return buildAd();
+          } else {
+            return Column(
+              children: posts,
             );
-          } 
-          return Column(
-            children: posts,
-          );
+          }
         },
       );
     }
