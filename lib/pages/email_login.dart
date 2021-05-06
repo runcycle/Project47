@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:bingeable/pages/home.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EmailLogin extends StatefulWidget {
   @override
@@ -23,12 +24,15 @@ class _EmailLoginState extends State<EmailLogin> {
   final TextEditingController _password = TextEditingController();
 
   String email;
+  String rememberedEmail;
   String password;
+  String rememberedPassword;
   String username;
   String error;
   bool _showProgress = false;
   String uid;
   User loggedInUser;
+  bool rememberMe = false;
 
   submit() async {
     final form = _formKey.currentState;
@@ -54,16 +58,12 @@ class _EmailLoginState extends State<EmailLogin> {
           });
           print(username);
           print(uid);
+          print(rememberedEmail);
 
-          ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Welcome Back $username!"))
-          );
-          // SnackBar snackbar =
-          //     SnackBar(content: Text("Welcome Back $username!"));
-          // _scaffoldKey.currentState.showSnackBar(snackbar);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Welcome Back $username!")));
           Timer(Duration(seconds: 2), () {
             Navigator.of(context).pop(username);
-            //Navigator.pop(context, username);
           });
         }
       } catch (e) {
@@ -74,6 +74,17 @@ class _EmailLoginState extends State<EmailLogin> {
         });
       }
     }
+  }
+
+  void setPrefs(bool newValue) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      rememberMe = newValue;
+      if (rememberMe = true) {
+          prefs.setString(rememberedEmail, _email.text);
+          prefs.setString(rememberedPassword, _password.text);
+        }
+    });
   }
 
   Widget showAlert() {
@@ -200,7 +211,14 @@ class _EmailLoginState extends State<EmailLogin> {
                         hintText: "Must be at least 8 characters",
                       ),
                     ),
-                    SizedBox(height: 25.0),
+                    SizedBox(height: 5.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Remember Me"),
+                        Checkbox(value: rememberMe, onChanged: setPrefs),
+                      ],
+                    ),
                     GestureDetector(
                       onTap: submit,
                       child: Container(
