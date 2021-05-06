@@ -110,17 +110,17 @@ class _HomeState extends State<Home> {
       //AndroidNotification android = message.notification?.android;
 
       print("on message: $message\n");
-        final String recipientId = message.messageId;
-        final String body = notification.body;
-        if (recipientId == currentUser.id) {
-          print("Notification shown!");
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(body, overflow: TextOverflow.ellipsis)));
-          // SnackBar snackbar =
-          //     SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
-          // _scaffoldKey.currentState.showSnackBar(snackbar);
-        }
-        print("Notification NOT shown");
+      final String recipientId = message.messageId;
+      final String body = notification.body;
+      if (recipientId == currentUser.id) {
+        print("Notification shown!");
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(body, overflow: TextOverflow.ellipsis)));
+        // SnackBar snackbar =
+        //     SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
+        // _scaffoldKey.currentState.showSnackBar(snackbar);
+      }
+      print("Notification NOT shown");
     });
   }
 
@@ -131,7 +131,7 @@ class _HomeState extends State<Home> {
   //     print("Setting registered: $settings");
   //   });
   // }
-  
+
   getiOSPermission() async {
     NotificationSettings settings = await _firebaseMessaging.requestPermission(
       alert: true,

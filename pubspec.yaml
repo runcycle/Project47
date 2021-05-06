@@ -26,7 +26,6 @@ dependencies:
   firebase_storage: ^8.0.3
   firebase_auth: ^1.0.3
   google_sign_in: 5.0.1
-  # geolocator: 5.0.1
   uuid: ^3.0.4
   image: ^3.0.1
   animator: 3.0.0
@@ -51,6 +50,7 @@ dependencies:
   google_mobile_ads: ^0.12.1
   flutter_cache_manager: ^3.0.1
   flutter_riverpod: ^0.13.1+1
+  shared_preferences: ^2.0.5
 
 dev_dependencies:
   flutter_test:
