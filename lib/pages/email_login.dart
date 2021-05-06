@@ -81,9 +81,10 @@ class _EmailLoginState extends State<EmailLogin> {
     setState(() {
       rememberMe = newValue;
       if (rememberMe = true) {
-          prefs.setString(rememberedEmail, _email.text);
-          prefs.setString(rememberedPassword, _password.text);
-        }
+        prefs.setString(rememberedEmail, _email.text);
+        prefs.setString(rememberedPassword, _password.text);
+      }
+      rememberedEmail = prefs.getString(rememberedEmail);
     });
   }
 
