@@ -34,6 +34,11 @@ class _EmailLoginState extends State<EmailLogin> {
   User loggedInUser;
   bool rememberMe = false;
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   submit() async {
     final form = _formKey.currentState;
 
@@ -81,10 +86,10 @@ class _EmailLoginState extends State<EmailLogin> {
     setState(() {
       rememberMe = newValue;
       if (rememberMe = true) {
-        prefs.setString(rememberedEmail, _email.text);
-        prefs.setString(rememberedPassword, _password.text);
+        prefs.setString("rememberedEmail", _email.text);
+        //prefs.setString(rememberedPassword, _password.text);
       }
-      rememberedEmail = prefs.getString(rememberedEmail);
+      rememberedEmail = prefs.getString("rememberedEmail");
     });
   }
 
