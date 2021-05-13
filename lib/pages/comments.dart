@@ -49,7 +49,7 @@ class CommentsState extends State<Comments> {
             return circularProgress();
           }
           List<Comment> comments = [];
-          snapshot.data.documents.forEach((doc) {
+          snapshot.data.docs.forEach((doc) {
             comments.add(Comment.fromDocument(doc));
           });
           return ListView(
@@ -85,7 +85,13 @@ class CommentsState extends State<Comments> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header(context, titleText: "Comments"),
+      appBar: AppBar(
+        title: Text('Comments',
+            style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
+        centerTitle: true,
+        elevation: 15,
+        backgroundColor: Theme.of(context).primaryColor,
+      ),
       body: Column(
         children: <Widget>[
           Expanded(child: buildComments()),

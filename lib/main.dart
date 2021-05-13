@@ -40,11 +40,6 @@ class MyApp extends StatelessWidget {
         accentColor: Color(0xFF42a5f5),
       ),
       home: Home(),
-      // initialRoute: "/",
-      // routes: {
-      //   "/": (context) => Home(),
-      //   "/timeline": (context) => Timeline(),
-      // }
     );
   }
 }
