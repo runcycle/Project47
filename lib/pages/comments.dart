@@ -1,5 +1,4 @@
 import 'package:bingeable/pages/home.dart';
-import 'package:bingeable/widgets/header.dart';
 import 'package:bingeable/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
