@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:bingeable/pages/home.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class EmailLogin extends StatefulWidget {
   @override
@@ -24,9 +23,7 @@ class _EmailLoginState extends State<EmailLogin> {
   final TextEditingController _password = TextEditingController();
 
   String email;
-  String rememberedEmail;
   String password;
-  String rememberedPassword;
   String username;
   String error;
   bool _showProgress = false;
@@ -53,8 +50,8 @@ class _EmailLoginState extends State<EmailLogin> {
             email: email, password: password);
 
         if (user != null) {
-          final User getUserId = _auth.currentUser;
-          final uid = getUserId.uid;
+          final User getUser = _auth.currentUser;
+          final uid = getUser.uid;
           DocumentSnapshot doc = await usersRef.doc(uid).get();
           currentUser = UserModel.fromDocument(doc);
           setState(() {
@@ -63,7 +60,6 @@ class _EmailLoginState extends State<EmailLogin> {
           });
           print(username);
           print(uid);
-          print(rememberedEmail);
 
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text("Welcome Back $username!")));
@@ -81,17 +77,15 @@ class _EmailLoginState extends State<EmailLogin> {
     }
   }
 
-  void setPrefs(bool newValue) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      rememberMe = newValue;
-      if (rememberMe = true) {
-        prefs.setString("rememberedEmail", _email.text);
-        //prefs.setString(rememberedPassword, _password.text);
-      }
-      rememberedEmail = prefs.getString("rememberedEmail");
-    });
-  }
+  // void setPrefs(bool newValue) async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     rememberMe = newValue;
+  //     if (rememberMe = true) {
+  //       prefs.setString("rememberedEmail", _email.text);
+  //     }
+  //   });
+  // }
 
   Widget showAlert() {
     if (error != null) {
@@ -217,14 +211,14 @@ class _EmailLoginState extends State<EmailLogin> {
                         hintText: "Must be at least 8 characters",
                       ),
                     ),
-                    SizedBox(height: 5.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Remember Me"),
-                        Checkbox(value: rememberMe, onChanged: setPrefs),
-                      ],
-                    ),
+                    SizedBox(height: 20.0),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Text("Remember Me"),
+                    //     Checkbox(value: rememberMe, onChanged: setPrefs),
+                    //   ],
+                    // ),
                     GestureDetector(
                       onTap: submit,
                       child: Container(

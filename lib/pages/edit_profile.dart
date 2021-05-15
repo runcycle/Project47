@@ -13,6 +13,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as Im;
 import 'package:uuid/uuid.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfile extends StatefulWidget {
   final String currentUserId;
@@ -124,11 +125,8 @@ class _EditProfileState extends State<EditProfile> {
         "displayName": displayNameController.text,
         "bio": bioController.text,
       });
-       ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(content: Text("Profile updated!"))
-        );
-      // SnackBar snackbar = SnackBar(content: Text("Profile updated!"));
-      // _scaffoldKey.currentState.showSnackBar(snackbar);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Profile updated!")));
     }
   }
 
@@ -139,6 +137,8 @@ class _EditProfileState extends State<EditProfile> {
           MaterialPageRoute(builder: (context) => Home()),
           (Route<dynamic> route) => false);
     } else if (emailLogin = true) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
       await _auth.signOut();
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => Home()),
@@ -254,13 +254,12 @@ class _EditProfileState extends State<EditProfile> {
     });
     print(avatar);
     usersRef.doc(widget.currentUserId).update({
-        "photoUrl": avatar,
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(content: Text("Profile updated!"))
-        );
-      // SnackBar snackbar = SnackBar(content: Text("Profile updated!"));
-      // _scaffoldKey.currentState.showSnackBar(snackbar);
+      "photoUrl": avatar,
+    });
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text("Profile updated!")));
+    // SnackBar snackbar = SnackBar(content: Text("Profile updated!"));
+    // _scaffoldKey.currentState.showSnackBar(snackbar);
   }
 
   avatarButton() {
@@ -374,7 +373,8 @@ class _EditProfileState extends State<EditProfile> {
                   child: ElevatedButton(
                     onPressed: updateProfileData,
                     style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.blue[400]),
                     ),
                     child: Text(
                       "Submit",

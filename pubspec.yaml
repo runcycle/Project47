@@ -74,4 +74,5 @@ flutter:
     - assets/images/activity_feed.svg
     - assets/images/no_content.svg
     - assets/images/noPoster.png
+    - assets/images/TMDB_logo2.svg
     - .env

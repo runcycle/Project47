@@ -14,6 +14,7 @@ import 'package:bingeable/pages/search.dart';
 import 'package:bingeable/pages/timeline.dart';
 import 'package:bingeable/pages/upload.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_svg/svg.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final firebase_storage.Reference storageRef =
@@ -38,6 +39,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  //final _auth = FirebaseAuth.instance;
   bool isAuth = false;
   PageController pageController;
   int pageIndex = 0;
@@ -58,9 +60,19 @@ class _HomeState extends State<Home> {
     }).catchError((err) {
       print('Error signing in: $err');
     });
+
     emailLogin = false;
     googleLogin = false;
   }
+
+  // onRefresh() async {
+  //   final User getUser = _auth.currentUser;
+  //   final uid = getUser.uid;
+  //   DocumentSnapshot doc = await usersRef.doc(uid).get();
+  //   setState(() {
+  //     currentUser = UserModel.fromDocument(doc);
+  //   });
+  // }
 
   handleSignIn(GoogleSignInAccount account) async {
     if (account != null) {
@@ -86,28 +98,8 @@ class _HomeState extends State<Home> {
       print("Firebase Messaging Token: $token\n");
       usersRef.doc(user.id).update({"androidNotificationToken": token});
     });
-
-    // _firebaseMessaging.configure(
-    //   onMessage: (Map<String, dynamic> message) async {
-    //     print("on message: $message\n");
-    //     final String recipientId = message["data"]["recipient"];
-    //     final String body = message["notification"]["body"];
-    //     if (recipientId == user.id) {
-    //       print("Notification shown!");
-
-    //       ScaffoldMessenger.of(context).showSnackBar(
-    //       SnackBar(content: Text(body, overflow: TextOverflow.ellipsis))
-    //       );
-    //       // SnackBar snackbar =
-    //       //     SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
-    //       // _scaffoldKey.currentState.showSnackBar(snackbar);
-    //     }
-    //     print("Notification NOT shown");
-    //   },
-    // );
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification notification = message.notification;
-      //AndroidNotification android = message.notification?.android;
 
       print("on message: $message\n");
       final String recipientId = message.messageId;
@@ -116,21 +108,10 @@ class _HomeState extends State<Home> {
         print("Notification shown!");
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(body, overflow: TextOverflow.ellipsis)));
-        // SnackBar snackbar =
-        //     SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
-        // _scaffoldKey.currentState.showSnackBar(snackbar);
       }
       print("Notification NOT shown");
     });
   }
-
-  // getiOSPermission() {
-  //   _firebaseMessaging.requestNotificationPermissions(
-  //       IosNotificationSettings(alert: true, badge: true, sound: true));
-  //   _firebaseMessaging.onIosSettingsRegistered.listen((settings) {
-  //     print("Setting registered: $settings");
-  //   });
-  // }
 
   getiOSPermission() async {
     NotificationSettings settings = await _firebaseMessaging.requestPermission(
@@ -287,11 +268,12 @@ class _HomeState extends State<Home> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
+            begin: Alignment.topLeft,
             end: Alignment.bottomCenter,
             colors: [
               Theme.of(context).primaryColor,
               Theme.of(context).accentColor,
+              Color(0xFF90cea1),
             ],
           ),
         ),
@@ -369,6 +351,19 @@ class _HomeState extends State<Home> {
                     fit: BoxFit.cover,
                   ),
                 ),
+              ),
+            ),
+            SizedBox(height: 30.0),
+            Text("Data Provided By:",
+                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
+            SizedBox(height: 0.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 80.0, right: 80.0),
+              child: SvgPicture.asset(
+                "assets/images/TMDB_logo2.svg",
+                color: Color(0xFF0d253f),
+                height: 35.0,
+                width: 50.0,
               ),
             ),
           ],
