@@ -19,7 +19,7 @@ class Followers extends StatefulWidget {
 class _FollowersState extends State<Followers>
     with AutomaticKeepAliveClientMixin<Followers> {
   bool get wantKeepAlive => true;
-  List<QueryDocumentSnapshot> following;
+  Future<QuerySnapshot> followingFuture;
 
   @override
   void initState() {
@@ -28,14 +28,33 @@ class _FollowersState extends State<Followers>
   }
 
   getFollowers() async {
-    QuerySnapshot snapshot = await followingRef
-        .doc(widget.profileId)
-        .collection("userFollowing")
-        .get();
+    Future<QuerySnapshot> users =
+        followingRef.doc(widget.profileId).collection("userFollowing").get();
     setState(() {
-      following = snapshot.docs;
+      followingFuture = users;
     });
   }
+
+  buildFollowingList() {
+    return FutureBuilder(
+        future: followingFuture,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return circularProgress();
+          }
+          List<UserResult> followingResults = [];
+          snapshot.data.docs.forEach((doc) {
+            UserModel user = UserModel.fromDocument(doc);
+            UserResult searchResult = UserResult(user);
+            followingResults.add(searchResult);
+          });
+          return ListView(
+            children: followingResults,
+          );
+        });
+  }
+
+  // UserModel user = UserModel.fromDocument(snapshot.data);
 
   buildNoContent() {
     //final Orientation orientation = MediaQuery.of(context).orientation;
@@ -43,26 +62,18 @@ class _FollowersState extends State<Followers>
       child: Center(
         child: ListView(
           shrinkWrap: true,
-          children: <Widget>[
-            // SvgPicture.asset(
-            //   "assets/images/search.svg",
-            //   height: orientation == Orientation.portrait ? 250.0 : 150.0,
-            // ),
-            // Text(
-            //   "Find Users",
-            //   textAlign: TextAlign.center,
-            //   style: TextStyle(
-            //     color: Colors.white,
-            //     fontStyle: FontStyle.italic,
-            //     fontWeight: FontWeight.w600,
-            //     fontSize: 50.0,
-            //   ),
-            // ),
-          ],
+          children: <Widget>[Text("You are not following any users.")],
         ),
       ),
     );
   }
+  // Implement the build method that will choose either content or no content
+}
+
+class UserResult extends StatelessWidget {
+  final UserModel user;
+
+  UserResult(this.user);
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +88,7 @@ class _FollowersState extends State<Followers>
               child: Container(
                 color: Colors.grey[300],
                 child: GestureDetector(
-                  onTap: () => showProfile(context, profileId: widget.profileId),
+                  onTap: () => showProfile(context, profileId: user.id),
                   child: ListTile(
                     leading: CircleAvatar(
                         radius: 25.0,
