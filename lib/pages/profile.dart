@@ -1,5 +1,6 @@
 import 'package:bingeable/models/user.dart';
 import 'package:bingeable/pages/edit_profile.dart';
+import 'package:bingeable/pages/following.dart';
 import 'package:bingeable/pages/home.dart';
 import 'package:bingeable/widgets/post.dart';
 import 'package:bingeable/widgets/post_tile.dart';
@@ -231,6 +232,11 @@ class _ProfileState extends State<Profile> {
     });
   }
 
+  navigateToFollowing() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => Followers(profileId: widget.profileId)));
+  }
+
   buildProfileHeader() {
     return FutureBuilder(
       future: usersRef.doc(widget.profileId).get(),
@@ -260,7 +266,9 @@ class _ProfileState extends State<Profile> {
                           children: <Widget>[
                             buildCountColumn("Posts", postCount),
                             buildCountColumn("Followers", followerCount),
-                            buildCountColumn("Following", followingCount),
+                            GestureDetector(
+                              onTap: navigateToFollowing(),
+                              child: buildCountColumn("Following", followingCount)),
                           ],
                         ),
                         Row(

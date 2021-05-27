@@ -353,7 +353,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            SizedBox(height: 30.0),
+            SizedBox(height: 50.0),
             Text("Data Provided By:",
                 style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
             SizedBox(height: 0.0),
