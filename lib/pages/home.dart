@@ -355,15 +355,15 @@ class _HomeState extends State<Home> {
             ),
             SizedBox(height: 30.0),
             Text("Data Provided By:",
-                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
+                style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
             SizedBox(height: 0.0),
             Padding(
-              padding: const EdgeInsets.only(left: 80.0, right: 80.0),
+              padding: const EdgeInsets.only(left: 125.0, right: 125.0),
               child: SvgPicture.asset(
                 "assets/images/TMDB_logo2.svg",
                 color: Color(0xFF0d253f),
                 height: 35.0,
-                width: 50.0,
+                width: 35.0,
               ),
             ),
           ],
