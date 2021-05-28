@@ -68,7 +68,35 @@ class _FollowersState extends State<Followers>
     );
   }
   // Implement the build method that will choose either content or no content
+   @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return Scaffold(
+      //backgroundColor: Theme.of(context).accentColor.withOpacity(0.5),
+      appBar: AppBar(
+        elevation: 15,
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Text(
+          "Users you are Following",
+          style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0),
+        ),
+        centerTitle: true,
+      ),
+      body: ListView(
+        children: <Widget>[
+          SizedBox(height: 10),
+          Container(
+            height: MediaQuery.of(context).size.height,
+            child: followingFuture == null
+                ? buildNoContent()
+                : buildFollowingList(),
+          ),
+        ],
+      ),
+    );
+  }
 }
+
 
 class UserResult extends StatelessWidget {
   final UserModel user;
