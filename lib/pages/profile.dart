@@ -266,9 +266,7 @@ class _ProfileState extends State<Profile> {
                           children: <Widget>[
                             buildCountColumn("Posts", postCount),
                             buildCountColumn("Followers", followerCount),
-                            GestureDetector(
-                              onTap: navigateToFollowing(),
-                              child: buildCountColumn("Following", followingCount)),
+                            buildCountColumn("Following", followingCount),
                           ],
                         ),
                         Row(

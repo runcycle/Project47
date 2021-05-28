@@ -45,7 +45,10 @@ class _ActivityFeedState extends State<ActivityFeed> {
               if (!snapshot.hasData) {
                 return circularProgress();
               }
-              return ListView(children: snapshot.data);
+              return Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: ListView(children: snapshot.data),
+              );
             }),
       ),
     );
@@ -139,48 +142,51 @@ class ActivityFeedItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 10.0, right: 10.0),
       child: Card(
-          elevation: 5.0,
-          child: Padding(
-            padding: EdgeInsets.only(top: 2.0, bottom: 0.0),
-            child: Container(
-              color: Colors.grey[300],
-              child: ListTile(
-                title: GestureDetector(
-                  onTap: () => showProfile(context, profileId: userId),
-                  child: RichText(
-                    overflow: TextOverflow.ellipsis,
-                    text: TextSpan(
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: username,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
+          elevation: 0,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child: Padding(
+              padding: EdgeInsets.only(top: 2.0, bottom: 0.0),
+              child: Container(
+                color: Colors.grey[300],
+                child: ListTile(
+                  title: GestureDetector(
+                    onTap: () => showProfile(context, profileId: userId),
+                    child: RichText(
+                      overflow: TextOverflow.ellipsis,
+                      text: TextSpan(
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.black,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: username,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          TextSpan(
-                            text: " $activityItemText",
-                          ),
-                        ]),
+                            TextSpan(
+                              text: " $activityItemText",
+                            ),
+                          ]),
+                    ),
                   ),
+                  leading: CircleAvatar(
+                    backgroundImage: CachedNetworkImageProvider(userProfileImg),
+                    backgroundColor: Colors.white,
+                    radius: 25.0,
+                  ),
+                  subtitle: Text(
+                    timeago.format(timestamp.toDate()),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.bold, fontSize: 13.0)
+                  ),
+                  trailing: mediaPreview,
                 ),
-                leading: CircleAvatar(
-                  backgroundImage: CachedNetworkImageProvider(userProfileImg),
-                  backgroundColor: Colors.white,
-                  radius: 25.0,
-                ),
-                subtitle: Text(
-                  timeago.format(timestamp.toDate()),
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.bold, fontSize: 13.0)
-                ),
-                trailing: mediaPreview,
               ),
-            ),
         ),
+          ),
       ),
     );
   }
