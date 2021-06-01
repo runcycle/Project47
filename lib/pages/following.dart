@@ -28,10 +28,10 @@ class _FollowersState extends State<Followers>
   }
 
   getFollowers() async {
-    Future<QuerySnapshot> users =
+    Future<QuerySnapshot> userIds =
         followingRef.doc(widget.profileId).collection("userFollowing").get();
     setState(() {
-      followingFuture = users;
+      followingFuture = userIds;
     });
     print(followingFuture);
   }
