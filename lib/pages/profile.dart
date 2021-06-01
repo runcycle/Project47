@@ -232,9 +232,11 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  navigateToFollowing() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => Followers(profileId: widget.profileId)));
+  navigateToFollowing() async {
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Following(currentUserId: currentUserId)));
   }
 
   buildProfileHeader() {
@@ -246,7 +248,8 @@ class _ProfileState extends State<Profile> {
         }
         UserModel user = UserModel.fromDocument(snapshot.data);
         return Padding(
-          padding: EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 10.0),
+          padding:
+              EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 10.0),
           child: Column(
             children: <Widget>[
               Row(
@@ -269,6 +272,11 @@ class _ProfileState extends State<Profile> {
                             buildCountColumn("Following", followingCount),
                           ],
                         ),
+                        Row(children: <Widget>[
+                          TextButton(
+                            onPressed: () => navigateToFollowing(),
+                            child: Text("View Users")),
+                        ]),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[

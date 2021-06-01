@@ -7,29 +7,29 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bingeable/pages/activity_feed.dart';
 
-class Followers extends StatefulWidget {
-  final String profileId;
+class Following extends StatefulWidget {
+  final String currentUserId;
 
-  Followers({this.profileId});
+  Following({this.currentUserId});
 
   @override
-  _FollowersState createState() => _FollowersState();
+  _FollowingState createState() => _FollowingState();
 }
 
-class _FollowersState extends State<Followers>
-    with AutomaticKeepAliveClientMixin<Followers> {
+class _FollowingState extends State<Following>
+    with AutomaticKeepAliveClientMixin<Following> {
   bool get wantKeepAlive => true;
   Future<QuerySnapshot> followingFuture;
 
   @override
   void initState() {
     super.initState();
-    getFollowers();
+    //getFollowers();
   }
 
   getFollowers() async {
     Future<QuerySnapshot> users =
-        followingRef.doc(widget.profileId).collection("userFollowing").get();
+        followingRef.doc(widget.currentUserId).collection("userFollowing").get();
     setState(() {
       followingFuture = users;
     });
@@ -86,6 +86,10 @@ class _FollowersState extends State<Followers>
       body: ListView(
         children: <Widget>[
           SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () => getFollowers(),
+            child: Text("Press Me") 
+            )
           // Container(
           //   height: MediaQuery.of(context).size.height,
           //   child: followingFuture == null
