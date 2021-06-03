@@ -236,7 +236,7 @@ class _ProfileState extends State<Profile> {
     await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => Following(currentUserId: currentUserId)));
+            builder: (context) => Following(profileId: widget.profileId)));
   }
 
   buildProfileHeader() {

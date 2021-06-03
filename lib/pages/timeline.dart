@@ -61,7 +61,6 @@ class _TimelineState extends State<Timeline> {
         snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
     setState(() {
       this.posts = posts;
-      //postsAndAds = List.from(posts);
     });
     print(currentUser.username);
   }
