@@ -272,10 +272,13 @@ class _ProfileState extends State<Profile> {
                             buildCountColumn("Following", followingCount),
                           ],
                         ),
-                        Row(children: <Widget>[
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
                           TextButton(
                             onPressed: () => navigateToFollowing(),
-                            child: Text("View Users")),
+                            child: Text("View")),
                         ]),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

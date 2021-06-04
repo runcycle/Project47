@@ -282,7 +282,7 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            SizedBox(height: 100),
+            SizedBox(height: 200),
             Text(
               'Bingeable',
               style: TextStyle(
@@ -291,7 +291,7 @@ class _HomeState extends State<Home> {
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 200.0),
+            SizedBox(height: 225.0),
             GestureDetector(
               onTap: emailRegister,
               child: Container(
@@ -353,17 +353,32 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            SizedBox(height: 50.0),
-            Text("Data Provided By:",
-                style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
-            SizedBox(height: 0.0),
-            Padding(
-              padding: const EdgeInsets.only(left: 125.0, right: 125.0),
-              child: SvgPicture.asset(
-                "assets/images/TMDB_logo2.svg",
-                color: Color(0xFF0d253f),
-                height: 35.0,
-                width: 35.0,
+            SizedBox(height: 20.0),
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Text("Data Provided By:",
+                    style:
+                        TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
+              ),
+            ),
+            SizedBox(height: 5.0),
+            Expanded(
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 125.0, right: 125.0),
+                      child: SvgPicture.asset(
+                        "assets/images/TMDB_logo2.svg",
+                        color: Color(0xFF0d253f),
+                        height: 10.0,
+                        width: 35.0,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

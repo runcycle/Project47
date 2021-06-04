@@ -34,10 +34,11 @@ class _FollowingState extends State<Following>
     QuerySnapshot snapshot =
         await followingRef.doc(currentUserId).collection("userFollowing").get();
     followingIds = snapshot.docs.map((doc) => doc.id).toList();
+    print(followingIds);
     setState(() {
       followingIds.forEach((doc) {
         Future<QuerySnapshot> users =
-            usersRef.where("id", isEqualTo: doc).get();
+            usersRef.where("id", isLessThanOrEqualTo: doc).get();
         followingFuture = users;
       });
     });
@@ -68,7 +69,9 @@ class _FollowingState extends State<Following>
       child: Center(
         child: ListView(
           shrinkWrap: true,
-          children: <Widget>[Text("You are not following any users.")],
+          children: <Widget>[
+            Center(child: Text("You are not following any users.", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)))
+          ],
         ),
       ),
     );
