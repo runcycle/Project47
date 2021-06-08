@@ -93,9 +93,9 @@ class _ProfileState extends State<Profile> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(count.toString(),
-            style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold)),
+            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
         Container(
-          margin: EdgeInsets.only(top: 4.0),
+          margin: EdgeInsets.only(top: 2.0),
           child: Text(
             label,
             style: TextStyle(
@@ -249,7 +249,7 @@ class _ProfileState extends State<Profile> {
         UserModel user = UserModel.fromDocument(snapshot.data);
         return Padding(
           padding:
-              EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 10.0),
+              EdgeInsets.only(top: 20.0, left: 16.0, right: 16.0, bottom: 10.0),
           child: Column(
             children: <Widget>[
               Row(
@@ -276,7 +276,7 @@ class _ProfileState extends State<Profile> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                          TextButton(
+                          ElevatedButton(
                             onPressed: () => navigateToFollowing(),
                             child: Text("View")),
                         ]),
@@ -293,7 +293,7 @@ class _ProfileState extends State<Profile> {
               ),
               Container(
                 alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(top: 12.0),
+                padding: EdgeInsets.only(top: 5.0),
                 child: Text(
                   user.username,
                   style: TextStyle(
@@ -312,7 +312,7 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
               ),
-              SizedBox(height: 8.0),
+              SizedBox(height: 0.0),
               Container(
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(top: 2.0),
