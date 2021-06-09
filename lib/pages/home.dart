@@ -229,7 +229,7 @@ class _HomeState extends State<Home> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Container(
-          margin: EdgeInsets.only(bottom: 15),
+          margin: EdgeInsets.only(bottom: 5),
           child: FloatingActionButton(
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(

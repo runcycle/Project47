@@ -372,9 +372,11 @@ class _EditProfileState extends State<EditProfile> {
                   padding: EdgeInsets.only(left: 120, right: 120),
                   child: ElevatedButton(
                     onPressed: updateProfileData,
-                    style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue[400]),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.purple[400],
+                      elevation: 2.0,
+                      //side: BorderSide(color: Colors.grey[600], width: 1.0),
+                      //visualDensity: VisualDensity.compact,
                     ),
                     child: Text(
                       "Submit",

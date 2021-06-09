@@ -247,9 +247,12 @@ class _DetailsState extends State<DetailsPage> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: ElevatedButton(
-                  style: ButtonStyle(
-                   foregroundColor: MaterialStateProperty.all<Color>(Colors.blue[400]),
-                  ),
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.purple[400],
+                      elevation: 2.0,
+                      //side: BorderSide(color: Colors.grey[600], width: 1.0),
+                      //visualDensity: VisualDensity.compact,
+                    ),
                   onPressed: () async {
                     await createPostInFirestore();
                     isUploading = true;
@@ -258,7 +261,7 @@ class _DetailsState extends State<DetailsPage> {
                   child:
                       const Text("Create Post", style: TextStyle(
                         color: Colors.white,
-                        fontSize: 15,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold
                     )),
                   // color: Colors.blue,

@@ -107,12 +107,18 @@ class _UploadState extends State<Upload>
                   }
                   return null;
                 }),
-            SizedBox(height: 10),
+            SizedBox(height: 20),
             Container(
                 width: MediaQuery.of(context).size.width,
                 height: 40.0,
                 alignment: Alignment.center,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.purple[400],
+                      elevation: 2.0,
+                      //side: BorderSide(color: Colors.grey[600], width: 1.0),
+                      //visualDensity: VisualDensity.compact,
+                    ),
                   child: Text(
                     "Submit",
                     style: TextStyle(

@@ -1,6 +1,7 @@
 import 'package:bingeable/models/user.dart';
 import 'package:bingeable/pages/edit_profile.dart';
 import 'package:bingeable/pages/following.dart';
+import 'package:bingeable/pages/followers.dart';
 import 'package:bingeable/pages/home.dart';
 import 'package:bingeable/widgets/post.dart';
 import 'package:bingeable/widgets/post_tile.dart';
@@ -85,28 +86,6 @@ class _ProfileState extends State<Profile> {
       postCount = snapshot.docs.length;
       posts = snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
     });
-  }
-
-  Column buildCountColumn(String label, int count) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(count.toString(),
-            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
-        Container(
-          margin: EdgeInsets.only(top: 2.0),
-          child: Text(
-            label,
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 15.0,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ),
-      ],
-    );
   }
 
   editProfile() {
@@ -239,6 +218,106 @@ class _ProfileState extends State<Profile> {
             builder: (context) => Following(profileId: widget.profileId)));
   }
 
+   navigateToFollowers() async {
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Followers(profileId: widget.profileId)));
+  }
+
+  buildPostCountColumn(String label, int count) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 10.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(count.toString(),
+              style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold)),
+          Container(
+            margin: EdgeInsets.only(top: 2.0),
+            child: Text(
+              label,
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 13.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  buildFollowerCountColumn(String label, int count) {
+    return ElevatedButton(
+      onPressed: () => navigateToFollowers(),
+      style: ElevatedButton.styleFrom(
+      primary: Colors.grey[200],
+      elevation: 2.0,
+      side: BorderSide(color: Colors.grey[600], width: 1.0),
+      visualDensity: VisualDensity.compact,
+    ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(count.toString(),
+                style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold)),
+            Container(
+              margin: EdgeInsets.only(top: 2.0),
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 13.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  buildFollowingCountColumn(String label, int count) {
+    return ElevatedButton(
+      onPressed: () => navigateToFollowing(),
+      style: ElevatedButton.styleFrom(
+      primary: Colors.grey[200],
+      elevation: 2.0,
+      side: BorderSide(color: Colors.grey[600], width: 1.0),
+      visualDensity: VisualDensity.compact,
+    ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(count.toString(),
+                style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold)),
+            Container(
+              margin: EdgeInsets.only(top: 2.0),
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 13.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   buildProfileHeader() {
     return FutureBuilder(
       future: usersRef.doc(widget.profileId).get(),
@@ -267,19 +346,12 @@ class _ProfileState extends State<Profile> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            buildCountColumn("Posts", postCount),
-                            buildCountColumn("Followers", followerCount),
-                            buildCountColumn("Following", followingCount),
+                            buildPostCountColumn("Posts", postCount),
+                            buildFollowerCountColumn("Followers", followerCount),
+                            buildFollowingCountColumn("Following", followingCount),
                           ],
                         ),
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                          ElevatedButton(
-                            onPressed: () => navigateToFollowing(),
-                            child: Text("View")),
-                        ]),
+                        SizedBox(height: 8.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
