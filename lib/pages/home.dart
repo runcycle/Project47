@@ -282,7 +282,7 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            SizedBox(height: 200),
+            SizedBox(height: 175),
             Text(
               'Bingeable',
               style: TextStyle(
@@ -291,7 +291,7 @@ class _HomeState extends State<Home> {
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 225.0),
+            SizedBox(height: 150.0),
             GestureDetector(
               onTap: emailRegister,
               child: Container(
@@ -353,28 +353,28 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            SizedBox(height: 20.0),
-            Expanded(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Text("Data Provided By:",
-                    style:
-                        TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
-              ),
-            ),
-            SizedBox(height: 5.0),
+            SizedBox(height: 50.0),
             Expanded(
               child: Column(
                 children: [
                   Align(
                     alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 125.0, right: 125.0),
-                      child: SvgPicture.asset(
-                        "assets/images/TMDB_logo2.svg",
-                        color: Color(0xFF0d253f),
-                        height: 10.0,
-                        width: 35.0,
+                    child: Text("Data Provided By:",
+                        style:
+                            TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 125.0, right: 125.0),
+                        child: SvgPicture.asset(
+                          "assets/images/TMDB_logo2.svg",
+                          color: Color(0xFF0d253f),
+                          height: 10.0,
+                          width: 35.0,
+                        ),
                       ),
                     ),
                   ),

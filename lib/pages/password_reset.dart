@@ -1,36 +1,25 @@
 import 'dart:async';
 
-import 'package:bingeable/models/user.dart';
-import 'package:bingeable/pages/email_account.dart';
-import 'package:bingeable/pages/password_reset.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:bingeable/pages/home.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-class EmailLogin extends StatefulWidget {
+class PasswordReset extends StatefulWidget {
   @override
-  _EmailLoginState createState() => _EmailLoginState();
+  _PasswordResetState createState() => _PasswordResetState();
 }
 
-class _EmailLoginState extends State<EmailLogin> {
+class _PasswordResetState extends State<PasswordReset> {
   final _auth = FirebaseAuth.instance;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _email = TextEditingController();
-  final TextEditingController _password = TextEditingController();
 
   String email;
-  String password;
-  String username;
   String error;
   bool _showProgress = false;
-  String uid;
-  User loggedInUser;
-  bool rememberMe = false;
 
   @override
   void initState() {
@@ -47,27 +36,13 @@ class _EmailLoginState extends State<EmailLogin> {
     if (form.validate()) {
       form.save();
       try {
-        final user = await _auth.signInWithEmailAndPassword(
-            email: email, password: password);
+        await _auth.sendPasswordResetEmail(email: email);
 
-        if (user != null) {
-          final User getUser = _auth.currentUser;
-          final uid = getUser.uid;
-          DocumentSnapshot doc = await usersRef.doc(uid).get();
-          currentUser = UserModel.fromDocument(doc);
-          setState(() {
-            username = currentUser.username;
-            emailLogin = true;
-          });
-          print(username);
-          print(uid);
-
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("Welcome Back $username!")));
-          Timer(Duration(seconds: 2), () {
-            Navigator.of(context).pop(username);
-          });
-        }
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("A password reset email has been sent to $email.")));
+        Timer(Duration(seconds: 2), () {
+          Navigator.pop(context);
+        });
       } catch (e) {
         print(e);
         setState(() {
@@ -120,19 +95,8 @@ class _EmailLoginState extends State<EmailLogin> {
     return SizedBox(height: 0.0);
   }
 
-  noAccount() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => EmailAccount()));
-  }
-
-  passwordReset() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => PasswordReset()));
-  }
-
   void dispose() {
     _email.dispose();
-    _password.dispose();
     super.dispose();
   }
 
@@ -144,15 +108,14 @@ class _EmailLoginState extends State<EmailLogin> {
         appBar: AppBar(
             elevation: 15,
             backgroundColor: Theme.of(context).primaryColor,
-            title: Text('Login',
+            title: Text('Password Reset',
                 style:
                     TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
             centerTitle: true,
             leading: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Home()));
+                  Navigator.pop(context);
                 })),
         body: ModalProgressHUD(
             inAsyncCall: _showProgress,
@@ -164,7 +127,7 @@ class _EmailLoginState extends State<EmailLogin> {
                   children: <Widget>[
                     //SizedBox(height: 5.0),
                     showAlert(),
-                    SizedBox(height: 5.0),
+                    SizedBox(height: 10.0),
                     Text(
                       "Please Enter Your Email Address",
                       textAlign: TextAlign.center,
@@ -190,33 +153,6 @@ class _EmailLoginState extends State<EmailLogin> {
                         hintText: "Must be at least 3 characters",
                       ),
                     ),
-                    SizedBox(height: 10.0),
-                    Text(
-                      "Please Enter A Password",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 5.0),
-                    TextFormField(
-                      controller: _password,
-                      obscureText: true,
-                      validator: (val) {
-                        if (val.trim().length < 6 || val.isEmpty) {
-                          return "Password too short";
-                        } else if (val.trim().length > 50) {
-                          return "Password too long";
-                        } else {
-                          return null;
-                        }
-                      },
-                      onSaved: (val) => password = val,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Password",
-                        labelStyle: TextStyle(fontSize: 15.0),
-                        hintText: "Must be at least 8 characters",
-                      ),
-                    ),
                     SizedBox(height: 20.0),
                     GestureDetector(
                       onTap: submit,
@@ -228,7 +164,7 @@ class _EmailLoginState extends State<EmailLogin> {
                         ),
                         child: Center(
                           child: Text(
-                            "Login",
+                            "Submit",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 15.0,
@@ -236,36 +172,6 @@ class _EmailLoginState extends State<EmailLogin> {
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 20.0),
-                    GestureDetector(
-                      onTap: noAccount,
-                      child: Container(
-                          height: 40.0,
-                          decoration: BoxDecoration(
-                            color: Colors.lightBlue[200],
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          child: Center(
-                              child: Text(
-                                  "Don't have an account?  Create one here.",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 13.0)))),
-                    ),
-                    SizedBox(height: 20.0),
-                    GestureDetector(
-                      onTap: passwordReset,
-                      child: Container(
-                          height: 40.0,
-                          decoration: BoxDecoration(
-                            color: Colors.lightBlue[50],
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          child: Center(
-                              child: Text(
-                                  "Did you forget your password?  Reset it here.",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 13.0)))),
                     ),
                   ]),
             )));

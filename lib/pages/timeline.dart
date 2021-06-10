@@ -135,7 +135,7 @@ class _TimelineState extends State<Timeline> {
           return circularProgress();
         }
         List<UserResult> userResults = [];
-        snapshot.data.documents.forEach((doc) {
+        snapshot.data.docs.forEach((doc) {
           UserModel user = UserModel.fromDocument(doc);
           final bool isAuthUser = currentUser.id == user.id;
           final bool isFollowingUser = followingList.contains(user.id);
