@@ -52,13 +52,13 @@ class _HomeState extends State<Home> {
     googleSignIn.onCurrentUserChanged.listen((account) {
       handleSignIn(account);
     }, onError: (err) {
-      print('Error signing in: $err');
+      //print('Error signing in: $err');
     });
     // Reauthenticate user when app is opened
     googleSignIn.signInSilently(suppressErrors: false).then((account) {
       handleSignIn(account);
     }).catchError((err) {
-      print('Error signing in: $err');
+      //print('Error signing in: $err');
     });
 
     emailLogin = false;
@@ -95,21 +95,21 @@ class _HomeState extends State<Home> {
     if (Platform.isIOS) getiOSPermission();
 
     _firebaseMessaging.getToken().then((token) {
-      print("Firebase Messaging Token: $token\n");
+      //print("Firebase Messaging Token: $token\n");
       usersRef.doc(user.id).update({"androidNotificationToken": token});
     });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification notification = message.notification;
 
-      print("on message: $message\n");
+      //print("on message: $message\n");
       final String recipientId = message.messageId;
       final String body = notification.body;
       if (recipientId == currentUser.id) {
-        print("Notification shown!");
+        //print("Notification shown!");
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(body, overflow: TextOverflow.ellipsis)));
       }
-      print("Notification NOT shown");
+      //print("Notification NOT shown");
     });
   }
 
@@ -124,7 +124,7 @@ class _HomeState extends State<Home> {
       sound: true,
     );
 
-    print('User granted permission: ${settings.authorizationStatus}');
+    //print('User granted permission: ${settings.authorizationStatus}');
   }
 
   createUserInFirestore() async {
@@ -157,8 +157,8 @@ class _HomeState extends State<Home> {
       doc = await usersRef.doc(user.id).get();
     }
     currentUser = UserModel.fromDocument(doc);
-    print(currentUser);
-    print(currentUser.username);
+    //print(currentUser);
+    //print(currentUser.username);
   }
 
   @override
@@ -291,7 +291,11 @@ class _HomeState extends State<Home> {
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 150.0),
+            Expanded(
+              flex: 3,
+              child: Container(),
+            ),
+            //SizedBox(height: 150.0),
             GestureDetector(
               onTap: emailRegister,
               child: Container(

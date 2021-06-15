@@ -34,7 +34,7 @@ class _FollowersState extends State<Followers>
     QuerySnapshot snapshot =
         await followersRef.doc(currentUserId).collection("userFollowers").get();
     followersIds = snapshot.docs.map((doc) => doc.id).toList();
-    print(followersIds);
+    //print(followersIds);
     setState(() {
       followersIds.forEach((doc) {
         Future<QuerySnapshot> users =

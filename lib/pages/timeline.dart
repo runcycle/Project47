@@ -45,7 +45,7 @@ class _TimelineState extends State<Timeline> {
         );
       }, onAdFailedToLoad: (Ad ad, LoadAdError error) {
         ad.dispose();
-        print("Ad Failed to Load with Error: $error");
+        //print("Ad Failed to Load with Error: $error");
       }),
     );
     _ad.load();
@@ -62,7 +62,7 @@ class _TimelineState extends State<Timeline> {
     setState(() {
       this.posts = posts;
     });
-    print(currentUser.username);
+    //print(currentUser.username);
   }
 
   getFollowing() async {

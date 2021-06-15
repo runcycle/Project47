@@ -188,8 +188,6 @@ class _EditProfileState extends State<EditProfile> {
     imageFile = selected != null ? File(selected.path) : null;
     if (imageFile != null) {
       _cropImage();
-    } else {
-      print("No image selected.");
     }
   }
 
@@ -252,7 +250,7 @@ class _EditProfileState extends State<EditProfile> {
       avatar = avatarUrl.toString();
       //state == AppState.free;
     });
-    print(avatar);
+    //print(avatar);
     usersRef.doc(widget.currentUserId).update({
       "photoUrl": avatar,
     });

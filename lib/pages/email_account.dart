@@ -62,7 +62,7 @@ class _EmailAccountState extends State<EmailAccount> {
           emailLogin = true;
         });
       } catch (e) {
-        print(e);
+        //print(e);
         setState(() {
           error = e.message;
           _showProgress = false;
@@ -100,8 +100,8 @@ class _EmailAccountState extends State<EmailAccount> {
         //doc = await usersRef.document(uid).get();
         DocumentSnapshot doc = await usersRef.doc(uid).get();
         currentUser = UserModel.fromDocument(doc);
-        print(currentUser);
-        print(currentUser.username);
+        //print(currentUser);
+        //print(currentUser.username);
         configurePushNotifications();
       }
     }
@@ -146,7 +146,7 @@ class _EmailAccountState extends State<EmailAccount> {
     if (Platform.isIOS) getiOSPermission();
 
     _firebaseMessaging.getToken().then((token) {
-      print("Firebase Messaging Token: $token\n");
+      //print("Firebase Messaging Token: $token\n");
       usersRef.doc(uid).update({"androidNotificationToken": token});
     });
 
@@ -170,18 +170,18 @@ class _EmailAccountState extends State<EmailAccount> {
       RemoteNotification notification = message.notification;
       //AndroidNotification android = message.notification?.android;
 
-      print("on message: $message\n");
+      //print("on message: $message\n");
         final String recipientId = message.messageId;
         final String body = notification.body;
         if (recipientId == uid) {
-          print("Notification shown!");
+          //print("Notification shown!");
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(body, overflow: TextOverflow.ellipsis)));
           // SnackBar snackbar =
           //     SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
           // _scaffoldKey.currentState.showSnackBar(snackbar);
         }
-        print("Notification NOT shown");
+        //print("Notification NOT shown");
     });
   }
 
@@ -196,7 +196,7 @@ class _EmailAccountState extends State<EmailAccount> {
       sound: true,
     );
 
-    print('User granted permission: ${settings.authorizationStatus}');
+    //print('User granted permission: ${settings.authorizationStatus}');
   }
 
   void dispose() {

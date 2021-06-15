@@ -320,7 +320,7 @@ class _ProfileState extends State<Profile> {
 
   buildProfileHeader() {
     return FutureBuilder(
-      future: usersRef.doc(widget.profileId).get(),
+      future: usersRef.doc(currentUserId).get(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return circularProgress();
@@ -521,7 +521,7 @@ class _ProfileState extends State<Profile> {
             setState(() {
               postType = result;
             });
-            print(postType);
+            //print(postType);
             filterMedia();
           },
           icon: Icon(Icons.filter_alt_outlined, color: Colors.grey),

@@ -35,7 +35,7 @@ class _UploadState extends State<Upload>
     var response = await http.get(url);
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
-      print(result);
+      //print(result);
       Iterable list = result["results"];
       final showList = list.map((query) => Show.fromJson(query)).toList();
       setState(() {

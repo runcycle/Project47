@@ -59,8 +59,8 @@ class _EmailLoginState extends State<EmailLogin> {
             username = currentUser.username;
             emailLogin = true;
           });
-          print(username);
-          print(uid);
+          //print(username);
+          //print(uid);
 
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text("Welcome Back $username!")));
@@ -69,7 +69,7 @@ class _EmailLoginState extends State<EmailLogin> {
           });
         }
       } catch (e) {
-        print(e);
+        //print(e);
         setState(() {
           error = e.message;
           _showProgress = false;

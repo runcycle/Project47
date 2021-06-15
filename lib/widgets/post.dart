@@ -362,6 +362,7 @@ class _PostState extends State<Post> {
             alignment: Alignment.center,
             children: <Widget>[
               Container(
+                width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   color: Colors.grey[300],
                 ),

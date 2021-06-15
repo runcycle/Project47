@@ -44,7 +44,7 @@ class _PasswordResetState extends State<PasswordReset> {
           Navigator.pop(context);
         });
       } catch (e) {
-        print(e);
+        //print(e);
         setState(() {
           error = e.message;
           _showProgress = false;

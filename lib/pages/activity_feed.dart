@@ -150,8 +150,8 @@ class ActivityFeedItem extends StatelessWidget {
               child: Container(
                 color: Colors.grey[300],
                 child: ListTile(
-                  title: GestureDetector(
-                    onTap: () => showProfile(context, profileId: userId),
+                  title: Container(
+                    //onTap: () => showProfile(context, profileId: userId),
                     child: RichText(
                       overflow: TextOverflow.ellipsis,
                       text: TextSpan(
