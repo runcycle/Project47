@@ -114,7 +114,7 @@ class _HomeState extends State<Home> {
   }
 
   getiOSPermission() async {
-    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+    await _firebaseMessaging.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -364,15 +364,16 @@ class _HomeState extends State<Home> {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Text("Data Provided By:",
-                        style:
-                            TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
+                        style: TextStyle(
+                            fontSize: 12.0, fontWeight: FontWeight.bold)),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Align(
                       alignment: Alignment.bottomCenter,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 125.0, right: 125.0),
+                        padding:
+                            const EdgeInsets.only(left: 125.0, right: 125.0),
                         child: SvgPicture.asset(
                           "assets/images/TMDB_logo2.svg",
                           color: Color(0xFF0d253f),

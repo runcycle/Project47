@@ -320,7 +320,7 @@ class _ProfileState extends State<Profile> {
 
   buildProfileHeader() {
     return FutureBuilder(
-      future: usersRef.doc(currentUserId).get(),
+      future: usersRef.doc(widget.profileId).get(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return circularProgress();

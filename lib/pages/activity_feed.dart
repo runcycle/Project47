@@ -97,7 +97,7 @@ class ActivityFeedItem extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PostScreen(postId: postId, userId: currentUser.id),
+        builder: (context) => PostScreen(postId: postId, userId: userId),
       ),
     );
   }
@@ -150,8 +150,8 @@ class ActivityFeedItem extends StatelessWidget {
               child: Container(
                 color: Colors.grey[300],
                 child: ListTile(
-                  title: Container(
-                    //onTap: () => showProfile(context, profileId: userId),
+                  title: GestureDetector(
+                    onTap: () => showProfile(context, profileId: userId),
                     child: RichText(
                       overflow: TextOverflow.ellipsis,
                       text: TextSpan(
