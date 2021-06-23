@@ -33,11 +33,12 @@ class _ActivityFeedState extends State<ActivityFeed> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-            elevation: 15,
-            backgroundColor: Theme.of(context).primaryColor,
-            title: Text('Recent Activity', style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
-            centerTitle: true,
-          ),
+        elevation: 15,
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Text('Recent Activity',
+            style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
+        centerTitle: true,
+      ),
       body: Container(
         child: FutureBuilder(
             future: getActivityFeed(),
@@ -97,9 +98,11 @@ class ActivityFeedItem extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PostScreen(postId: postId, userId: userId),
+        builder: (context) => PostScreen(postId: postId, userId: currentUser.id),
       ),
     );
+    print("$userId");
+    print("$postId");
   }
 
   configureMediaPreview(context) {
@@ -142,51 +145,55 @@ class ActivityFeedItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 10.0, right: 10.0),
       child: Card(
-          elevation: 0,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child: Padding(
-              padding: EdgeInsets.only(top: 2.0, bottom: 0.0),
-              child: Container(
-                color: Colors.grey[300],
-                child: ListTile(
-                  title: GestureDetector(
-                    onTap: () => showProfile(context, profileId: userId),
-                    child: RichText(
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.black,
+        elevation: 0,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10.0),
+          child: Padding(
+            padding: EdgeInsets.only(top: 2.0, bottom: 0.0),
+            child: Container(
+              color: Colors.grey[300],
+              child: ListTile(
+                title: Container(
+                  //onTap: () => showProfile(context, profileId: userId),
+                  child: RichText(
+                    overflow: TextOverflow.ellipsis,
+                    text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.black,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: username,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          children: [
-                            TextSpan(
-                              text: username,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            TextSpan(
-                              text: " $activityItemText",
-                            ),
-                          ]),
-                    ),
+                          TextSpan(
+                            text: " $activityItemText",
+                          ),
+                        ]),
                   ),
-                  leading: CircleAvatar(
+                ),
+                leading: GestureDetector(
+                  onTap: () => showProfile(context, profileId: userId),
+                  child: CircleAvatar(
                     backgroundImage: CachedNetworkImageProvider(userProfileImg),
                     backgroundColor: Colors.white,
                     radius: 25.0,
                   ),
-                  subtitle: Text(
-                    timeago.format(timestamp.toDate()),
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.bold, fontSize: 13.0)
-                  ),
-                  trailing: mediaPreview,
                 ),
+                subtitle: Text(timeago.format(timestamp.toDate()),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        color: Colors.grey[700],
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13.0)),
+                trailing: mediaPreview,
               ),
-        ),
+            ),
           ),
+        ),
       ),
     );
   }
@@ -194,10 +201,10 @@ class ActivityFeedItem extends StatelessWidget {
 
 showProfile(BuildContext context, {String profileId}) {
   Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => Profile(
-                profileId: profileId,
+    context,
+    MaterialPageRoute(
+      builder: (context) => Profile(
+        profileId: profileId,
       ),
     ),
   );
