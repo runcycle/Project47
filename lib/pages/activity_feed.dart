@@ -101,8 +101,8 @@ class ActivityFeedItem extends StatelessWidget {
         builder: (context) => PostScreen(postId: postId, userId: currentUser.id),
       ),
     );
-    print("$userId");
-    print("$postId");
+    // print("$userId");
+    // print("$postId");
   }
 
   configureMediaPreview(context) {
