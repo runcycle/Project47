@@ -411,15 +411,17 @@ class _ProfileState extends State<Profile> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SvgPicture.asset("assets/images/no_content.svg", height: 200.0),
-            Padding(
-              padding: EdgeInsets.only(top: 20.0),
-              child: Text(
-                "No Posts Yet!",
-                style: TextStyle(
-                  color: Colors.redAccent,
-                  fontSize: 40.0,
-                  fontWeight: FontWeight.bold,
+            //SvgPicture.asset("assets/images/no_content.svg", height: 200.0),
+            Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: 20.0),
+                child: Text(
+                  "No Posts Yet!  ",
+                  style: TextStyle(
+                    color: Colors.redAccent,
+                    fontSize: 40.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
