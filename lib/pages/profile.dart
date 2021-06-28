@@ -9,7 +9,7 @@ import 'package:bingeable/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+//import 'package:flutter_svg/svg.dart';
 
 class Profile extends StatefulWidget {
   final String profileId;
@@ -218,7 +218,7 @@ class _ProfileState extends State<Profile> {
             builder: (context) => Following(profileId: widget.profileId)));
   }
 
-   navigateToFollowers() async {
+  navigateToFollowers() async {
     await Navigator.push(
         context,
         MaterialPageRoute(
@@ -233,7 +233,10 @@ class _ProfileState extends State<Profile> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(count.toString(),
-              style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold)),
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold)),
           Container(
             margin: EdgeInsets.only(top: 2.0),
             child: Text(
@@ -254,11 +257,11 @@ class _ProfileState extends State<Profile> {
     return ElevatedButton(
       onPressed: () => navigateToFollowers(),
       style: ElevatedButton.styleFrom(
-      primary: Colors.grey[200],
-      elevation: 2.0,
-      side: BorderSide(color: Colors.grey[600], width: 1.0),
-      visualDensity: VisualDensity.compact,
-    ),
+        primary: Colors.grey[200],
+        elevation: 2.0,
+        side: BorderSide(color: Colors.grey[600], width: 1.0),
+        visualDensity: VisualDensity.compact,
+      ),
       child: Padding(
         padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
         child: Column(
@@ -266,7 +269,10 @@ class _ProfileState extends State<Profile> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(count.toString(),
-                style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold)),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold)),
             Container(
               margin: EdgeInsets.only(top: 2.0),
               child: Text(
@@ -288,11 +294,11 @@ class _ProfileState extends State<Profile> {
     return ElevatedButton(
       onPressed: () => navigateToFollowing(),
       style: ElevatedButton.styleFrom(
-      primary: Colors.grey[200],
-      elevation: 2.0,
-      side: BorderSide(color: Colors.grey[600], width: 1.0),
-      visualDensity: VisualDensity.compact,
-    ),
+        primary: Colors.grey[200],
+        elevation: 2.0,
+        side: BorderSide(color: Colors.grey[600], width: 1.0),
+        visualDensity: VisualDensity.compact,
+      ),
       child: Padding(
         padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
         child: Column(
@@ -300,7 +306,10 @@ class _ProfileState extends State<Profile> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(count.toString(),
-                style: TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold)),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold)),
             Container(
               margin: EdgeInsets.only(top: 2.0),
               child: Text(
@@ -347,8 +356,10 @@ class _ProfileState extends State<Profile> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             buildPostCountColumn("Posts", postCount),
-                            buildFollowerCountColumn("Followers", followerCount),
-                            buildFollowingCountColumn("Following", followingCount),
+                            buildFollowerCountColumn(
+                                "Followers", followerCount),
+                            buildFollowingCountColumn(
+                                "Following", followingCount),
                           ],
                         ),
                         SizedBox(height: 8.0),
@@ -546,12 +557,12 @@ class _ProfileState extends State<Profile> {
                   child: Text("TV Shows",
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold))),
-              PopupMenuItem(
-                value: "podcast",
-                child: Text("Podcasts (Soon)",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
-              ),
+              // PopupMenuItem(
+              //   value: "podcast",
+              //   child: Text("Podcasts (Soon)",
+              //       style: TextStyle(
+              //           color: Colors.white, fontWeight: FontWeight.bold)),
+              // ),
             ];
           },
         ),
