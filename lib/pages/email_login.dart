@@ -66,6 +66,7 @@ class _EmailLoginState extends State<EmailLogin> {
               .showSnackBar(SnackBar(content: Text("Welcome Back $username!")));
           Timer(Duration(seconds: 2), () {
             Navigator.of(context).pop(username);
+            print(username);
           });
         }
       } catch (e) {

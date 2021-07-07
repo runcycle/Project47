@@ -70,7 +70,13 @@ class _FollowingState extends State<Following>
         child: ListView(
           shrinkWrap: true,
           children: <Widget>[
-            Center(child: Text("You are not following any users.", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)))
+            Center(child: Padding(
+              padding: const EdgeInsets.only(bottom: 150.0),
+              child: Text(
+                "You are not following any users.", 
+                softWrap: true,
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+            ))
           ],
         ),
       ),
