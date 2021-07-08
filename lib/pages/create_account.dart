@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:bingeable/widgets/header.dart';
+//import 'package:bingeable/widgets/header.dart';
 
 class CreateAccount extends StatefulWidget {
   @override
@@ -32,8 +32,13 @@ class _CreateAccountState extends State<CreateAccount> {
   Widget build(BuildContext parentContext) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: header(context,
-          titleText: "Set up your profile", removeBackButton: true),
+      appBar: AppBar(
+        title: Text('Set up your profile', style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
+        centerTitle: true,
+        elevation: 15,
+        backgroundColor: Theme.of(context).primaryColor,
+        automaticallyImplyLeading: false,
+      ),
       body: ListView(
         children: <Widget>[
           Container(
