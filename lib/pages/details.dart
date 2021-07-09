@@ -26,7 +26,7 @@ class _DetailsState extends State<DetailsPage> {
   final TextEditingController _comment = TextEditingController();
   String postId = Uuid().v4();
   bool isUploading = false;
-  String description = "";
+  String description;
   bool renderPage = false;
   final mediaUrl = "https://image.tmdb.org/t/p/w342/";
   String network;
@@ -89,7 +89,7 @@ class _DetailsState extends State<DetailsPage> {
   }
 
   Widget buildNetworkList() => Center(
-      child: Padding(
+          child: Padding(
         padding: const EdgeInsets.only(bottom: 10.0),
         child: Container(
           decoration: BoxDecoration(
@@ -112,9 +112,15 @@ class _DetailsState extends State<DetailsPage> {
             ),
             value: network,
             onChanged: (newValue) {
-              setState(() {
-                network = newValue;
-              });
+              if (network != null) {
+                setState(() {
+                  network = newValue;
+                });
+              } else {
+                setState(() {
+                  network = "No network info provided.";
+                });
+              }
             },
             items: networksList.map((valueItem) {
               return DropdownMenuItem(
@@ -142,8 +148,8 @@ class _DetailsState extends State<DetailsPage> {
       "ownerId": widget.currentUser.id,
       "username": widget.currentUser.username,
       "mediaUrl": poster,
-      "description": description,
-      "network": network,
+      "description": description != null ? description : "No comment provided",
+      "network": network != null ? network : "Network info not provided",
       "timestamp": timestamp,
       "title": details.title != null ? details.title : details.name,
       "likes": {},
@@ -248,22 +254,21 @@ class _DetailsState extends State<DetailsPage> {
                 alignment: Alignment.bottomCenter,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.purple[400],
-                      elevation: 2.0,
-                      //side: BorderSide(color: Colors.grey[600], width: 1.0),
-                      //visualDensity: VisualDensity.compact,
-                    ),
+                    primary: Colors.purple[400],
+                    elevation: 2.0,
+                    //side: BorderSide(color: Colors.grey[600], width: 1.0),
+                    //visualDensity: VisualDensity.compact,
+                  ),
                   onPressed: () async {
                     await createPostInFirestore();
                     isUploading = true;
                     Navigator.pop(context);
                   },
-                  child:
-                      const Text("Create Post", style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold
-                    )),
+                  child: const Text("Create Post",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold)),
                   // color: Colors.blue,
                   // textColor: Colors.white,
                   // elevation: 5,
