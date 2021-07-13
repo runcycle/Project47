@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bingeable/pages/home.dart';
 import 'package:flutter/material.dart';
 //import 'package:bingeable/widgets/header.dart';
 
@@ -37,7 +38,16 @@ class _CreateAccountState extends State<CreateAccount> {
         centerTitle: true,
         elevation: 15,
         backgroundColor: Theme.of(context).primaryColor,
-        automaticallyImplyLeading: false,
+        leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => Home()),
+                      (Route<dynamic> route) => false);
+                  // Navigator.push(
+                  //     context, MaterialPageRoute(builder: (context) => Home()));
+          }
+        )
       ),
       body: ListView(
         children: <Widget>[

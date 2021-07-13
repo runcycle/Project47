@@ -1,5 +1,7 @@
 import 'package:bingeable/models/user.dart';
 import 'package:bingeable/pages/home.dart';
+import 'package:bingeable/pages/profile.dart';
+import 'package:bingeable/pages/timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -112,15 +114,9 @@ class _DetailsState extends State<DetailsPage> {
             ),
             value: network,
             onChanged: (newValue) {
-              if (network != null) {
-                setState(() {
-                  network = newValue;
-                });
-              } else {
-                setState(() {
-                  network = "No network info provided.";
-                });
-              }
+              setState(() {
+                network = newValue;
+              });
             },
             items: networksList.map((valueItem) {
               return DropdownMenuItem(
@@ -262,7 +258,10 @@ class _DetailsState extends State<DetailsPage> {
                   onPressed: () async {
                     await createPostInFirestore();
                     isUploading = true;
-                    Navigator.pop(context);
+                    //Navigator.pop(context);
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => Home()),
+                      (Route<dynamic> route) => false);
                   },
                   child: const Text("Create Post",
                       style: TextStyle(

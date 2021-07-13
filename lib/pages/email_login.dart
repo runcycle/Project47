@@ -152,8 +152,11 @@ class _EmailLoginState extends State<EmailLogin> {
             leading: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Home()));
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => Home()),
+                      (Route<dynamic> route) => false);
+                  // Navigator.push(
+                  //     context, MaterialPageRoute(builder: (context) => Home()));
                 })),
         body: ModalProgressHUD(
             inAsyncCall: _showProgress,

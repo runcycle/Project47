@@ -13,9 +13,7 @@ final usersRef = FirebaseFirestore.instance.collection("users");
 class Timeline extends StatefulWidget {
   final UserModel currentUser;
 
-  final renderPage;
-
-  Timeline({this.currentUser, this.renderPage});
+  Timeline({this.currentUser});
 
   @override
   _TimelineState createState() => _TimelineState();
