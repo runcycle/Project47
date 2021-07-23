@@ -63,6 +63,8 @@ class _TimelineState extends State<Timeline> {
     //print(currentUser.username);
   }
 
+  //timeLineStream()
+
   getFollowing() async {
     QuerySnapshot snapshot = await followingRef
         .doc(currentUser.id)
@@ -180,7 +182,8 @@ class _TimelineState extends State<Timeline> {
   Widget build(context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bingeable', style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
+        title: Text('Bingeable',
+            style: TextStyle(fontFamily: 'CherryCreamSoda', fontSize: 25.0)),
         centerTitle: true,
         elevation: 15,
         backgroundColor: Theme.of(context).primaryColor,
